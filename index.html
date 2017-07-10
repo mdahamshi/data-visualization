@@ -1,0 +1,98 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
+   integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
+   crossorigin=""/>
+   <link rel="stylesheet" href="css/style.css">
+   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:100,300,400">
+
+   <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
+   integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
+   crossorigin=""></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="js/d3.min.js"></script>
+    <script src="js/Globals.js"></script>    
+    <script type="text/javascript" src="js/main.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <!--<h1>data visualization</h1>-->
+        <div class="menue">
+        <div class="dropdown">
+		<div class="dropbtn" >Maps
+			<div class="dropdown-content">
+				<a href="#1" onclick="changeMap('terrian');">Terrain</a> 
+                <a href="#1" onclick="changeMap('toner');">Toner</a> 
+                <a href="#1" onclick="changeMap('openStreet');">Open Street (default)</a> 
+                <a href="#1" onclick="changeMap('waterColor');">Water Color</a> 
+                <a href="#1" onclick="changeMap('light');">Light</a> 
+                <a href="#1" onclick="changeMap('sat');">Satellite</a> 
+                <a href="#1" onclick="changeMap('street');">Streets</a>
+			</div>
+        </div>
+        </div>
+        </div>
+        <div id="myProgress">
+            <div id="myBar"></div>
+        </div>
+
+		<!--<li class="dropdown1"><a class="dropbtn"
+			href="javascript:void(0)">Tools</a>
+			<div class="dropdown-content1">
+				<h6 class="FRSTNON" id="splitneed">
+					<font color="red">(to enabel/show select/ed arew click on
+						split)</font>
+				</h6>
+				</a> <a href="#1" class="tablinks" id="ON" onclick="turnselectorON()">Select
+					area <br>
+					<h6>
+						<font color="red">(avilabel only for heatmap)</font>
+					</h6>
+				</a> 
+				<a href="#1" class="tablinks FRSTNON" id="OFF"
+					onclick="turnselectorOff()">UnSelect area</a> 
+					
+				<a href="#1" class="tablinks  " onclick="HeatSens(0);resetParalleelDiagram()">+ heatmap sensitive</a> 
+				<a href="#1" class="tablinks  " onclick="HeatSens(1);resetParalleelDiagram()">- heatmap sensitive</a>
+				 <h6>
+						<font color="red">(resets the data)</font>
+					</h6>
+			</div></li>
+
+		<li class="dropdown1"><a class="dropbtn"
+			href="javascript:void(0)">visualization</a>
+			<div class="dropdown-content1">
+				<a href="#1" class="tablinks FRSTNON" id="HON" onclick="HeatMapON()">Heat
+					Map</a> <a href="#1" class="tablinks  " id="CON" onclick="CirclesON()">circles</a>
+				<a href="#1" class="tablinks  " id="HOFF" onclick="HeatMapOFF()">un
+					Heat Map</a> <a href="#1" class="tablinks FRSTNON " id="COFF"
+					onclick="CirclesOFF()">un circles</a>
+			</div></li>
+
+		<li id="haetMap-li"><a href="javascript:void(0)"
+			onclick="fullView(1)"> return to heatmap </a></li>
+		<li id="parallel-li"><a href="javascript:void(0)"
+			onclick="fullView(2)"> parallel diagram </a></li>
+		<li id="splitthesplit"><a href="javascript:void(0)"
+			onclick="resizeWindow()"> split </a></li>
+				<li id="resetDatali"><a href="#1" onclick="resetData()">
+				reset Data </a></li>
+				
+		<li id="splitthesplit"><a href="#1" onclick="updatejsondata()">
+				update the data </a></li>
+
+	-->
+    <div class="map-wrapper">
+     <div id="mainMap" style="width: 100%; z-index: 0; height: 100%; position: relative;"></div>
+    </div>
+    <footer>
+  <p>Created by: Mohammad Dahamshi</p>
+  <p>Contact information: <a href="mailto:Mohammad.Dahamshi@gmail.com">
+  Mohammad.Dahamshi@gmail.com</a></p>
+</footer>
+     <script src="js/map.js"></script>
+</body>
+</html>  
