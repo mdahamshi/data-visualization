@@ -11,30 +11,47 @@
     <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
    integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
    crossorigin=""></script>
+   <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script type="text/javascript" src="js/d3.min.js"></script>
-    <script src="js/Globals.js"></script>    
+    <script type="text/javascript" src="js/leaflet-heat.js"></script>
+    <script type="text/javascript" src="js/Globals.js"></script>    
     <script type="text/javascript" src="js/main.js"></script>
     <title>Document</title>
 </head>
-<body>
+<body onresize="windowResizeHandler()">
     <!--<h1>data visualization</h1>-->
+
         <div class="menue">
-        <div class="dropdown">
-		<div class="dropbtn" >Maps
-			<div class="dropdown-content">
-				<a href="#1" onclick="changeMap('terrian');">Terrain</a> 
-                <a href="#1" onclick="changeMap('toner');">Toner</a> 
-                <a href="#1" onclick="changeMap('openStreet');">Open Street (default)</a> 
-                <a href="#1" onclick="changeMap('waterColor');">Water Color</a> 
-                <a href="#1" onclick="changeMap('light');">Light</a> 
-                <a href="#1" onclick="changeMap('sat');">Satellite</a> 
-                <a href="#1" onclick="changeMap('street');">Streets</a>
-			</div>
+            <div class="dropdown">
+                <button class="dropbtn" >Maps</button>
+                    <div class="dropdown-content">
+                        <a href="#1" onclick="changeMap('terrian');">Terrain</a> 
+                        <a href="#1" onclick="changeMap('toner');">Toner</a> 
+                        <a href="#1" onclick="changeMap('openStreet');">Open Street (default)</a> 
+                        <a href="#1" onclick="changeMap('waterColor');">Water Color</a> 
+                        <a href="#1" onclick="changeMap('light');">Light</a> 
+                        <a href="#1" onclick="changeMap('sat');">Satellite</a> 
+                        <a href="#1" onclick="changeMap('street');">Streets</a>
+                    </div>
+                
+            </div>
+            <div class="dropdown">
+                <button class="dropbtn">Tools</button>
+                    <div class="dropdown-content">
+                        <a href="#1" onclick="changeMap('terrian');">Terrain</a> 
+                        <a href="#1" onclick="changeMap('toner');">Toner</a> 
+                        <a href="#1" onclick="changeMap('openStreet');">Open Street (default)</a> 
+                        <a href="#1" onclick="changeMap('waterColor');">Water Color</a> 
+                        <a href="#1" onclick="changeMap('light');">Light</a> 
+                        <a href="#1" onclick="changeMap('sat');">Satellite</a> 
+                        <a href="#1" onclick="changeMap('street');">Streets</a>
+                    </div>
+
+            </div>
         </div>
-        </div>
-        </div>
+
         <div id="myProgress">
             <div id="myBar"></div>
         </div>
@@ -88,11 +105,15 @@
     <div class="map-wrapper">
      <div id="mainMap" style="width: 100%; z-index: 0; height: 100%; position: relative;"></div>
     </div>
+
     <footer>
-  <p>Created by: Mohammad Dahamshi</p>
-  <p>Contact information: <a href="mailto:Mohammad.Dahamshi@gmail.com">
-  Mohammad.Dahamshi@gmail.com</a></p>
-</footer>
-     <script src="js/map.js"></script>
+        <p>Created by: Mohammad Dahamshi & Mohammad Dabbah</p>
+        <p>Contact information: <a href="mailto:Mohammad.Dahamshi@gmail.com">
+        Mohammad.Dahamshi@gmail.com</a></p>
+    </footer>
+
+    <!--MUST be after the map div !-->
+    <script src="js/map.js"></script>
+
 </body>
 </html>  

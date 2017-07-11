@@ -24,7 +24,7 @@ var mapTypes = {
     accessToken: 'pk.eyJ1IjoibWRhaGFtc2hpIiwiYSI6ImNqNHhxM3pjdzFmMnEzMnFqZnhoc211cDcifQ.UKGiBew-rmYzU29WgEnY_g'
 }],
     openStreet: [
-        'http://{s}.tile.osm.org/{z}/{x}/{y}.png', {}
+        'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {}
     ],
     toner: [
         'http://{s}.tile.stamen.com/toner/{z}/{x}/{y}.png', {
@@ -43,6 +43,9 @@ var mapTypes = {
     ]
 }
 
-// var dataURL = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson';
-var dataURL = 'https://raw.githubusercontent.com/mdahamshi/StripsQT/master/stripsQT.zip';
+var dataURL = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson';
+// var dataURL = 'https://raw.githubusercontent.com/mdahamshi/reversi/master/reversiQTFinal.zip';
 var theData;
+var heatData;
+var heatLayer;
+var mymap;
