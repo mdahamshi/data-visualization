@@ -1,5 +1,6 @@
 
 
+init();
 
 //update progress bar according to downloaded data
 function moveBar(value) {
@@ -47,9 +48,11 @@ function getData(){
             console.log('error parasing ' + err);
             return;
         }
+        //after loading the data, extract heat data and add them to map
+        extractOurData();        
         extractHeatData();
-        addHeatMap();
-
+        heatLayer =  addHeatMap(heatData);
+        //hide download bar
         setTimeout(function(){
             moveBar(-1);       
             setTimeout(function(){
@@ -76,26 +79,59 @@ function getData(){
 }
 //GeoJSON has coordinates[long, lat, depth]  , heatLayer takes [lat, long, mag] as input
 function extractHeatData(){
-    heatData = theData.features.map(function(element){
-        return [element.geometry.coordinates[1], 
-        element.geometry.coordinates[0],
-        element.properties.mag ];
-    });
+    heatData = theData.features.map(featureToHeat);
+    return heatData;
 }
 
+function extractOurData(){
+    ourData = theData.features.map(function(element){
+        return {'lat':element.geometry.coordinates[1],
+        'lng': element.geometry.coordinates[0], 'depth': element.geometry.coordinates[2],
+        'mag': element.properties.mag, 'sig': element.properties.sig,
+        'title': element.properties.title, 'felt': element.properties.felt,
+        'city': element.properties.title.split(',')[1]
+        }
+    });
+}
+//update map size according to screen size (avoid scrooling - app like mode)
 function windowResizeHandler(){
     var bodyChilds = document.body.children;
     var sumHeight = 0;
     for (var i = 0; i < bodyChilds.length; i++){
-        if(bodyChilds[i].className !== 'map-wrapper')
+        if(! hasClass(bodyChilds[i], 'no-height'))
             sumHeight += bodyChilds[i].clientHeight || 0 ;
 
     }
     var windwoHeight = $(window).height();
-    $('.map-wrapper').height(windwoHeight - sumHeight -10); //10 for the download bar
+    $('.map-wrapper:first').height(windwoHeight - sumHeight -10); //10 for the download bar
+    mymap.invalidateSize();
 }
 
-getData();
+function mapSelectArea(){
+    if(selectArea){
+        selectArea.remove();
+        selectArea = undefined;
+    }
+    selectArea =  L.areaSelect({width:200, height:250}).addTo(mymap);
+    selectButton.show();
+    cancelSelect.show();
+}
+function hasClass(element, cls) {
+    return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
+}
+
+function resetMap(){
+    replaceHeatLayer(extractHeatData());
+    hideSelect();
+    mymap.setView([0, 0], 2);
+}
+function init(){
+    getData();
+
+    
+}
+
 window.onload = function(){
     windowResizeHandler();  
 }
+window.onresize = windowResizeHandler;
