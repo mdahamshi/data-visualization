@@ -52,7 +52,7 @@ var MyButton = L.Control.extend({
   },
  
   onAdd: function (map) {
-    var container = L.DomUtil.create('div', 'leaflet-bar float-btn leaflet-control leaflet-control-custom');
+    var container = L.DomUtil.create('button', 'leaflet-bar btn leaflet-control leaflet-control-custom');
     container.style.cursor = 'pointer';
     container.style.display = 'none';
     // container.style.backgroundColor = '#293f50';

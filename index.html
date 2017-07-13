@@ -1,22 +1,32 @@
 <html >
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.1.0/dist/leaflet.css"
    integrity="sha512-wcw6ts8Anuw10Mzh9Ytw4pylW8+NAD4ch3lqm9lzAsTxg0GFeJgoAtxuCLREZSC5lUXdVyo/7yfsqFjQ4S+aKw=="
    crossorigin=""/>
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Lato:100,300,400">
     <link rel="stylesheet" href="css/leaflet-areaselect.css" />
-   
+   <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
    <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
    integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
    crossorigin=""></script>
-   <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+   
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script type="text/javascript" src="js/d3.min.js"></script>
+    <script type="text/javascript" src="js/init.js"></script>
     <script type="text/javascript" src="js/leaflet-heat.js"></script>
     <script type="text/javascript" src="js/Globals.js"></script>    
     <script type="text/javascript" src="js/main.js"></script>
@@ -26,42 +36,43 @@
 <body >
     <!--<h1>data visualization</h1>-->
         <!--top menu-->
-        <div class="menue">
-            <div class="dropdown">
-                <button class="dropbtn" >Maps</button>
-                    <div class="dropdown-content">
-                        <a href="#1" onclick="changeMap('terrian');">Terrain</a> 
-                        <a href="#1" onclick="changeMap('toner');">Toner</a> 
-                        <a href="#1" onclick="changeMap('openStreet');">Open Street (default)</a> 
-                        <a href="#1" onclick="changeMap('waterColor');">Water Color</a> 
-                        <a href="#1" onclick="changeMap('light');">Light</a> 
-                        <a href="#1" onclick="changeMap('sat');">Satellite</a> 
-                        <a href="#1" onclick="changeMap('street');">Streets</a>
-                    </div>
-                
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span> 
+                    </button>
+                <a class="navbar-brand text-uppercase" href="">Data visualization</a>
             </div>
-            <div class="dropdown">
-                <button class="dropbtn">Tools</button>
-                    <div class="dropdown-content">
-                        <a href="#1" onclick="mapSelectArea();">Select Area</a> 
-                        <a href="#1" onclick="changeMap('toner');">Toner</a> 
-                        <a href="#1" onclick="changeMap('openStreet');">Open Street (default)</a> 
-                        <a href="#1" onclick="changeMap('waterColor');">Water Color</a> 
-                        <a href="#1" onclick="changeMap('light');">Light</a> 
-                        <a href="#1" onclick="changeMap('sat');">Satellite</a> 
-                        <a href="#1" onclick="changeMap('street');">Streets</a>
-                    </div>
-
-            </div>
-             <div class="dropdown">
-                <button class="dropbtn" onclick="resetMap()">Reset</button>
-                    <div class="dropdown-content">
-
-                    </div>
-
-            </div>
-            
+            <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="dropdown">
+                        <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Maps
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#1" onclick="changeMap('terrian');">Terrain</a> </li>
+                        <li><a href="#1" onclick="changeMap('toner');">Toner  (default)</a> </li>
+                        <li><a href="#1" onclick="changeMap('openStreet');">Open Street</a> </li>
+                        <li><a href="#1" onclick="changeMap('waterColor');">Water Color</a> </li>
+                        <li><a href="#1" onclick="changeMap('light');">Light</a> </li>
+                        <li><a href="#1" onclick="changeMap('sat');">Satellite</a> </li>
+                        <li><a href="#1" onclick="changeMap('street');">Streets</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                        <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Tools
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#1" onclick="mapSelectArea();">Select Area</a>  </li>
+                    </ul>
+                </li>
+                 <button class="btn btn-danger navbar-btn" onclick="resetMap();">Reset</button>
+            </ul>
         </div>
+    </nav>
+       
         <!--/top menu-->
         <!--download progress bar-->
         <div id="myProgress" class="no-height">

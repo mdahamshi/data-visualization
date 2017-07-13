@@ -56,7 +56,7 @@ function getData(){
         setTimeout(function(){
             moveBar(-1);       
             setTimeout(function(){
-                document.getElementById('myProgress').style.display = 'none';    
+                $('#myProgress').slideUp(200);   
                 windowResizeHandler();  
             }, 2000);
         }, 1000);
@@ -94,19 +94,36 @@ function extractOurData(){
     });
 }
 //update map size according to screen size (avoid scrooling - app like mode)
+// function windowResizeHandler(){
+//     var bodyChilds = document.body.children;
+//     var sumHeight = 0;
+//     for (var i = 0; i < bodyChilds.length; i++){
+//         if(! hasClass(bodyChilds[i], 'no-height'))
+//             sumHeight += bodyChilds[i].clientHeight || 0 ;
+
+//     }
+//     var windwoHeight = $(window).height();
+//     $('.map-wrapper:first').height(windwoHeight - sumHeight -10); //10 for the download bar
+// }
 function windowResizeHandler(){
-    var bodyChilds = document.body.children;
-    var sumHeight = 0;
-    for (var i = 0; i < bodyChilds.length; i++){
-        if(! hasClass(bodyChilds[i], 'no-height'))
-            sumHeight += bodyChilds[i].clientHeight || 0 ;
 
-    }
+    var totalHeight = 0;
     var windwoHeight = $(window).height();
-    $('.map-wrapper:first').height(windwoHeight - sumHeight -10); //10 for the download bar
-    mymap.invalidateSize();
+    $("body > div ,nav").each(function(){
+        totalHeight += $(this).height();
+    });
+    totalHeight = totalHeight - $('.map-wrapper').height() + $('nav').height(); //50 to avoid nav overlap
+    $('body').animate({ paddingTop: $('nav').height() });
+    
+    $('.map-wrapper').height(windwoHeight - totalHeight -10); 
+    mymap.invalidateSize();    
 }
-
+function hideMe(item){
+    $(item).hide();
+}
+function showMe(item){
+    $(item).show();
+}
 function mapSelectArea(){
     if(selectArea){
         selectArea.remove();
@@ -131,7 +148,7 @@ function init(){
     
 }
 
-window.onload = function(){
-    windowResizeHandler();  
-}
+
+
+
 window.onresize = windowResizeHandler;
