@@ -1,6 +1,7 @@
 window.onload = function(){
         
-    windowResizeHandler();  
+        windowResizeHandler();      
+        
 
     // var dropContent = document.getElementsByClassName('dropdown-content');
     // for(var i = 0; i < dropContent.length; i++){

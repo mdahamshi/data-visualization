@@ -92,5 +92,5 @@ var selectArea; //save selected area, avoid multi select
 var buttonWrapper;
 var selectButton;
 var temp;
-var heatIntensity = 0.2;
+var heatIntensity = 0.7;
 var cancelSelect;

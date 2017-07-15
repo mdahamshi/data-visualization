@@ -5,7 +5,7 @@ initMap();
 //creating leaflet map
 
 function initMap(){
-    mymap = L.map('mainMap').setView([0, 0], 2);
+    mymap = L.map('mainMap').setView([0,0],2);
     cancelSelect = new MyButton();
     mymap.addControl(cancelSelect);
     cancelSelect.text('Cancel');
@@ -29,12 +29,7 @@ function changeMap(type){
 }
 //add heat layer to the map
 function addHeatMap(data){
-    var minMax = data.reduce(function(accumulator, current){
-        return [Math.min(accumulator[0], current.mag),
-                Math.max(accumulator[1], current.mag)];
-    },[10,0]);
-    maxMag = minMax[1];
-    minMag = minMax[0];
+    updateMinMaxVars(data);
     var delta = maxMag - minMag;
     //maping the data to be between 0..1
     if(delta > 0){
@@ -42,14 +37,13 @@ function addHeatMap(data){
             function(element){
                 return [element.lat, element.lng, (element.mag - minMag) / delta];
             });
-        temp = mappedData;
     }
     else
-        mappedData = data;
-    updateQuakeNumber(data.length);
+        mappedData = data.map(function(e){return [e.lat,e.lng,0];}) //the case where all mag is -1
+    updateQuakeNumber(data.length, maxMag, minMag);
     try{
-        return L.heatLayer(mappedData, {
-            radius: 20,
+        return L.heatLayer(data, {
+            radius: 19,
             blur: 0, 
             minOpacity: heatIntensity,
             maxZoom: 16,
@@ -65,16 +59,22 @@ function addHeatMap(data){
 }
 //latitude increase when going up (opposite to screen coordinates...)
 function extractAreaData(topLeft, downRight){
-    selectData = [];
-    theData.features.forEach(
+    selectData = theData.features.filter(
         function(current){
             var currentPoint = {lat: current.geometry.coordinates[1],
                                 lng: current.geometry.coordinates[0]};
             if(pointInRange(currentPoint, topLeft, downRight))
-                selectData.push(current);
- 
+                return true;
         }
     );
+}
+function updateMinMaxVars(data){
+    var minMax = data.reduce(function(accumulator, current){
+        return [Math.min(accumulator[0], current.mag),
+                Math.max(accumulator[1], current.mag)];
+    },[10,-1]);
+    maxMag = minMax[1];
+    minMag = minMax[0];
 }
 function pointInRange(point, topLeft, downRight){
     if(point.lat < topLeft.lat && point.lng > topLeft.lng)
@@ -83,8 +83,10 @@ function pointInRange(point, topLeft, downRight){
     return false;
 }
 
-function updateQuakeNumber(num){
+function updateQuakeNumber(num, max, min){
     document.getElementById('quakeNum').innerText = num;
+    document.getElementById('maxMag').innerText = max;
+    document.getElementById('minMag').innerText = min;
 }
 
 function replaceHeatLayer(data){
@@ -99,6 +101,8 @@ function addSelected(){
     extractAreaData(topLeft,downRight);
     replaceHeatLayer(selectData.map(featureToHeat));
     hideSelect();
+    mymap.fitBounds([topLeft, downRight]);
+    
 }
 function hideSelect(){
     selectButton.hide();

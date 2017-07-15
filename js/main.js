@@ -5,6 +5,7 @@ init();
 //update progress bar according to downloaded data
 function moveBar(value) {
     var elem = document.getElementById("myBar"); 
+    $('#myProgress').slideDown(200); 
     if(value === 0){
         elem.style.width = '100' + '%';    
         elem.innerHTML = 'Downloading ... ';
@@ -13,6 +14,10 @@ function moveBar(value) {
     if(value === -1){
         elem.style.width = '100' + '%';    
         elem.innerHTML = 'Done !';
+        setTimeout(function(){
+                $('#myProgress').slideUp(200);   
+                windowResizeHandler();  
+            }, 2000);
         return;
     }
       if(value === -2){
@@ -25,6 +30,11 @@ function moveBar(value) {
         elem.style.width = '100' + '%';    
         elem.innerHTML = 'Error occured while parasing the data !';
         elem.style.backgroundColor = 'red';
+        return;
+    }
+    if(value === -4){
+        elem.style.width = '100' + '%';    
+        elem.innerHTML = 'Loading...';
         return;
     }
     var width = 1;
@@ -49,16 +59,14 @@ function getData(){
             return;
         }
         //after loading the data, extract heat data and add them to map
+        updateMinMaxVars(theData.features);
         extractOurData();        
         extractHeatData();
         heatLayer =  addHeatMap(heatData);
         //hide download bar
         setTimeout(function(){
             moveBar(-1);       
-            setTimeout(function(){
-                $('#myProgress').slideUp(200);   
-                windowResizeHandler();  
-            }, 2000);
+
         }, 1000);
         
         
@@ -109,14 +117,16 @@ function windowResizeHandler(){
 
     var totalHeight = 0;
     var windwoHeight = $(window).height();
-    $("body > div ,nav").each(function(){
+    $(".height-calc").each(function(){
         totalHeight += $(this).height();
     });
-    totalHeight = totalHeight - $('.map-wrapper').height() + $('nav').height(); //50 to avoid nav overlap
-    $('body').animate({ paddingTop: $('nav').height() });
-    
-    $('.map-wrapper').height(windwoHeight - totalHeight -10); 
+    temp = totalHeight;
+    if($('body').css('padding-top') !== $('#mainNav').height())
+        $('body').animate({ paddingTop: $('#mainNav').height() });
+    var suggestedHeight = windwoHeight - totalHeight - 20;
+    $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 
     mymap.invalidateSize();    
+    mymap.setView([0,0],2);
 }
 function hideMe(item){
     $(item).hide();
@@ -129,7 +139,7 @@ function mapSelectArea(){
         selectArea.remove();
         selectArea = undefined;
     }
-    selectArea =  L.areaSelect({width:200, height:250}).addTo(mymap);
+    selectArea =  L.areaSelect({width:200, height:130}).addTo(mymap);
     selectButton.show();
     cancelSelect.show();
 }
@@ -140,10 +150,13 @@ function hasClass(element, cls) {
 function resetMap(){
     replaceHeatLayer(extractHeatData());
     hideSelect();
-    mymap.setView([0, 0], 2);
+    changeMap("");
+    mymap.setView([0,0],2);
 }
 function init(){
+     $('body').animate({ paddingTop: $('#mainNav').height() });
     getData();
+    
 
     
 }

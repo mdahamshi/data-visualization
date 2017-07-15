@@ -27,6 +27,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script type="text/javascript" src="js/d3.min.js"></script>
     <script type="text/javascript" src="js/init.js"></script>
+    <script src="js/angular.min.js"></script>
     <script type="text/javascript" src="js/leaflet-heat.js"></script>
     <script type="text/javascript" src="js/Globals.js"></script>    
     <script type="text/javascript" src="js/main.js"></script>
@@ -36,7 +37,7 @@
 <body >
     <!--<h1>data visualization</h1>-->
         <!--top menu-->
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <nav id="mainNav" class="navbar navbar-inverse navbar-fixed-top height-calc">
         <div class="container-fluid">
             <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -52,20 +53,20 @@
                         <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Maps
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#1" onclick="changeMap('terrian');">Terrain</a> </li>
-                        <li><a href="#1" onclick="changeMap('toner');">Toner  (default)</a> </li>
-                        <li><a href="#1" onclick="changeMap('openStreet');">Open Street</a> </li>
-                        <li><a href="#1" onclick="changeMap('waterColor');">Water Color</a> </li>
-                        <li><a href="#1" onclick="changeMap('light');">Light</a> </li>
-                        <li><a href="#1" onclick="changeMap('sat');">Satellite</a> </li>
-                        <li><a href="#1" onclick="changeMap('street');">Streets</a></li>
+                        <li><a href="#" onclick="changeMap('terrian');">Terrain</a> </li>
+                        <li><a href="#" onclick="changeMap('toner');">Toner  (default)</a> </li>
+                        <li><a href="#" onclick="changeMap('openStreet');">Open Street</a> </li>
+                        <li><a href="#" onclick="changeMap('waterColor');">Water Color</a> </li>
+                        <li><a href="#" onclick="changeMap('light');">Light</a> </li>
+                        <li><a href="#" onclick="changeMap('sat');">Satellite</a> </li>
+                        <li><a href="#" onclick="changeMap('street');">Streets</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                         <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Tools
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#1" onclick="mapSelectArea();">Select Area</a>  </li>
+                        <li><a href="#" onclick="mapSelectArea();">Select Area</a>  </li>
                     </ul>
                 </li>
                  <button class="btn btn-danger navbar-btn" onclick="resetMap();">Reset</button>
@@ -90,15 +91,24 @@
         </div>
     </div>
     <!--information bar-->
-    <table class="infoBar">
-        <tr>
-            <td>Number of Earthquakes:</td>
-            <td id='quakeNum'>0</td>
-        </tr>
-
-    </table>
+   <table class="table table-condensed text-center height-calc">
+    <thead>
+      <tr>
+        <th>Earthquakes #</th>
+        <th>Max Magnitude</th>
+        <th>Min Magnitude</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="quakeNum">0</td>
+        <td id='maxMag'>0</td>
+        <td id='minMag'>0</td>        
+      </tr>
+    </tbody>
+  </table>
     <!--footer-->
-    <footer>
+    <footer class="height-calc">
         <p>Created by: Mohammad Dahamshi & Mohammad Dabbah & Naseem ma5se</p>
         <p>Contact information: <a href="mailto:Mohammad.Dahamshi@gmail.com">
         Mohammad.Dahamshi@gmail.com</a></p>
