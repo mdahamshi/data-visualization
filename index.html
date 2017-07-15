@@ -26,8 +26,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script type="text/javascript" src="js/d3.min.js"></script>
-    <script type="text/javascript" src="js/init.js"></script>
     <script src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/init.js"></script>
+    
     <script type="text/javascript" src="js/leaflet-heat.js"></script>
     <script type="text/javascript" src="js/Globals.js"></script>    
     <script type="text/javascript" src="js/main.js"></script>
@@ -35,6 +36,8 @@
     <title>Document</title>
 </head>
 <body >
+    <div ng-app="myApp" ng-controller="myCtrl">
+    
     <!--<h1>data visualization</h1>-->
         <!--top menu-->
     <nav id="mainNav" class="navbar navbar-inverse navbar-fixed-top height-calc">
@@ -53,7 +56,7 @@
                         <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Maps
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" onclick="changeMap('terrian');">Terrain</a> </li>
+                        <li><a href="#" ng-click="switchView('views/test.htm');">Terrain</a> </li>
                         <li><a href="#" onclick="changeMap('toner');">Toner  (default)</a> </li>
                         <li><a href="#" onclick="changeMap('openStreet');">Open Street</a> </li>
                         <li><a href="#" onclick="changeMap('waterColor');">Water Color</a> </li>
@@ -82,31 +85,9 @@
 
 	
     <!--the map-->
-    <div class="map-wrapper no-height leaflet-control-container">
-        <div id="mainMap" style="width: inherit; z-index: 0; height: inherit; position: relative;">
-            <!--<div class="button-wrapper leaflet-bottom leaflet-left">
-                <button class="float-btn">Done</button>
-            </div>-->
-            
-        </div>
-    </div>
-    <!--information bar-->
-   <table class="table table-condensed text-center height-calc">
-    <thead>
-      <tr>
-        <th>Earthquakes #</th>
-        <th>Max Magnitude</th>
-        <th>Min Magnitude</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td id="quakeNum">0</td>
-        <td id='maxMag'>0</td>
-        <td id='minMag'>0</td>        
-      </tr>
-    </tbody>
-  </table>
+
+   <div id='ngInc' ng-include="templateURL" onload="windowResizeHandler();"></div>
+  </div>
     <!--footer-->
     <footer class="height-calc">
         <p>Created by: Mohammad Dahamshi & Mohammad Dabbah & Naseem ma5se</p>
@@ -115,7 +96,6 @@
     </footer>
 
     <!--MUST be after the map div !-->
-    <script src="js/map.js"></script>
 
 </body>
 </html>  

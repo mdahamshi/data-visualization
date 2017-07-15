@@ -1,6 +1,13 @@
+var app = angular.module('myApp', []);
+
+app.controller('myCtrl', function($scope) {
+    $scope.templateURL = 'views/main.htm';
+    $scope.switchView = function(url){
+        $scope.templateURL = url;
+    }
+});        
 window.onload = function(){
-        
-        windowResizeHandler();      
+
         
 
     // var dropContent = document.getElementsByClassName('dropdown-content');

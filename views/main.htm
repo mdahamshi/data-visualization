@@ -1,0 +1,31 @@
+ <div class="map-wrapper no-height leaflet-control-container">
+        <div id="mainMap" style="width: inherit; z-index: 0; height: inherit; position: relative;">
+            <!--<div class="button-wrapper leaflet-bottom leaflet-left">
+                <button class="float-btn">Done</button>
+            </div>-->
+            
+        </div>
+    </div>
+    <!--information bar-->
+   <table class="table table-condensed text-center height-calc">
+    <thead>
+      <tr>
+        <th>Earthquakes #</th>
+        <th>Max Magnitude</th>
+        <th>Min Magnitude</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="quakeNum">0</td>
+        <td id="maxMag">0</td>
+        <td id="minMag">0</td>        
+      </tr>
+    </tbody>
+  </table>
+
+      <script src="js/map.js"></script>
+      <script>
+              windowResizeHandler();      
+
+      </script>
