@@ -22,17 +22,18 @@
    integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
    crossorigin=""></script>
     <link rel="stylesheet" href="css/style.css">
-   
+    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script type="text/javascript" src="js/d3.min.js"></script>
-    <script type="text/javascript" src="js/init.js"></script>
-    <script src="js/angular.min.js"></script>
-    <script type="text/javascript" src="js/leaflet-heat.js"></script>
     <script type="text/javascript" src="js/Globals.js"></script>    
+    
+    <script src="data/worldgeo.js"></script>
+    <script type="text/javascript" src="js/init.js"></script>
+    <script type="text/javascript" src="js/leaflet-heat.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/leaflet-areaselect.js"></script>
-    <title>Document</title>
+    <title>Data visualization</title>
 </head>
 <body >
     <!--<h1>data visualization</h1>-->
@@ -54,9 +55,10 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#" onclick="changeMap('terrian');">Terrain</a> </li>
-                        <li><a href="#" onclick="changeMap('toner');">Toner  (default)</a> </li>
+                        <li><a href="#" onclick="changeMap('toner');">Toner</a> </li>
                         <li><a href="#" onclick="changeMap('openStreet');">Open Street</a> </li>
                         <li><a href="#" onclick="changeMap('waterColor');">Water Color</a> </li>
+                        <li><a href="#" onclick="changeMap('simple');">Simple (default)</a> </li>
                         <li><a href="#" onclick="changeMap('light');">Light</a> </li>
                         <li><a href="#" onclick="changeMap('sat');">Satellite</a> </li>
                         <li><a href="#" onclick="changeMap('street');">Streets</a></li>
@@ -69,6 +71,21 @@
                         <li><a href="#" onclick="mapSelectArea();">Select Area</a>  </li>
                     </ul>
                 </li>
+
+                 <li class="dropdown">
+                        <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Data Type
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" onclick="updateCurrentData('mag');" data-toggle="tooltip" title="The magnitude reported is that which the U.S. Geological Survey considers official for this earthquake, and was the best available estimate of the earthquake’s size">Magnitude (default)</a>  </li>
+                        <li><a href="#" onclick="updateCurrentData('sig');" data-toggle="tooltip" title="A number describing how significant the event is. Larger numbers indicate a more significant event. This value is determined on a number of factors, including: magnitude, maximum MMI, felt reports, and estimated impact.">Sig</a>  </li>
+                        <li><a href="#" onclick="updateCurrentData('felt');" data-toggle="tooltip" title="Display whether the event was felt or not">Felt</a>  </li>
+                        <li><a href="#" onclick="updateCurrentData('depth');" data-toggle="tooltip" title="The depth where the earthquake begins to rupture. This depth may be relative to the WGS84 geoid, mean sea-level, or the average elevation of the seismic stations which provided arrival-time data for the earthquake location">Depth</a>  </li>
+                        
+
+                    </ul>
+                </li>
+                
+                 <button id='toggleLabel' class="btn  navbar-btn" onclick="simpleToggleLabels();">Toggle Labels</button>
                  <button class="btn btn-danger navbar-btn" onclick="resetMap();">Reset</button>
             </ul>
         </div>
@@ -80,7 +97,7 @@
             <div id="myBar"></div>
         </div>
 
-	
+	<div id="sideBar" class="width-calc"></div>
     <!--the map-->
     <div class="map-wrapper no-height leaflet-control-container">
         <div id="mainMap" style="width: inherit; z-index: 0; height: inherit; position: relative;">
@@ -91,19 +108,24 @@
         </div>
     </div>
     <!--information bar-->
+
    <table class="table table-condensed text-center height-calc">
     <thead>
       <tr>
-        <th>Earthquakes #</th>
-        <th>Max Magnitude</th>
-        <th>Min Magnitude</th>
+        <th># Earthquakes</th>
+        <th>Magnitude Range</th>
+        <th>Sig Range</th>
+        <th># Felt / Not Felt</th>
+        <th>Depth Range</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td id="quakeNum">0</td>
-        <td id='maxMag'>0</td>
-        <td id='minMag'>0</td>        
+        <td id='magRange'>0</td>
+        <td id='sigRange'>0</td>        
+        <td id='numFelt'>0</td>        
+        <td id='depthRange'>0</td>        
       </tr>
     </tbody>
   </table>

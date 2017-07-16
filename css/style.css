@@ -25,8 +25,7 @@ html, body {
     min-height: 500px;
     min-width: 350px;
 }
-body{
-}
+
 @media screen and (max-width:768px) and (min-width:440px) {
   .navbar-right {
     float: right!important;
@@ -58,6 +57,42 @@ body{
     z-index:0;
     
     
+}
+
+.map-wrapper {
+    width: 500px;
+    height: 500px;    
+    position: relative;
+    float: right;
+    
+    
+}
+#sideBar{
+    float: left;
+    position: relative;
+    display: none;
+}
+#quakeMap path:hover{
+    fill:black;
+    cursor: pointer;
+}
+#basicMap path{
+    fill: cadetblue;
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+svg {
+  position: relative;
+}
+#basicMap path:hover{
+    opacity: 0.5;
+    cursor: pointer;
+    
+
+}
+
+.leaflet-container {
+    background-color:rgba(255,0,0,0.0);
 }
 .leaflet-areaselect-container{
     z-index: 1;

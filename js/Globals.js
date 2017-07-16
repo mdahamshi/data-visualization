@@ -42,7 +42,13 @@ var mapTypes = {
         'http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png', {
 					maxZoom : 17
 				}
-    ]
+    ],
+    simple:[
+        'http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png'
+        , {
+        attribution: '©OpenStreetMap, ©CartoDB',
+        pane: 'labels'
+}]
 }
 var MyButton = L.Control.extend({
  
@@ -77,20 +83,47 @@ var MyButton = L.Control.extend({
  
 });
 
+
+
+
 var dataURL = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson';
 // var dataURL = 'https://raw.githubusercontent.com/mdahamshi/reversi/master/reversiQTFinal.zip';
 var theData;    //save GEOjson data
 var heatData;   //save heatLayer requiered data from GEOjson data
-var heatLayer;  //save heatLayer object
+var tileLayer;  //save heatLayer object
 var mymap;      //save the main map
 var currentLayer;//save current baseLayer
 var ourData;    //map raw data to data that we use: lat, lng, depth, mag, title, sig
 var selectData; //to hold selected area data
-var maxMag;     //to save maximum magnitude
-var minMag;     //to save minimum magnitude
+var maxValue = 10;     // save current max data value
+var minValue = -1;     //save current min data value
 var selectArea; //save selected area, avoid multi select
 var buttonWrapper;
 var selectButton;
 var temp;
 var heatIntensity = 0.7;
 var cancelSelect;
+var svg,
+    worldG,
+    path,
+    transform,
+    worldFeature,
+    quakeG,
+    quakeFeature,
+    drag = d3.behavior.drag(),
+    myScale,
+    scaleRangeStart = '#ffffb2',
+    scaleRangeEnd = '#bd0026',
+    felt = 0,
+    unfelt = 0,
+    maxMag,
+    currentDataLength,
+    minMag,
+    maxDepth,
+    minDepth,
+    maxSig,
+    minSig = 0,
+    currentData = 'mag';  //current viewed data (mag, depth ...)
+
+    
+

@@ -4,8 +4,9 @@ init();
 
 //update progress bar according to downloaded data
 function moveBar(value) {
+    $('#myProgress').slideDown();
     var elem = document.getElementById("myBar"); 
-    $('#myProgress').slideDown(200); 
+     
     if(value === 0){
         elem.style.width = '100' + '%';    
         elem.innerHTML = 'Downloading ... ';
@@ -37,7 +38,6 @@ function moveBar(value) {
         elem.innerHTML = 'Loading...';
         return;
     }
-    var width = 1;
     elem.style.width = Math.floor(value * 100) + '%';    
     elem.innerHTML = Math.floor(value * 100) + '%';
 
@@ -59,10 +59,12 @@ function getData(){
             return;
         }
         //after loading the data, extract heat data and add them to map
-        updateMinMaxVars(theData.features);
         extractOurData();        
         extractHeatData();
-        heatLayer =  addHeatMap(heatData);
+        updateDataSummary(theData.features);
+        
+        initMap();
+
         //hide download bar
         setTimeout(function(){
             moveBar(-1);       
@@ -85,11 +87,7 @@ function getData(){
     }
 
 }
-//GeoJSON has coordinates[long, lat, depth]  , heatLayer takes [lat, long, mag] as input
-function extractHeatData(){
-    heatData = theData.features.map(featureToHeat);
-    return heatData;
-}
+
 
 function extractOurData(){
     ourData = theData.features.map(function(element){
@@ -116,18 +114,32 @@ function extractOurData(){
 function windowResizeHandler(){
 
     var totalHeight = 0;
+    var totalWidth = 0;
     var windwoHeight = $(window).height();
+    var windowWidth = $(window).width();
     $(".height-calc").each(function(){
         totalHeight += $(this).height();
     });
-    temp = totalHeight;
+    $(".width-calc").each(function(){
+        totalWidth += $(this).width();
+    });
     if($('body').css('padding-top') !== $('#mainNav').height())
         $('body').animate({ paddingTop: $('#mainNav').height() });
     var suggestedHeight = windwoHeight - totalHeight - 20;
+    var suugestedWidth = windowWidth - totalWidth;
     $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 
-    mymap.invalidateSize();    
-    mymap.setView([0,0],2);
+    $('.map-wrapper').width(Math.max(suugestedWidth,380) ); 
+    if(mymap){
+        mymap.invalidateSize();    
+        mymap.setView([0,0],2);
+    }
 }
+
+function updateCurrentData(type){
+    currentData = type;
+    replaceData(selectData || theData.features);
+}
+
 function hideMe(item){
     $(item).hide();
 }
@@ -148,16 +160,22 @@ function hasClass(element, cls) {
 }
 
 function resetMap(){
-    replaceHeatLayer(extractHeatData());
+    currentData = 'mag';
+    moveBar(-4);
     hideSelect();
     changeMap("");
+    selectData = undefined;
+    replaceData(theData.features);
     mymap.setView([0,0],2);
+    moveBar(-1);
 }
 function init(){
      $('body').animate({ paddingTop: $('#mainNav').height() });
-    getData();
     
-
+    
+    
+     getData();
+    
     
 }
 

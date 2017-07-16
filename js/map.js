@@ -1,11 +1,14 @@
     
 
-initMap();
+
 
 //creating leaflet map
 
 function initMap(){
     mymap = L.map('mainMap').setView([0,0],2);
+    mymap.createPane('geoJsonPane');
+    mymap.getPane('geoJsonPane').style.pointerEvents = 'visible';
+    mymap.createPane('labels');
     cancelSelect = new MyButton();
     mymap.addControl(cancelSelect);
     cancelSelect.text('Cancel');
@@ -14,33 +17,146 @@ function initMap(){
     mymap.addControl(selectButton);
     selectButton.container.onclick = addSelected;
 
+    svg = d3.select(mymap.getPane('geoJsonPane')).append('svg');
+    worldG = svg.append('g')
+    .attr('id', 'basicMap');    
+    worldG.attr("class", "leaflet-zoom-hide")
+    transform = d3.geo.transform({point:projectPoint});
+    path = d3.geo.path().projection(transform);
+    worldFeature = worldG.selectAll('path')
+    .data(worldgeo.features)
+    .enter()
+    .append('path');
+    worldFeature.attr('style', 'pointer-events:visiblePainted;');
+    quakeG = svg.append('g')
+    .attr('id', 'quakeMap');
+    quakeG.attr("class", "leaflet-zoom-hide");
+    quakeFeature =quakeG.selectAll('path')
+    .data(theData.features)
+    .enter()
+    .append('path');
+    replaceQuakeData(theData.features);
+    
+    worldFeature.on('click', function(d){
+    if (d3.event.defaultPrevented) 
+        return; // dragged
+    var bounds = path.bounds(d);
+
+    mymap.fitBounds(layerToLatLng(bounds));
+    }).call(drag);
+    mymap.on("zoom",zoomReset);
+
+    zoomReset();    //to set default map at startup
+    changeMap("");
+
+}
+
+function updateDataSummary(geoJsonFeatures){
+    felt = unfelt = 0;
+    maxMag = maxDepth = maxSig = -Number.MAX_VALUE;
+    minMag = minDepth = minSig = Number.MAX_VALUE;
+    
+    geoJsonFeatures.forEach(function(element){
+        felt += getFeatureProperty(element, 'felt');
+        maxMag = Math.max(getFeatureProperty(element,'mag'), maxMag);
+        minMag = Math.min(getFeatureProperty(element,'mag'), minMag);
+        maxDepth = Math.max(getFeatureProperty(element,'depth'), maxDepth);
+        minDepth = Math.min(getFeatureProperty(element,'depth'), minDepth);
+        maxSig = Math.max(getFeatureProperty(element,'sig'), maxSig);
+        minSig = Math.min(getFeatureProperty(element,'sig'), minSig);
+    });
+    unfelt = geoJsonFeatures.length - felt;
+    currentDataLength = geoJsonFeatures.length;
+    updateQuakeNumber();
     
 }
+function updateScale(property=currentData){
+    myScale =  d3.scale.linear()
+    .domain(getScaleDomain(property))
+    .range([scaleRangeStart, scaleRangeEnd]);
+}
+function getScaleDomain(property){
+    return {
+        'depth': [minDepth, maxDepth],
+        'mag': [minMag, maxMag], 
+        'sig':[minSig, maxSig],
+        'felt': [0,1],
+    }[property];
+}
+
+function zoomReset(){
+    var bounds = path.bounds(worldgeo),
+    topLeft = bounds[0], 
+    bottomRight = bounds[1];
+    svg.attr('width', bottomRight[0] -topLeft[0])
+    .attr('height', bottomRight[1] -topLeft[1])
+    .style('left', topLeft[0] + 'px')
+    .style('top', topLeft[1] + 'px');
+    worldG.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
+    quakeG.attr("transform", "translate(" + -topLeft[0] + "," + -topLeft[1] + ")");
+    worldFeature.attr('d', path);
+    quakeFeature.attr('d', path);
+   
+}
+
+//convert layer point to lat lng
+function layerToLatLng(bounds){
+    return [mymap.layerPointToLatLng(bounds[1]),mymap.layerPointToLatLng(bounds[0])];
+}
+//convert from lat lng to layer point
+ function projectPoint(x,y){
+        var point = mymap.latLngToLayerPoint(new L.LatLng(y,x));
+        this.stream.point(point.x, point.y);
+    }
+
 //change map type (layer)
 function changeMap(type){
     var currentMap; 
-    if (currentLayer)
-        mymap.removeLayer(currentLayer);
+    if (tileLayer){
+        mymap.removeLayer(tileLayer);        
+        tileLayer = undefined;
+    }
     if (mapTypes[type] == undefined)
-        type = 'toner';
+        type = 'simple';
+    if(type === 'simple'){
+        $('#basicMap').show();
+        $('#toggleLabel').show();
+        return;
+    }
+    else{
+        $('#basicMap').hide();
+        $('#toggleLabel').hide();
+    }
     currentMap = mapTypes[type];
-    currentLayer = L.tileLayer(currentMap[0], currentMap[1]).addTo(mymap);
+    tileLayer = L.tileLayer(currentMap[0], currentMap[1]).addTo(mymap);
     
+}
+function simpleToggleLabels(){
+    if(tileLayer){
+        mymap.removeLayer(tileLayer);
+        tileLayer = undefined;
+    }
+    else
+        {
+            var currentMap = mapTypes['simple'];
+            tileLayer = L.tileLayer(currentMap[0], currentMap[1]).addTo(mymap);
+        }
+        
 }
 //add heat layer to the map
 function addHeatMap(data){
-    updateMinMaxVars(data);
-    var delta = maxMag - minMag;
+    
+    var delta = maxValue - minValue;
     //maping the data to be between 0..1
     if(delta > 0){
         var mappedData = data.map(
             function(element){
-                return [element.lat, element.lng, (element.mag - minMag) / delta];
+                return [element.lat, element.lng, (element.mag - minValue) / delta];
             });
     }
     else
         mappedData = data.map(function(e){return [e.lat,e.lng,0];}) //the case where all mag is -1
-    updateQuakeNumber(data.length, maxMag, minMag);
+    updateDataSummary(data);
     try{
         return L.heatLayer(data, {
             radius: 19,
@@ -53,7 +169,7 @@ function addHeatMap(data){
     }catch(err){
         console.log('maps.js/addHeatMap Error: '+err);
         console.log(mappedData);
-        updateQuakeNumber(0);
+        updateQuakeNumber();
         return null;
     }
 }
@@ -68,14 +184,7 @@ function extractAreaData(topLeft, downRight){
         }
     );
 }
-function updateMinMaxVars(data){
-    var minMax = data.reduce(function(accumulator, current){
-        return [Math.min(accumulator[0], current.mag),
-                Math.max(accumulator[1], current.mag)];
-    },[10,-1]);
-    maxMag = minMax[1];
-    minMag = minMax[0];
-}
+
 function pointInRange(point, topLeft, downRight){
     if(point.lat < topLeft.lat && point.lng > topLeft.lng)
         if(point.lat > downRight.lat && point.lng < downRight.lng)
@@ -83,33 +192,75 @@ function pointInRange(point, topLeft, downRight){
     return false;
 }
 
-function updateQuakeNumber(num, max, min){
-    document.getElementById('quakeNum').innerText = num;
-    document.getElementById('maxMag').innerText = max;
-    document.getElementById('minMag').innerText = min;
+function updateQuakeNumber(){
+    document.getElementById('quakeNum').innerText = currentDataLength;
+    document.getElementById('magRange').innerText = minMag + ' <-> ' + maxMag;
+    document.getElementById('sigRange').innerText = minSig + ' <-> ' + maxSig;
+    document.getElementById('depthRange').innerText = minDepth + ' <-> ' + maxDepth;    
+    document.getElementById('numFelt').innerText = felt + ' / ' + unfelt;
 }
 
 function replaceHeatLayer(data){
-    if(heatLayer)
-        heatLayer.remove();
-    heatLayer = addHeatMap(data);
+    if(tileLayer)
+        mymap.remove(tileLayer);
+    tileLayer = addHeatMap(data);
 
 }
 function addSelected(){
     var topLeft = selectArea.getBounds().getNorthWest();
     var downRight = selectArea.getBounds().getSouthEast();
     extractAreaData(topLeft,downRight);
-    replaceHeatLayer(selectData.map(featureToHeat));
+    replaceData(selectData);
     hideSelect();
     mymap.fitBounds([topLeft, downRight]);
     
 }
+function replaceData(data, type){
+    updateDataSummary(data);    
+    if(type === 'heat')
+        replaceHeatLayer(data.map(featureToHeat));
+    else
+        replaceQuakeData(data);
+}
+//GeoJSON has coordinates[long, lat, depth]  , heatLayer takes [lat, long, mag] as input
+function extractHeatData(){
+    heatData = theData.features.map(featureToHeat);
+    return heatData;
+}
+
+function replaceQuakeData(data){
+    updateScale(currentData);
+    quakeFeature = d3.select('#quakeMap').selectAll('*')
+    .data(data);
+    quakeFeature.enter()
+    .append('path');
+    quakeFeature.attr('style', 'pointer-events:visiblePainted;')
+    .style('z-index', 3);
+     quakeFeature.attr('fill', d =>{
+    if(d) return myScale(getFeatureProperty(d,currentData));});
+    quakeFeature.exit().remove();
+    // zoomReset();
+}
+
+
 function hideSelect(){
     selectButton.hide();
     cancelSelect.hide();
     if(selectArea)
         selectArea.remove();
     selectArea = undefined;
+}
+
+
+function getFeatureProperty(feature, property){
+    return {
+        'lat':feature.geometry.coordinates[1],
+        'lng': feature.geometry.coordinates[0], 'depth': feature.geometry.coordinates[2],
+        'mag': feature.properties.mag, 'sig': feature.properties.sig,
+        'title': feature.properties.title, 'felt': (feature.properties.felt == null ? 0:1),
+        'city': feature.properties.title.split(',')[1]
+        
+    }[property];
 }
 function featureToHeat(element){
         
@@ -118,5 +269,3 @@ function featureToHeat(element){
             'mag': element.properties.mag
     }
 }
-//to set default map at startup
-changeMap("");
