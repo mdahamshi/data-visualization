@@ -21,7 +21,6 @@
     <script src="https://unpkg.com/leaflet@1.1.0/dist/leaflet.js"
    integrity="sha512-mNqn2Wg7tSToJhvHcqfzLMU6J4mkOImSPTxVZAdo+lcPlk+GhZmYgACEe0x35K7YzW1zJ7XyJV/TT1MrdXvMcA=="
    crossorigin=""></script>
-    <link rel="stylesheet" href="css/style.css">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
@@ -31,8 +30,11 @@
     <script src="data/worldgeo.js"></script>
     <script type="text/javascript" src="js/init.js"></script>
     <script type="text/javascript" src="js/leaflet-heat.js"></script>
+    <script type="text/javascript" src="js/L.D3SvgOverlay.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/leaflet-areaselect.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    
     <title>Data visualization</title>
 </head>
 <body >
@@ -54,44 +56,48 @@
                         <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Maps
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" onclick="changeMap('terrian');">Terrain</a> </li>
-                        <li><a href="#" onclick="changeMap('toner');">Toner</a> </li>
-                        <li><a href="#" onclick="changeMap('openStreet');">Open Street</a> </li>
-                        <li><a href="#" onclick="changeMap('waterColor');">Water Color</a> </li>
-                        <li><a href="#" onclick="changeMap('simple');">Simple (default)</a> </li>
-                        <li><a href="#" onclick="changeMap('light');">Light</a> </li>
-                        <li><a href="#" onclick="changeMap('sat');">Satellite</a> </li>
-                        <li><a href="#" onclick="changeMap('street');">Streets</a></li>
+                        <li><a href="#" onclick="changeMapWrap(this,'terrian');">Terrain</a> </li>
+                        <li><a href="#" onclick="changeMapWrap(this,'toner');">Toner</a> </li>
+                        <li><a href="#" onclick="changeMapWrap(this,'openStreet');">Open Street</a> </li>
+                        <li><a href="#" onclick="changeMapWrap(this,'waterColor');">Water Color</a> </li>
+                        <li class="default-active active"><a href="#" onclick="changeMapWrap(this,'simple');">Simple (default)</a> </li>
+                        <li><a href="#" onclick="changeMapWrap(this,'light');">Light</a> </li>
+                        <li><a href="#" onclick="changeMapWrap(this,'sat');">Satellite</a> </li>
+                        <li><a href="#" onclick="changeMapWrap(this,'street');">Streets</a></li>
                     </ul>
                 </li>
                 <li class="dropdown">
                         <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Tools
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="#" onclick="mapSelectArea();">Select Area</a>  </li>
+                        <li data-toggle="tooltip" title="Select spesific area, show data only to it. (you can restore all data by clicking reset)"><a href="#" onclick="mapSelectArea();">Select Area</a>  </li>
+                        <li  id='toggleLabel' data-toggle="tooltip" title="Toggle locations labels "><a href="#" onclick="simpleToggleLabels();"  >Toggle Labels</a></li>
+                        <li data-toggle="tooltip" title="Toggle Countries Layer"><a href="#" onclick="worldLayerToggle();">Toggle Layer</a></li>
                     </ul>
                 </li>
 
                  <li class="dropdown">
                         <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Data Type
                         <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="#" onclick="updateCurrentData('mag');" data-toggle="tooltip" title="The magnitude reported is that which the U.S. Geological Survey considers official for this earthquake, and was the best available estimate of the earthquake’s size">Magnitude (default)</a>  </li>
-                        <li><a href="#" onclick="updateCurrentData('sig');" data-toggle="tooltip" title="A number describing how significant the event is. Larger numbers indicate a more significant event. This value is determined on a number of factors, including: magnitude, maximum MMI, felt reports, and estimated impact.">Sig</a>  </li>
-                        <li><a href="#" onclick="updateCurrentData('felt');" data-toggle="tooltip" title="Display whether the event was felt or not">Felt</a>  </li>
-                        <li><a href="#" onclick="updateCurrentData('depth');" data-toggle="tooltip" title="The depth where the earthquake begins to rupture. This depth may be relative to the WGS84 geoid, mean sea-level, or the average elevation of the seismic stations which provided arrival-time data for the earthquake location">Depth</a>  </li>
+                    <ul  class="dropdown-menu">
+                        <li class="active default-active"><a href="#" onclick="updateCurrentData(pastDay, this);" >Last Day (default)</a>  </li>
+                        <li><a href="#" onclick="updateCurrentData(pastSeven, this);" >Past 7 Days</a>  </li>
+                        <li><a href="#" onclick="updateCurrentData(allMonth, this);" >All Month</a>  </li>
                         
 
                     </ul>
                 </li>
-                
-                 <button id='toggleLabel' class="btn  navbar-btn" onclick="simpleToggleLabels();">Toggle Labels</button>
-                 <button class="btn btn-danger navbar-btn" onclick="resetMap();">Reset</button>
+                  <button class="btn  navbar-btn" onclick="animateMap();" data-toggle="tooltip" title="Animate the Map according to date happend">Animate</button> 
+                 <button class="btn btn-danger navbar-btn" onclick="resetMap();" data-toggle="tooltip" title="Reset the map to it's original state">Reset</button>
             </ul>
         </div>
     </nav>
        
         <!--/top menu-->
+
+
+
+
         <!--download progress bar-->
         <div id="myProgress" class="no-height">
             <div id="myBar"></div>
@@ -100,7 +106,7 @@
 	<div id="sideBar" class="width-calc"></div>
     <!--the map-->
     <div class="map-wrapper no-height leaflet-control-container">
-        <div id="mainMap" style="width: inherit; z-index: 0; height: inherit; position: relative;">
+        <div id="mainMap" style="width: inherit; height: inherit; position: relative;">
             <!--<div class="button-wrapper leaflet-bottom leaflet-left">
                 <button class="float-btn">Done</button>
             </div>-->
@@ -108,7 +114,9 @@
         </div>
     </div>
     <!--information bar-->
-
+    <div id='success-alert' style="display:none;"class="text-center alert alert-success">
+        <strong>Success!</strong> Data Animated Successfully !
+    </div>
    <table class="table table-condensed text-center height-calc">
     <thead>
       <tr>

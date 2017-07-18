@@ -50,46 +50,65 @@ html, body {
 
 }
 
-.map-wrapper {
-    width: 100%;
-    height: 500px;    
-    position: relative;
-    z-index:0;
-    
-    
-}
 
 .map-wrapper {
     width: 500px;
     height: 500px;    
     position: relative;
     float: right;
+    /* background: steelblue; */
+        background-image: radial-gradient(at center center, rgb(197, 232, 255) 0px, rgb(160, 195, 255) 100%);
     
     
 }
+
+
+
+/* .leaflet-clickable {
+    cursor: pointer;
+} */
 #sideBar{
     float: left;
     position: relative;
     display: none;
 }
-#quakeMap path:hover{
+ #quakeMap circle:hover{
     fill:black;
     cursor: pointer;
+} 
+#quakeMap > circle{
+    stroke: white;
 }
-#basicMap path{
-    fill: cadetblue;
+.info {
+    padding: 6px 8px;
+    font: 14px/16px Arial, Helvetica, sans-serif;
+    background: white;
+    background: rgba(255,255,255,0.8);
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    border-radius: 5px;
+}
+.info h4 {
+    margin: 0 0 5px;
+    color: #777;
+}
+ /* #worldGraph path:hover{
+    cursor: pointer;
+}  */
+
+ /* #basicMap path{
+    fill: white;
     stroke: #fff;
-    stroke-width: 1.5px;
-}
-svg {
+    stroke-width: 0px;
+} */
+/* svg {
   position: relative;
-}
-#basicMap path:hover{
+} */
+/* #basicMap path:hover{
     opacity: 0.5;
     cursor: pointer;
     
 
-}
+}  */
 
 .leaflet-container {
     background-color:rgba(255,0,0,0.0);

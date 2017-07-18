@@ -47,7 +47,7 @@ var mapTypes = {
         'http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png'
         , {
         attribution: '©OpenStreetMap, ©CartoDB',
-        pane: 'labels'
+        // pane: 'labels'
 }]
 }
 var MyButton = L.Control.extend({
@@ -85,10 +85,14 @@ var MyButton = L.Control.extend({
 
 
 
+var allMonth = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson';
 
-var dataURL = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_month.geojson';
+var pastSeven = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
+var pastDay = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson';
+var dataURL = pastDay;
 // var dataURL = 'https://raw.githubusercontent.com/mdahamshi/reversi/master/reversiQTFinal.zip';
 var theData;    //save GEOjson data
+var dataDisplayed = 0;
 var heatData;   //save heatLayer requiered data from GEOjson data
 var tileLayer;  //save heatLayer object
 var mymap;      //save the main map
@@ -105,18 +109,31 @@ var heatIntensity = 0.7;
 var cancelSelect;
 var svg,
     worldG,
+    geojson,    //geojson world map
     path,
     transform,
     worldFeature,
+    colorProperty = 'sig',
+    radiusProperty = 'mag',
     quakeG,
     quakeFeature,
     drag = d3.behavior.drag(),
     myScale,
-    scaleRangeStart = '#ffffb2',
-    scaleRangeEnd = '#bd0026',
+    colorRange = ['#ffffb2', '#fed976','#feb24c','#fd8d3c', '#fc4e2a','#e31a1c', '#b10026'],
+    rdaiusRange = [0.1, 30],
+    dynamicOn = false,
+    transRange = [0.1,1],
+    transScale,
+    transProperty = 'sig',
+    strokeProperty = 'felt',
+    strokeScale,
+    strokeRange = ['white','green'],
     felt = 0,
     unfelt = 0,
     maxMag,
+    radiusScale,
+    dynamicTurns = 10,
+    colorScale,
     currentDataLength,
     minMag,
     maxDepth,

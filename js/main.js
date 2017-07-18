@@ -44,26 +44,36 @@ function moveBar(value) {
 }
 
 //get the earthquake data
-function getData(){
+function getData(dataurl){
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("progress", updateProgress);
     xhr.addEventListener("error", downloadError);
-    xhr.open('GET', dataURL, true);
+    xhr.open('GET', dataurl, true);
     xhr.send(null);
     xhr.onload = function(){
         try{
             theData = JSON.parse(xhr.responseText);
+            theData.features = theData.features.sort(function(a,b){
+                return (getFeatureProperty(b,'time') - getFeatureProperty(b, 'time'));
+            });
         }catch(err){
             moveBar(-3);
             console.log('error parasing ' + err);
             return;
         }
         //after loading the data, extract heat data and add them to map
-        extractOurData();        
-        extractHeatData();
+
         updateDataSummary(theData.features);
+        if(mymap)
+            mymap.remove();
         
+        $('#mainMap').empty();
+        $('#mainMap').removeClass();
+        dataDisplayed = 0;  
+        dynamicOn = false;
         initMap();
+        
+  
 
         //hide download bar
         setTimeout(function(){
@@ -135,9 +145,11 @@ function windowResizeHandler(){
     }
 }
 
-function updateCurrentData(type){
+function updateCurrentData(type, who){
     currentData = type;
-    replaceData(selectData || theData.features);
+    $(who).parent().parent().children().removeClass('active');
+    $(who).parent().addClass('active');
+    getData(type);
 }
 
 function hideMe(item){
@@ -164,17 +176,20 @@ function resetMap(){
     moveBar(-4);
     hideSelect();
     changeMap("");
+    $('.info').css('display','block');
     selectData = undefined;
     replaceData(theData.features);
     mymap.setView([0,0],2);
     moveBar(-1);
+    dynamicTurns = 10;
+    i = 0;    
 }
 function init(){
      $('body').animate({ paddingTop: $('#mainNav').height() });
     
     
     
-     getData();
+     getData(dataURL);
     
     
 }
