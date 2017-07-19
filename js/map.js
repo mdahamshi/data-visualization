@@ -3,7 +3,8 @@
 
 
 //creating leaflet map
-var mapOpacity = 0.5;
+var mapOpacity = 0.5,
+    strokeOpacity = 0.5;
 function initMap(){
     mymap = L.map('mainMap').setView([0,0],2);
     // mymap.createPane('geoJsonPane');
@@ -22,7 +23,7 @@ function initMap(){
             style:function(){
             return {
                 fillOpacity: mapOpacity,fillColor:'white',
-                weight: 0.5,color: 'white',opacity: 0.5};
+                weight: 0.5,color: 'white',opacity: strokeOpacity};
             },
             onEachFeature: onEachFeature,
         }
@@ -201,14 +202,15 @@ function toggleThemeTo(type){
         d3.select('#worldLayer').selectAll('path')
         .transition()
         .duration(1000)
-        .attr('fill-opacity',0.01)
-        .attr('stroke-opacity', 0.5);
+        .attr('fill-opacity',0.1)
+        .attr('stroke-opacity', 0.1);
         d3.select('.map-wrapper')
         .transition()
         .duration(1000)
         .style('background-color', 'black')
         
-        mapOpacity = 0.01;
+        mapOpacity = 0.1;
+        strokeOpacity = 0.1;
     }
     else if(type === 'light'){
         d3.select('#worldLayer').selectAll('path')
@@ -221,6 +223,7 @@ function toggleThemeTo(type){
         .duration(1000)
         .style('background-color', lightBackground);
         mapOpacity = 0.5;
+        strokeOpacity = 0.5;
     }
 }
 //convert layer point to lat lng
@@ -255,6 +258,7 @@ function strokeAttr(d){
 function changeMapWrap(who, type){
     $(who).parent().parent().children().removeClass('active');
     $(who).parent().addClass('active');
+    toggleThemeTo('light');
     changeMap(type);
 }
 //change map type (layer)
@@ -399,7 +403,7 @@ function replaceQuakeData(data){
     .append('circle')
     .style("stroke", "white")      
     .style("stroke-opacity", 0.5)
-    .style('stroke-width', 1)
+    .style('stroke-width', 2)
     .style("fill-opacity", 1) 
         // .classed('leaflet-interactive', true)
     // .on('mouseover' ,function(){
@@ -414,7 +418,7 @@ function replaceQuakeData(data){
     .on('click', function(d){
         if (d3.event.defaultPrevented) 
             return; // dragged
-        console.log('quake clicked',this,d.properties.sig,d.properties.mag,radiusScale(getFeatureProperty(d,'sig')));
+        console.log('quake clicked',this,d);
     }).call(drag);
       if(dynamicOn){
         updateQuakePropertiesDynamic();

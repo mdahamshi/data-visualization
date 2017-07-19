@@ -136,7 +136,7 @@ function windowResizeHandler(){
     if($('body').css('padding-top') !== $('#mainNav').height())
         $('body').animate({ paddingTop: $('#mainNav').height() });
     var suggestedHeight = windwoHeight - totalHeight - 20;
-    var suugestedWidth = windowWidth - totalWidth + 13;
+    var suugestedWidth = windowWidth - totalWidth + 15;
     $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 
     $('.map-wrapper').width(Math.max(suugestedWidth,380) ); 
     if(mymap){
