@@ -193,6 +193,8 @@ function resetMap(){
     dynamicTurns = 10;
     i = 0;    
 }
+
+
 function init(){
      $('body').animate({ paddingTop: $('#mainNav').height() });
     

@@ -88,7 +88,7 @@
 
                     </ul>
                 </li>
-                  <button class="btn  navbar-btn" onclick="animateMap();" data-toggle="tooltip" title="Animate the Map according to date happend">Animate</button> 
+                  <button class="btn  navbar-btn" onclick="$('#animateForm').slideDown();;" data-toggle="tooltip" title="Animate the Map according to date happend">Animate</button> 
                  <button class="btn btn-danger navbar-btn" onclick="resetMap();" data-toggle="tooltip" title="Reset the map to it's original state">Reset</button>
             </ul>
         </div>
@@ -104,6 +104,23 @@
             <div id="myBar"></div>
         </div>
 
+
+    <!-- user input divs -->
+    <form id='animateForm' style="display:none"  class="margin-left-right form-inline margin-up-down">
+  <div class="form-group">
+    <label for="animateTime" >Time : </label>
+    <input type="text" data-toggle="tooltip" title="Time in ms between each point appearance."placeholder="Time in ms between each point appearance:" class="form-control" id="animateTime">
+  </div>
+  
+  <div class="checkbox">
+    <label><input type="checkbox" checked class="margin-left-right" data-toggle="tooltip" title="Uncheck for light theme."><span data-toggle="tooltip" title="Uncheck for light theme.">Dark Theme</span></label>
+  </div>
+  <button type="button" class="btn btn-default" value="cancel" onclick="$('#animateForm').slideUp()">Cancel</button>
+  <button type="button" class="btn btn-default" value="begin" onclick="animateFormHandler();">Begin</button>
+    </form>
+    <!-- /user input divs -->
+
+
 	<div id="sideBar" class=" "></div>
     <!--the map-->
     <div class="map-wrapper no-height leaflet-control-container">
@@ -114,9 +131,11 @@
             
         </div>
     </div>
+
+
     <!--information bar-->
     <div id='success-alert' style="display:none;"class="text-center alert alert-success">
-        <strong>Success!</strong> Data Animated Successfully !
+        <strong></strong> Data Animated Successfully !
     </div>
    <table class="table table-condensed text-center height-calc">
     <thead>

@@ -167,9 +167,9 @@ function updateScale(){
 function getScaleDomain(property){
     return {
         'depth': [minDepth, maxDepth],
-        'mag': [-1, 8], 
-        'sig':[0, 1000],
-        'felt': [0,1],
+        'mag': [-1, 8],  //typical mag
+        'sig':[0, 1000],  //typical sig
+        'felt': [0,1],      
     }[property];
 }
 
@@ -436,11 +436,23 @@ function updateQuakeProperties(){
     // .style('stroke-opacity', transAttr);
 }
 
+function animateFormHandler(){
+    var time = $('#animateTime').val();
+    if(isNaN(time) || time < 0 || time ===''){
+        $('#animateForm:first').addClass('has-error');
+        return;        
+    }
+    $('#animateForm:first').removeClass('has-error');
+    animateDelta = time;
+    $('#animateForm').slideUp();
+    animateMap();
+}
+function myvoid(){}
 function updateQuakePropertiesDynamic(){
-    if(! dynamicOn)
-        return;
+    
     var earthquakes = quakeFeature;
-
+    if(earthquakes[0].length === dataDisplayed)
+        return;
     var c = earthquakes[0][dataDisplayed];
         d3.select(c)
         .attr("r", 1)
@@ -457,15 +469,14 @@ function updateQuakePropertiesDynamic(){
         setTimeout(updateQuakePropertiesDynamic, animateDelta);
         dataDisplayed++;
         if (earthquakes[0].length === dataDisplayed){ 
-            dynamicOn = false;
             $('#mainNav .dropdown ,.navbar-btn').show();
-            $("#success-alert").css('display','block');
+            $("#success-alert").slideDown();
             setTimeout(function(){
                 quakeFeature.style("stroke", strokeAttr)      
                 .style("stroke-opacity", 0.5)
-                .style('stroke-width', 1)
+                // .style('stroke-width', 1)
                 .style("fill-opacity", 1) ;
-                $("#success-alert").fadeTo(2000, 500).slideUp(500);
+                $("#success-alert").slideUp(2000);
                 replaceQuakeData(theData.features);
                 dataDisplayed = 0;
                 if(themeLight)
@@ -479,19 +490,16 @@ function updateQuakePropertiesDynamic(){
 
 
 function animateMap(){
-    var confirmMsg = "You cannot stop animation mode, if it took long time, Please refresh the page..";
-    if(! dynamicOn && confirm(confirmMsg)){
         quakeFeature.style('fill-opacity',0)
         .style("stroke-opacity", 0)
-        dynamicOn = true;
-        $('#mainNav .dropdown, .navbar-btn').hide();
-        updateQuakePropertiesDynamic();
-        windowResizeHandler();
-        $('.map-wrapper').css('background-color', 'black');
-        mymap.fitWorld();
         if(themeLight)
             toggleThemeTo('dark');
-    }
+        $('#mainNav .dropdown, .navbar-btn').hide();
+
+        mymap.fitWorld();                
+        windowResizeHandler();        
+        setTimeout(updateQuakePropertiesDynamic,2000);
+        
 }
 function hideSelect(){
     selectButton.hide();
