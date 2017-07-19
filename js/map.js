@@ -445,7 +445,8 @@ function animateFormHandler(){
     $('#animateForm:first').removeClass('has-error');
     animateDelta = time;
     $('#animateForm').slideUp();
-    animateMap();
+    var darkThemeChecked = ($('#animateForm .checkbox label input:checked').length ===1); 
+    animateMap(darkThemeChecked);
 }
 function myvoid(){}
 function updateQuakePropertiesDynamic(){
@@ -482,17 +483,17 @@ function updateQuakePropertiesDynamic(){
                 if(themeLight)
                     toggleThemeTo('light');
                 windowResizeHandler();
-            },3000);
+            },4000);
 
       }
     }
     // .style('opacity',transAttr)
 
 
-function animateMap(){
+function animateMap(toggleTheme){
         quakeFeature.style('fill-opacity',0)
         .style("stroke-opacity", 0)
-        if(themeLight)
+        if(themeLight && toggleTheme)
             toggleThemeTo('dark');
         $('#mainNav .dropdown, .navbar-btn').hide();
 
