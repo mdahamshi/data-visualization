@@ -54,7 +54,7 @@ function getData(dataurl){
         try{
             theData = JSON.parse(xhr.responseText);
             theData.features = theData.features.sort(function(a,b){
-                return (getFeatureProperty(b,'time') - getFeatureProperty(b, 'time'));
+                return (getFeatureProperty(a,'time') - getFeatureProperty(b, 'time'));
             });
         }catch(err){
             moveBar(-3);
@@ -136,12 +136,21 @@ function windowResizeHandler(){
     if($('body').css('padding-top') !== $('#mainNav').height())
         $('body').animate({ paddingTop: $('#mainNav').height() });
     var suggestedHeight = windwoHeight - totalHeight - 20;
-    var suugestedWidth = windowWidth - totalWidth;
+    var suugestedWidth = windowWidth - totalWidth + 13;
     $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 
     $('.map-wrapper').width(Math.max(suugestedWidth,380) ); 
     if(mymap){
         mymap.invalidateSize();    
-        mymap.setView([0,0],2);
+        // mymap.fitWorld();
+    }
+}
+function toggleThemeWrapper(){
+    if(themeLight){
+        toggleThemeTo('dark');
+        themeLight = false;
+    }else{
+        toggleThemeTo('light');
+        themeLight = true;
     }
 }
 

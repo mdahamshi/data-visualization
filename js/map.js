@@ -3,7 +3,7 @@
 
 
 //creating leaflet map
-
+var mapOpacity = 0.5;
 function initMap(){
     mymap = L.map('mainMap').setView([0,0],2);
     // mymap.createPane('geoJsonPane');
@@ -21,8 +21,8 @@ function initMap(){
         {
             style:function(){
             return {
-                fillOpacity: 0.5,fillColor:'white',
-                weight: 0.5,color: 'white',opacity: 1};
+                fillOpacity: mapOpacity,fillColor:'white',
+                weight: 0.5,color: 'white',opacity: 0.5};
             },
             onEachFeature: onEachFeature,
         }
@@ -145,16 +145,20 @@ function updateScale(){
     colorScale =  d3.scale.quantize()
     .domain(getScaleDomain(colorProperty))
     .range(colorRange);
-    radiusScale = d3.scale.log().base(10)
+
+    radiusScale = d3.scale.linear()
     .domain(getScaleDomain(radiusProperty).map(
         function(element){
-            return Math.pow(10, element);
+            return Math.pow(logBase, element);
         })
     )
-    .range(rdaiusRange);
+    .range(radiusRange);
+    radiusScale.clamp(true);
+
     transScale = d3.scale.linear()
     .domain(getScaleDomain(transProperty))
     .range(transRange);
+    
     strokeScale = d3.scale.quantize()
     .domain(getScaleDomain(strokeProperty))
     .range(strokeRange);
@@ -162,8 +166,8 @@ function updateScale(){
 function getScaleDomain(property){
     return {
         'depth': [minDepth, maxDepth],
-        'mag': [minMag, maxMag], 
-        'sig':[minSig, maxSig],
+        'mag': [-1, 8], 
+        'sig':[0, 1000],
         'felt': [0,1],
     }[property];
 }
@@ -192,7 +196,33 @@ function zoomReset(){
     // updateQuakeProperties();
             
 }
-
+function toggleThemeTo(type){
+    if(type === 'dark'){
+        d3.select('#worldLayer').selectAll('path')
+        .transition()
+        .duration(1000)
+        .attr('fill-opacity',0.01)
+        .attr('stroke-opacity', 0.5);
+        d3.select('.map-wrapper')
+        .transition()
+        .duration(1000)
+        .style('background-color', 'black')
+        
+        mapOpacity = 0.01;
+    }
+    else if(type === 'light'){
+        d3.select('#worldLayer').selectAll('path')
+        .transition()
+        .duration(1000)
+        .attr('fill-opacity',0.5)
+        .attr('stroke-opacity', 0.7);
+        d3.select('.map-wrapper')
+        .transition()
+        .duration(1000)
+        .style('background-color', lightBackground);
+        mapOpacity = 0.5;
+    }
+}
 //convert layer point to lat lng
 function layerToLatLng(bounds){
     return [mymap.layerPointToLatLng(bounds[1]),mymap.layerPointToLatLng(bounds[0])];
@@ -203,13 +233,8 @@ function layerToLatLng(bounds){
         this.stream.point(point.x, point.y);
 }
 function radiusAttr(d){
-    var zoom = mymap.getZoom();
-    if(zoom > 4)
-        zoom = 4;
-
     if(d)
-        return radiusScale(Math.pow(10, getFeatureProperty(d,radiusProperty)));
-        
+        return radiusScale(Math.pow(logBase, getFeatureProperty(d,radiusProperty)));
 }
 function transAttr(d){
       if(d)
@@ -342,6 +367,7 @@ function replaceHeatLayer(data){
 function addSelected(){
     var topLeft = selectArea.getBounds().getNorthWest();
     var downRight = selectArea.getBounds().getSouthEast();
+    console.log(topLeft,downRight);
     extractAreaData(topLeft,downRight);
     replaceData(selectData);
     hideSelect();
@@ -401,14 +427,16 @@ function replaceQuakeData(data){
 function updateQuakeProperties(){
     quakeFeature.attr('r', radiusAttr)
     .style('fill', circleColorAttr)
-    .style('stroke',strokeAttr);
-    // .style('opacity',transAttr)
+    .style('stroke',strokeAttr)
+    // .style('fill-opacity',transAttr)
+    // .style('stroke-opacity', transAttr);
 }
 
 function updateQuakePropertiesDynamic(){
     if(! dynamicOn)
         return;
     var earthquakes = quakeFeature;
+
     var c = earthquakes[0][dataDisplayed];
         d3.select(c)
         .attr("r", 1)
@@ -422,12 +450,11 @@ function updateQuakePropertiesDynamic(){
         .attr("r", radiusAttr)
         .style("fill-opacity", 1e-6)
         .style("stroke-opacity", 1e-6)
-        setTimeout(updateQuakePropertiesDynamic, 50);
+        setTimeout(updateQuakePropertiesDynamic, animateDelta);
         dataDisplayed++;
         if (earthquakes[0].length === dataDisplayed){ 
             dynamicOn = false;
-            $('#mainNav .navbar-btn').removeAttr('disabled');
-            $('#mainNav .dropdown').show();
+            $('#mainNav .dropdown ,.navbar-btn').show();
             $("#success-alert").css('display','block');
             setTimeout(function(){
                 quakeFeature.style("stroke", strokeAttr)      
@@ -436,7 +463,11 @@ function updateQuakePropertiesDynamic(){
                 .style("fill-opacity", 1) ;
                 $("#success-alert").fadeTo(2000, 500).slideUp(500);
                 replaceQuakeData(theData.features);
-            },1000);
+                dataDisplayed = 0;
+                if(themeLight)
+                    toggleThemeTo('light');
+                windowResizeHandler();
+            },3000);
 
       }
     }
@@ -449,9 +480,13 @@ function animateMap(){
         quakeFeature.style('fill-opacity',0)
         .style("stroke-opacity", 0)
         dynamicOn = true;
-        $('#mainNav .navbar-btn').attr('disabled', true);
-        $('#mainNav .dropdown').hide();
+        $('#mainNav .dropdown, .navbar-btn').hide();
         updateQuakePropertiesDynamic();
+        windowResizeHandler();
+        $('.map-wrapper').css('background-color', 'black');
+        mymap.fitWorld();
+        if(themeLight)
+            toggleThemeTo('dark');
     }
 }
 function hideSelect(){

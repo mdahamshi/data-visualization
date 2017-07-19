@@ -26,29 +26,7 @@ html, body {
     min-width: 350px;
 }
 
-@media screen and (max-width:768px) and (min-width:440px) {
-  .navbar-right {
-    float: right!important;
-  }
-  .navbar-collapse.collapse {
-    display: block!important;
-    height: auto!important;
-    overflow: visible!important;
-    border: none;
-    margin-right: 15px;
-  }
-  .navbar-nav>li {
-    float: left;
-    margin: 5px 0;
-  }
-  .navbar-header {
-    float: left
-  }
-  .navbar-toggle {
-    display: none
-  }
 
-}
 
 
 .map-wrapper {
@@ -56,8 +34,9 @@ html, body {
     height: 500px;    
     position: relative;
     float: right;
-    /* background: steelblue; */
-        background-image: radial-gradient(at center center, rgb(197, 232, 255) 0px, rgb(160, 195, 255) 100%);
+     background:rgb(160, 195, 255) ; 
+        /* background-image: radial-gradient(at center center, rgb(197, 232, 255) 0px, rgb(160, 195, 255) 100%); */
+
     
     
 }
