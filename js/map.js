@@ -17,6 +17,7 @@ function initMap(){
     selectButton = new MyButton();
     mymap.addControl(selectButton);
     selectButton.container.onclick = addSelected;
+    mymap.addControl(new ResetZoom());
 
     geojson = L.geoJson(worldgeo.features,
         {
@@ -72,6 +73,8 @@ function initMap(){
     
     
     function highlightFeature(e) {
+        if(mymap.getZoom() > 2)
+            return;         //no need to highlite with zoomed map
         var layer = e.target;
         info.update(layer.feature.properties);
         layer.setStyle({
@@ -128,7 +131,7 @@ function updateDataSummary(geoJsonFeatures){
     minMag = minDepth = minSig = Number.MAX_VALUE;
     
     geoJsonFeatures.forEach(function(element){
-        felt += getFeatureProperty(element, 'felt');
+        felt += getFeatureProperty(element, 'felt') & 1;
         maxMag = Math.max(getFeatureProperty(element,'mag'), maxMag);
         minMag = Math.min(getFeatureProperty(element,'mag'), minMag);
         maxDepth = Math.max(getFeatureProperty(element,'depth'), maxDepth);
@@ -137,24 +140,31 @@ function updateDataSummary(geoJsonFeatures){
         minSig = Math.min(getFeatureProperty(element,'sig'), minSig);
     });
     unfelt = geoJsonFeatures.length - felt;
+    minDate = getFeatureProperty(geoJsonFeatures[0],'time');
+    maxDate = getFeatureProperty(geoJsonFeatures[geoJsonFeatures.length - 1], 'time');
     currentDataLength = geoJsonFeatures.length;
     updateScale();
+    drawXAxis(minDate, maxDate);
     updateQuakeNumber();
     
 }
+
+function drawXAxis(start, end){
+    $('#timeSvg').empty();
+    var x= d3.time.scale().domain([new Date(start),new Date(end)]).range([20,$(window).width()-20]);
+    x.nice();
+    var axisSvg = d3.select('#timeSvg');
+    var xAxis = axisSvg.append('g').attr('id','xAxis').call(d3.svg.axis().scale(x));
+}
+
 function updateScale(){
     colorScale =  d3.scale.quantize()
     .domain(getScaleDomain(colorProperty))
     .range(colorRange);
 
-    radiusScale = d3.scale.linear()
-    .domain(getScaleDomain(radiusProperty).map(
-        function(element){
-            return Math.pow(logBase, element);
-        })
-    )
+    radiusScale = d3.scale.quantize()
+    .domain(getScaleDomain(radiusProperty))
     .range(radiusRange);
-    radiusScale.clamp(true);
 
     transScale = d3.scale.linear()
     .domain(getScaleDomain(transProperty))
@@ -200,8 +210,8 @@ function zoomReset(){
 function toggleThemeTo(type){
     if(type === 'dark'){
         d3.select('#worldLayer').selectAll('path')
-        .transition()
-        .duration(1000)
+        // .transition()
+        // .duration(1000)
         .attr('fill-opacity',0.1)
         .attr('stroke-opacity', 0.1);
         d3.select('.map-wrapper')
@@ -214,8 +224,8 @@ function toggleThemeTo(type){
     }
     else if(type === 'light'){
         d3.select('#worldLayer').selectAll('path')
-        .transition()
-        .duration(1000)
+        // .transition()
+        // .duration(1000)    the transition is laggy with big dataset
         .attr('fill-opacity',0.5)
         .attr('stroke-opacity', 0.7);
         d3.select('.map-wrapper')
@@ -237,7 +247,7 @@ function layerToLatLng(bounds){
 }
 function radiusAttr(d){
     if(d)
-        return radiusScale(Math.pow(logBase, getFeatureProperty(d,radiusProperty)));
+        return  radiusScale(getFeatureProperty(d,radiusProperty));
 }
 function transAttr(d){
       if(d)
@@ -370,6 +380,7 @@ function replaceHeatLayer(data){
 
 }
 function addSelected(){
+    enableMenue();
     var topLeft = selectArea.getBounds().getNorthWest();
     var downRight = selectArea.getBounds().getSouthEast();
     console.log(topLeft,downRight);
@@ -402,10 +413,6 @@ function replaceQuakeData(data){
     quakeFeature.exit().remove();   
     quakeFeature.enter()
     .append('circle')
-    .style("stroke", "white")      
-    .style("stroke-opacity", 0.5)
-    .style('stroke-width', 2)
-    .style("fill-opacity", 1) 
         // .classed('leaflet-interactive', true)
     // .on('mouseover' ,function(){
     //     var oldFill = d3.select(this).style('fill')
@@ -430,6 +437,9 @@ function updateQuakeProperties(){
     quakeFeature.attr('r', radiusAttr)
     .style('fill', circleColorAttr)
     .style('stroke',strokeAttr)
+    .style("stroke-opacity", 0.5)
+    .style('stroke-width', 0)
+    .style("fill-opacity", 1) 
     // .style('fill-opacity',transAttr)
     // .style('stroke-opacity', transAttr);
 }
@@ -443,6 +453,7 @@ function animateFormHandler(){
     $('#animateForm:first').removeClass('has-error');
     animateDelta = time;
     $('#animateForm').slideUp();
+    $('#timeDiv').slideUp();
     var darkThemeChecked = ($('#animateForm .checkbox label input:checked').length ===1); 
     animateMap(darkThemeChecked);
 }
@@ -468,15 +479,14 @@ function updateQuakePropertiesDynamic(){
         setTimeout(updateQuakePropertiesDynamic, animateDelta);
         dataDisplayed++;
         if (earthquakes[0].length === dataDisplayed){ 
-            $('#collapseBtn').attr('data-toggle','collapse');
+            enableMenue();
             $("#success-alert").slideDown();
             setTimeout(function(){
-                quakeFeature.style("stroke", strokeAttr)      
-                .style("stroke-opacity", 0.5)
-                // .style('stroke-width', 1)
-                .style("fill-opacity", 1) ;
+
                 $("#success-alert").slideUp(2000);
-                replaceQuakeData(theData.features);
+                $('#timeDiv').slideDown();
+                // replaceQuakeData(theData.features);
+                updateQuakeProperties();
                 dataDisplayed = 0;
                 if(themeLight)
                     toggleThemeTo('light');
@@ -493,14 +503,14 @@ function animateMap(toggleTheme){
         .style("stroke-opacity", 0)
         if(themeLight && toggleTheme)
             toggleThemeTo('dark');
-        $('#collapseBtn').removeAttr('data-toggle');
-
-        mymap.fitWorld();                
+        disableMenue();
+        mymap.fitBounds(geojson.getBounds());
         windowResizeHandler();        
         setTimeout(updateQuakePropertiesDynamic,2000);
         
 }
 function hideSelect(){
+    enableMenue();
     selectButton.hide();
     cancelSelect.hide();
     if(selectArea)
@@ -514,7 +524,7 @@ function getFeatureProperty(feature, property){
         'lat':feature.geometry.coordinates[1],
         'lng': feature.geometry.coordinates[0], 'depth': feature.geometry.coordinates[2],
         'mag': feature.properties.mag, 'sig': feature.properties.sig,
-        'title': feature.properties.title, 'felt': (feature.properties.felt == null ? 0:1),
+        'title': feature.properties.title, 'felt': (feature.properties.felt || 0),
         'city': feature.properties.title.split(',')[1],
         'time': feature.properties.time
         
