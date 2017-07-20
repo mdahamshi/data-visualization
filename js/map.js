@@ -10,6 +10,7 @@ function initMap(){
     // mymap.createPane('geoJsonPane');
     // mymap.getPane('geoJsonPane').style.pointerEvents = 'visible';
     // mymap.createPane('labels');
+    feltOn = false;
     cancelSelect = new MyButton();
     mymap.addControl(cancelSelect);
     cancelSelect.text('Cancel');
@@ -131,7 +132,7 @@ function updateDataSummary(geoJsonFeatures){
     minMag = minDepth = minSig = Number.MAX_VALUE;
     
     geoJsonFeatures.forEach(function(element){
-        felt += getFeatureProperty(element, 'felt') & 1;
+        felt += (getFeatureProperty(element, 'felt') > 0 ? 1 : 0);
         maxMag = Math.max(getFeatureProperty(element,'mag'), maxMag);
         minMag = Math.min(getFeatureProperty(element,'mag'), minMag);
         maxDepth = Math.max(getFeatureProperty(element,'depth'), maxDepth);
@@ -148,13 +149,22 @@ function updateDataSummary(geoJsonFeatures){
     updateQuakeNumber();
     
 }
-
+function getTimeTick(){
+    if(dataURL === pastDay)
+        return 12;
+    if(dataURL === pastSeven)
+        return d3.time.days;
+    if(dataURL === allMonth)
+        return d3.time.weeks;
+}
 function drawXAxis(start, end){
     $('#timeSvg').empty();
-    var x= d3.time.scale().domain([new Date(start),new Date(end)]).range([20,$(window).width()-20]);
+    var x= d3.time.scale().domain([new Date(start),new Date(end)])
+    .range([20,$(window).width()-20]);
     x.nice();
     var axisSvg = d3.select('#timeSvg');
-    var xAxis = axisSvg.append('g').attr('id','xAxis').call(d3.svg.axis().scale(x));
+    var xAxis = axisSvg.append('g').attr('id','xAxis')
+    .call(d3.svg.axis().scale(x).ticks(getTimeTick()) );
 }
 
 function updateScale(){
@@ -249,6 +259,10 @@ function radiusAttr(d){
     if(d)
         return  radiusScale(getFeatureProperty(d,radiusProperty));
 }
+function radiusAttrExtra(d){
+      if(d)
+        return  (3*radiusScale(getFeatureProperty(d,radiusProperty)));
+}
 function transAttr(d){
       if(d)
         return transScale(getFeatureProperty(d,transProperty));
@@ -260,10 +274,16 @@ function circleColorAttr(d){
 }
 function strokeAttr(d){
     if(d) 
-        if(getFeatureProperty(d,strokeProperty) === 1)
+        if(getFeatureProperty(d,strokeProperty) > 0)
             return strokeScale(getFeatureProperty(d,strokeProperty));
         else
             return circleColorAttr(d);
+}
+function strokeOpacityAttr(d){
+    if(getFeatureProperty(d, 'felt') > 0)
+        return 1;
+    else
+        return 0;
 }
 function changeMapWrap(who, type){
     navBarHide();
@@ -437,9 +457,10 @@ function updateQuakeProperties(){
     quakeFeature.attr('r', radiusAttr)
     .style('fill', circleColorAttr)
     .style('stroke',strokeAttr)
-    .style("stroke-opacity", 0.5)
+    .style("stroke-opacity", strokeOpacityAttr)
     .style('stroke-width', 0)
-    .style("fill-opacity", 1) 
+    .style("fill-opacity", 1) ;
+    feltOn = false;
     // .style('fill-opacity',transAttr)
     // .style('stroke-opacity', transAttr);
 }
@@ -469,11 +490,10 @@ function updateQuakePropertiesDynamic(){
         .style("fill", circleColorAttr)
         .style("fill-opacity", 0.9)
         .style("stroke", strokeAttr)
-        .style("stroke-opacity", 0.7)
         .transition()
         .duration(2000)
         .ease(Math.sqrt)
-        .attr("r", radiusAttr)
+        .attr("r", radiusAttrExtra)
         .style("fill-opacity", 1e-6)
         .style("stroke-opacity", 1e-6)
         setTimeout(updateQuakePropertiesDynamic, animateDelta);
@@ -506,6 +526,8 @@ function animateMap(toggleTheme){
         disableMenue();
         mymap.fitBounds(geojson.getBounds());
         windowResizeHandler();        
+        if(feltOn)
+            toggleFelt();
         setTimeout(updateQuakePropertiesDynamic,2000);
         
 }
@@ -529,6 +551,13 @@ function getFeatureProperty(feature, property){
         'time': feature.properties.time
         
     }[property];
+}
+function toggleFelt(){
+    if(feltOn)
+        quakeFeature.style('stroke-width',0);
+    else
+        quakeFeature.style('stroke-width',2);
+    feltOn = ! feltOn;
 }
 function featureToHeat(element){
         

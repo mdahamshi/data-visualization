@@ -34,11 +34,14 @@ html, body {
     margin-left: 4;
     margin-right: 4;
 }
+
 #animateForm{
     display:none;
 }
 #timeSvg{
     cursor: pointer;
+    font-family: "Lato";
+    font-size: 12;
     height:22; 
     width:100%;
 }
