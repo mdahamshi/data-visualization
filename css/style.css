@@ -37,7 +37,15 @@ html, body {
 #animateForm{
     display:none;
 }
+#timeSvg{
+    cursor: pointer;
+    height:22; 
+    width:100%;
+}
+#timeDiv{
+    display: none;
 
+}
 .map-wrapper {
     width: 500px;
     height: 500px;    

@@ -70,7 +70,7 @@
                         <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Tools
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li data-toggle="tooltip" title="Select spesific area, show data only to it. (you can restore all data by clicking reset)"><a href="#" onclick="mapSelectArea();navBarHide();">Select Area</a>  </li>
+                        <li data-toggle="tooltip" title="Select spesific area, show data only to it. (you can restore all data by clicking reset)"><a href="#" onclick="mapSelectArea();navBarHide();disableMenue();">Select Area</a>  </li>
                         <li  id='toggleLabel' data-toggle="tooltip" title="Toggle locations labels "><a href="#" onclick="simpleToggleLabels();navBarHide();"  >Toggle Labels</a></li>
                         <li data-toggle="tooltip" title="Toggle Countries Layer"><a href="#" onclick="worldLayerToggle();navBarHide();">Toggle Layer</a></li>
                         <li  id='toggleLabel' data-toggle="tooltip" title="Toggle light / darak theme. "><a href="#" onclick="toggleThemeWrapper();navBarHide();"  >Toggle Theme</a></li>
@@ -98,9 +98,8 @@
 
 
 
-
         <!--download progress bar-->
-        <div id="myProgress" class="no-height">
+        <div id="myProgress" >
             <div id="myBar"></div>
         </div>
 
@@ -115,13 +114,19 @@
   <div class="checkbox">
     <label><input type="checkbox" checked class="margin-left-right" data-toggle="tooltip" title="Uncheck for light theme."><span data-toggle="tooltip" title="Uncheck for light theme.">Dark Theme</span></label>
   </div>
-  <button type="button" class="btn btn-default" value="cancel" onclick="$('#animateForm').slideUp();$('#collapseBtn').attr('data-toggle','collapse');">Cancel</button>
+  <button type="button" class="btn btn-default" value="cancel" onclick="$('#animateForm').slideUp();enableMenue();">Cancel</button>
   <button type="button" class="btn btn-default" value="begin" onclick="animateFormHandler();">Begin</button>
     </form>
     <!-- /user input divs -->
 
 
-	<div id="sideBar" class=" "></div>
+    <div id="sideBar" class=" "></div>
+
+    <!-- time axis -->
+    <div id='timeDiv' class=" margin-up-down">
+        <svg id='timeSvg'></svg>
+    </div>
+
     <!--the map-->
     <div class="map-wrapper no-height leaflet-control-container">
         <div id="mainMap" style="width: inherit; height: inherit; position: relative;">

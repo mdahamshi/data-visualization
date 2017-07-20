@@ -82,6 +82,39 @@ var MyButton = L.Control.extend({
   },
  
 });
+var ResetZoom = L.Control.extend({
+ 
+  options: {
+    position: 'topleft' 
+    //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
+  },
+ 
+  onAdd: function (map) {
+    var container = L.DomUtil.create('button', 'leaflet-bar btn leaflet-control leaflet-control-custom');
+    container.style.cursor = 'pointer';
+    container.style.display = 'block';
+    container.setAttribute("title",'Reset Zoom');
+    // container.style.backgroundColor = '#293f50';
+    // container.style.width = mymap.getSize().y / 2;
+    // container.style.height = '40px';
+    container.innerText = 'O';
+    this.show = function(){
+        container.style.display = 'inline-block';
+    }
+    this.hide = function(){
+        container.style.display = 'none';
+    }
+    this.container = container;
+    this.text = function(txt){
+        container.innerText = txt;
+    }
+    container.onclick = function(){
+        mymap.fitBounds(geojson.getBounds());
+    }
+    return container;
+  },
+ 
+});
 
 
 
@@ -120,7 +153,7 @@ var svg,
     drag = d3.behavior.drag(),
     myScale,
     colorRange = ['#ffffb2', '#fed976','#feb24c','#fd8d3c', '#fc4e2a','#e31a1c', '#b10026'],
-    radiusRange = [5, 30],
+    radiusRange = [2, 2, 4, 6, 8, 10, 12, 16, 30],
     transRange = [0.1,1],
     lightBackground = 'rgb(160, 195, 255)',
     
@@ -137,6 +170,8 @@ var svg,
     colorScale,
     currentDataLength,
     minMag,
+    minDate,
+    maxDate,
     logBase = 2,
     maxDepth,
     themeLight = true,

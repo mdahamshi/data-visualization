@@ -8,7 +8,8 @@ function moveBar(value) {
     if ( $('#myProgress').css('display') == 'none' )
         $('#myProgress').slideDown();
     var elem = document.getElementById("myBar"); 
-     
+    if(elem == null)
+        return;
     if(value === 0){
         elem.style.width = '100' + '%';    
         elem.innerHTML = 'Downloading ... ';
@@ -18,7 +19,10 @@ function moveBar(value) {
         elem.style.width = '100' + '%';    
         elem.innerHTML = 'Done !';
         setTimeout(function(){
-                $('#myProgress').slideUp(200);   
+                $('#timeDiv').slideDown();
+            
+                $('#myProgress').slideUp();   
+                
                 windowResizeHandler();  
             }, 2000);
         return;
@@ -47,6 +51,7 @@ function moveBar(value) {
 
 //get the earthquake data
 function getData(dataurl){
+    disableMenue();
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("progress", updateProgress);
     xhr.addEventListener("error", downloadError);
@@ -73,13 +78,12 @@ function getData(dataurl){
         $('#mainMap').removeClass();
         dataDisplayed = 0;  
         initMap();
-        
-  
+        enableMenue();
 
         //hide download bar
         setTimeout(function(){
             moveBar(-1);       
-
+            
         }, 1000);
         
         
@@ -136,7 +140,7 @@ function windowResizeHandler(){
     });
     if($('body').css('padding-top') !== $('#mainNav').height())
         $('body').animate({ paddingTop: $('#mainNav').height() });
-    var suggestedHeight = windwoHeight - totalHeight -50- 20;
+    var suggestedHeight = windwoHeight - totalHeight -50- 24 -34;//34 xAxis, 50 navbar
     var suugestedWidth = windowWidth - totalWidth + 15;
     $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 
     $('.map-wrapper').width(Math.max(suugestedWidth,380) ); 
@@ -144,6 +148,7 @@ function windowResizeHandler(){
         mymap.invalidateSize();    
         // mymap.fitWorld();
     }
+    drawXAxis(minDate, maxDate);
 }
 function toggleThemeWrapper(){
     if(themeLight){
@@ -156,16 +161,18 @@ function toggleThemeWrapper(){
 }
 
 function updateCurrentData(type, who){
+    moveBar(0);
+    $('#timeDiv').slideUp();
     navBarHide();
     currentData = type;
     $(who).parent().parent().children().removeClass('active');
     $(who).parent().addClass('active');
-    getData(type);
+    setTimeout(function(){getData(type);},400); //300 to avoid progressbar slidedown lag
 }
 function animateBtnHandler(){
     $('#animateForm').slideDown();
     navBarHide();
-    $('#collapseBtn').removeAttr('data-toggle');
+    disableMenue();
 }
 
 function hideMe(item){
@@ -206,14 +213,19 @@ function resetMap(){
     dynamicTurns = 10;
     i = 0;    
 }
-
+function enableMenue(){
+    $('#collapseBtn').attr('data-toggle','collapse');
+    $('#mainNav .dropdown, .navbar-btn').show();
+}
+function disableMenue(){
+    $('#collapseBtn').removeAttr('data-toggle');
+    $('#mainNav .dropdown, .navbar-btn').hide();
+}
 
 function init(){
      $('body').animate({ paddingTop: $('#mainNav').height() });
-    
-    
-    
-     getData(dataURL);
+     moveBar(0);
+     setTimeout(function(){getData(dataURL);},1000); //300 to avoid progressbar slidedown lag
     
     
 }
