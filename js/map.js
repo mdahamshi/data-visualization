@@ -256,6 +256,7 @@ function strokeAttr(d){
             return circleColorAttr(d);
 }
 function changeMapWrap(who, type){
+    navBarHide();
     $(who).parent().parent().children().removeClass('active');
     $(who).parent().addClass('active');
     toggleThemeTo('light');
@@ -420,10 +421,7 @@ function replaceQuakeData(data){
             return; // dragged
         console.log('quake clicked',this,d);
     }).call(drag);
-      if(dynamicOn){
-        updateQuakePropertiesDynamic();
-        return;
-    }
+      
     updateQuakeProperties();
     zoomReset();
 }
@@ -470,7 +468,7 @@ function updateQuakePropertiesDynamic(){
         setTimeout(updateQuakePropertiesDynamic, animateDelta);
         dataDisplayed++;
         if (earthquakes[0].length === dataDisplayed){ 
-            $('#mainNav .dropdown ,.navbar-btn').show();
+            $('#collapseBtn').attr('data-toggle','collapse');
             $("#success-alert").slideDown();
             setTimeout(function(){
                 quakeFeature.style("stroke", strokeAttr)      
@@ -495,7 +493,7 @@ function animateMap(toggleTheme){
         .style("stroke-opacity", 0)
         if(themeLight && toggleTheme)
             toggleThemeTo('dark');
-        $('#mainNav .dropdown, .navbar-btn').hide();
+        $('#collapseBtn').removeAttr('data-toggle');
 
         mymap.fitWorld();                
         windowResizeHandler();        

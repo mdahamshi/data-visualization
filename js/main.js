@@ -4,7 +4,9 @@ init();
 
 //update progress bar according to downloaded data
 function moveBar(value) {
-    $('#myProgress').slideDown();
+
+    if ( $('#myProgress').css('display') == 'none' )
+        $('#myProgress').slideDown();
     var elem = document.getElementById("myBar"); 
      
     if(value === 0){
@@ -70,7 +72,6 @@ function getData(dataurl){
         $('#mainMap').empty();
         $('#mainMap').removeClass();
         dataDisplayed = 0;  
-        dynamicOn = false;
         initMap();
         
   
@@ -135,7 +136,7 @@ function windowResizeHandler(){
     });
     if($('body').css('padding-top') !== $('#mainNav').height())
         $('body').animate({ paddingTop: $('#mainNav').height() });
-    var suggestedHeight = windwoHeight - totalHeight - 20;
+    var suggestedHeight = windwoHeight - totalHeight -50- 20;
     var suugestedWidth = windowWidth - totalWidth + 15;
     $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 
     $('.map-wrapper').width(Math.max(suugestedWidth,380) ); 
@@ -155,10 +156,16 @@ function toggleThemeWrapper(){
 }
 
 function updateCurrentData(type, who){
+    navBarHide();
     currentData = type;
     $(who).parent().parent().children().removeClass('active');
     $(who).parent().addClass('active');
     getData(type);
+}
+function animateBtnHandler(){
+    $('#animateForm').slideDown();
+    navBarHide();
+    $('#collapseBtn').removeAttr('data-toggle');
 }
 
 function hideMe(item){
@@ -166,6 +173,12 @@ function hideMe(item){
 }
 function showMe(item){
     $(item).show();
+}
+
+function navBarHide(){
+    if($('#collapseBtn').css('display') !== 'none')
+        $('.navbar-toggle').click();
+
 }
 function mapSelectArea(){
     if(selectArea){
