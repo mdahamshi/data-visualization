@@ -51,6 +51,7 @@ function moveBar(value) {
 
 //get the earthquake data
 function getData(dataurl){
+    dataURL = dataurl;
     disableMenue();
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("progress", updateProgress);
