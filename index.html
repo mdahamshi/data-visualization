@@ -40,10 +40,10 @@
 <body >
     <!--<h1>data visualization</h1>-->
         <!--top menu-->
-    <nav id="mainNav" class="navbar navbar-inverse navbar-fixed-top height-calc">
+    <nav id="mainNav" class="navbar navbar-inverse navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <button id='collapseBtn' type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span> 
@@ -70,10 +70,10 @@
                         <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Tools
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li data-toggle="tooltip" title="Select spesific area, show data only to it. (you can restore all data by clicking reset)"><a href="#" onclick="mapSelectArea();">Select Area</a>  </li>
-                        <li  id='toggleLabel' data-toggle="tooltip" title="Toggle locations labels "><a href="#" onclick="simpleToggleLabels();"  >Toggle Labels</a></li>
-                        <li data-toggle="tooltip" title="Toggle Countries Layer"><a href="#" onclick="worldLayerToggle();">Toggle Layer</a></li>
-                        <li  id='toggleLabel' data-toggle="tooltip" title="Toggle light / darak theme. "><a href="#" onclick="toggleThemeWrapper();"  >Toggle Theme</a></li>
+                        <li data-toggle="tooltip" title="Select spesific area, show data only to it. (you can restore all data by clicking reset)"><a href="#" onclick="mapSelectArea();navBarHide();">Select Area</a>  </li>
+                        <li  id='toggleLabel' data-toggle="tooltip" title="Toggle locations labels "><a href="#" onclick="simpleToggleLabels();navBarHide();"  >Toggle Labels</a></li>
+                        <li data-toggle="tooltip" title="Toggle Countries Layer"><a href="#" onclick="worldLayerToggle();navBarHide();">Toggle Layer</a></li>
+                        <li  id='toggleLabel' data-toggle="tooltip" title="Toggle light / darak theme. "><a href="#" onclick="toggleThemeWrapper();navBarHide();"  >Toggle Theme</a></li>
                     </ul>
                 </li>
 
@@ -88,8 +88,8 @@
 
                     </ul>
                 </li>
-                  <button class="btn  navbar-btn" onclick="$('#animateForm').slideDown();;" data-toggle="tooltip" title="Animate the Map according to date happend">Animate</button> 
-                 <button class="btn btn-danger navbar-btn" onclick="resetMap();" data-toggle="tooltip" title="Reset the map to it's original state">Reset</button>
+                  <button class="btn  navbar-btn" onclick="animateBtnHandler()" data-toggle="tooltip" title="Animate the Map according to date happend">Animate</button> 
+                 <button class="btn btn-danger navbar-btn" onclick="resetMap();navBarHide()" data-toggle="tooltip" title="Reset the map to it's original state">Reset</button>
             </ul>
         </div>
     </nav>
@@ -106,7 +106,7 @@
 
 
     <!-- user input divs -->
-    <form id='animateForm' style="display:none"  class="margin-left-right form-inline margin-up-down">
+    <form id='animateForm'   class="margin-left-right form-inline margin-up-down">
   <div class="form-group">
     <label for="animateTime" >Time : </label>
     <input type="text" value="500" data-toggle="tooltip" title="Time in ms between each point appearance." class="form-control" id="animateTime">
@@ -115,7 +115,7 @@
   <div class="checkbox">
     <label><input type="checkbox" checked class="margin-left-right" data-toggle="tooltip" title="Uncheck for light theme."><span data-toggle="tooltip" title="Uncheck for light theme.">Dark Theme</span></label>
   </div>
-  <button type="button" class="btn btn-default" value="cancel" onclick="$('#animateForm').slideUp()">Cancel</button>
+  <button type="button" class="btn btn-default" value="cancel" onclick="$('#animateForm').slideUp();$('#collapseBtn').attr('data-toggle','collapse');">Cancel</button>
   <button type="button" class="btn btn-default" value="begin" onclick="animateFormHandler();">Begin</button>
     </form>
     <!-- /user input divs -->
