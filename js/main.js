@@ -78,6 +78,7 @@ function getData(dataurl){
         $('#mainMap').empty();
         $('#mainMap').removeClass();
         dataDisplayed = 0;  
+
         initMap();
         enableMenue();
 

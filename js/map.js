@@ -74,10 +74,12 @@ function initMap(){
     
     
     function highlightFeature(e) {
-        if(mymap.getZoom() > 2)
-            return;         //no need to highlite with zoomed map
         var layer = e.target;
         info.update(layer.feature.properties);
+
+        if(mymap.getZoom() > 4)
+            return;         //no need to highlite with zoomed map
+    
         layer.setStyle({
             weight: 5,
             color: '#666',
@@ -159,12 +161,20 @@ function getTimeTick(){
 }
 function drawXAxis(start, end){
     $('#timeSvg').empty();
+    var width  = $('#timeDiv').width();
     var x= d3.time.scale().domain([new Date(start),new Date(end)])
-    .range([20,$(window).width()-20]);
-    x.nice();
+    .range([20,width - 20]);
+    // x.nice();
     var axisSvg = d3.select('#timeSvg');
-    var xAxis = axisSvg.append('g').attr('id','xAxis')
-    .call(d3.svg.axis().scale(x).ticks(getTimeTick()) );
+    var xAxis = d3.svg.axis()
+    .scale(x)
+    .tickSize(2);
+    axisSvg.append('g').attr('id','xAxis')
+    .call(xAxis)
+    .attr('id', 'xAxis')
+    // .append('text')
+    // .attr('class', 'label')
+    // .attr('x', width);
 }
 
 function updateScale(){
@@ -524,7 +534,7 @@ function animateMap(toggleTheme){
         if(themeLight && toggleTheme)
             toggleThemeTo('dark');
         disableMenue();
-        mymap.fitBounds(geojson.getBounds());
+        mymap.setView([0,0],1);
         windowResizeHandler();        
         if(feltOn)
             toggleFelt();

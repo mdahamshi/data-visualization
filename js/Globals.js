@@ -109,7 +109,7 @@ var ResetZoom = L.Control.extend({
         container.innerText = txt;
     }
     container.onclick = function(){
-        mymap.fitBounds(geojson.getBounds());
+       mymap.setView([0,0],1);
     }
     return container;
   },
@@ -152,7 +152,9 @@ var svg,
     quakeFeature,
     drag = d3.behavior.drag(),
     myScale,
-    colorRange = ['#ffffb2', '#fed976','#feb24c','#fd8d3c', '#fc4e2a','#e31a1c', '#b10026'],
+    colorRangeWhiteToRed = ['#ffffb2', '#fed976','#feb24c','#fd8d3c', '#fc4e2a','#e31a1c', '#b10026'],
+    colorRangeRed = ['#fee5d9', '#fcbba1', '#fc9272', '#fb6a4a', '#ef3b2c', '#cb181d', '#99000d'],
+    colorRange = colorRangeRed,
     radiusRange = [2, 2, 4, 6, 8, 10, 12, 16, 30],
     transRange = [0.1,1],
     lightBackground = 'rgb(160, 195, 255)',
