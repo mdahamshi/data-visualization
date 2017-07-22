@@ -142,7 +142,7 @@ function windowResizeHandler(){
     });
     if($('body').css('padding-top') !== $('#mainNav').height())
         $('body').animate({ paddingTop: $('#mainNav').height() });
-    var suggestedHeight = windwoHeight - totalHeight -50- 24 -34;//34 xAxis, 50 navbar
+    var suggestedHeight = windwoHeight - totalHeight -50 -18;//34 xAxis, 50 navbar
     var suugestedWidth = windowWidth - totalWidth + 15;
     $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 
     $('.map-wrapper').width(Math.max(suugestedWidth,380) ); 
@@ -172,6 +172,7 @@ function updateCurrentData(type, who){
     setTimeout(function(){getData(type);},400); //300 to avoid progressbar slidedown lag
 }
 function animateBtnHandler(){
+    $("html, body").animate({ scrollTop: 0 }, "slow");
     $('#animateForm').slideDown();
     navBarHide();
     disableMenue();
