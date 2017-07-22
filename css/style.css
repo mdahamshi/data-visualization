@@ -20,7 +20,8 @@ time, mark, audio, video {
   vertical-align: baseline;
 }
 html, body {
-    font-family: "Lato";
+    /* font-family: "Lato"; */
+    font-family: 'Open Sans', sans-serif;
     height: 100%;
     min-height: 500px;
     min-width: 350px;
