@@ -140,8 +140,8 @@ function windowResizeHandler(){
     $(".width-calc").each(function(){
         totalWidth += $(this).width();
     });
-    if($('body').css('padding-top') !== $('#mainNav').height())
-        $('body').animate({ paddingTop: $('#mainNav').height() });
+    if($('body').css('padding-top') !== 50) //$('#mainNav').height()
+        $('body').animate({ paddingTop: 50 });
     var suggestedHeight = windwoHeight - totalHeight -50 -18;//34 xAxis, 50 navbar
     var suugestedWidth = windowWidth - totalWidth + 15;
     $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 

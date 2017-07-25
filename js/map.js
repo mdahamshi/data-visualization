@@ -469,10 +469,11 @@ function updateQuakeProperties(){
     .style('stroke',strokeAttr)
     .style("stroke-opacity", strokeOpacityAttr)
     .style('stroke-width', 0)
-    .style("fill-opacity", 1) ;
-    feltOn = false;
+    .style("fill-opacity", 1) 
     // .style('fill-opacity',transAttr)
     // .style('stroke-opacity', transAttr);
+    feltOn = false;
+    
 }
 
 function animateFormHandler(){
