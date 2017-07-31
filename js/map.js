@@ -556,10 +556,10 @@ function updateQuakePropertiesDynamic(){
         dataDisplayed++;
         if (earthquakes[0].length === dataDisplayed){ 
             enableMenue();
-            $("#success-alert").slideDown();
+            showInfo('Data animated successfuly !', 'alert-success')
             setTimeout(function(){
 
-                $("#success-alert").slideUp(2000);
+         
                 // replaceQuakeData(theData.features);
                 updateQuakeProperties();
                 dataDisplayed = 0;
@@ -611,6 +611,10 @@ function filterData(type, min, max){
             end = new Date(max);
         min = start.toLocaleTimeString('en-us',options);
         max = end.toLocaleTimeString('en-us',options);
+    }
+    else{
+        min = min.toFixed(2);
+        max = max.toFixed(2);
     }
     var rows = $('#filterTable > tbody  tr').length + 1;
     type = typeToString(type);

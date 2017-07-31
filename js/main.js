@@ -177,6 +177,10 @@ function showMe(item){
     $(item).show();
 }
 function filterDivHandler(type){
+    if(currentData.length === 0){
+        showInfo('No Data available ! Reset the Map', 'alert-danger')
+        return;
+    }
     currentAxisType = type;
     navBarHide();
     disableMenue();
@@ -218,15 +222,25 @@ function resetMap(){
     currentData = theData.features;
     replaceData(theData.features);
     mymap.setView([0,0],2);
-     $('#filterTable > tbody').empty();
+    $('#filterTable > tbody').empty();
     $('#filterTable').hide('slow');    
+
     moveBar(-1);
     dynamicTurns = 10;
     i = 0;    
 }
 
 
-
+function showInfo(msg, type){
+    $('#success-alert').text(msg);
+    $('#success-alert').addClass(type);
+    $('#success-alert').slideDown();
+    setTimeout(function(){
+    $('#success-alert').slideUp();
+    $('#success-alert').removeClass(type);
+        
+    }, 3000);
+}
 function enableMenue(){
     $('#collapseBtn').attr('data-toggle','collapse');
     $('#mainNav .dropdown, .navbar-btn').show();
