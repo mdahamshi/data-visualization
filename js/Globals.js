@@ -155,7 +155,7 @@ var svg,
     colorRangeWhiteToRed = ['#ffffb2', '#fed976','#feb24c','#fd8d3c', '#fc4e2a','#e31a1c', '#b10026'],
     colorRangeRed = ['#fee5d9', '#fcbba1', '#fc9272', '#fb6a4a', '#ef3b2c', '#cb181d', '#99000d'],
     colorRange = colorRangeWhiteToRed,
-    radiusRange = [1, 1, 2, 3, 4, 5, 6, 8, 15],
+    radiusRange = [1, 1, 2, 4, 6, 9, 12, 16, 20],
     transRange = [0.1,1],
     lightBackground = 'rgb(160, 195, 255)',
     
@@ -174,6 +174,8 @@ var svg,
     minMag,
     feltOn = false,
     minDate,
+    dayInSeconds = 86400,
+    dayInMlSeconds = dayInSeconds * 1000,
     maxDate,
     logBase = 2,
     maxDepth,
@@ -181,7 +183,10 @@ var svg,
     minDepth,
     maxSig,
     minSig = 0,
-    currentData = 'mag';  //current viewed data (mag, depth ...)
+    currentData,
+    filterMin,
+    filterMax,
+    currentAxisType = 'time';
 
     
 

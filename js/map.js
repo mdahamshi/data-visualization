@@ -129,6 +129,14 @@ function initMap(){
 }
 
 function updateDataSummary(geoJsonFeatures){
+        if(! geoJsonFeatures || geoJsonFeatures.length == 0 ){
+            felt = unfelt = 0;
+            maxMag = maxDepth = maxSig = '-';
+            minMag = minDepth = minSig = '-';
+            currentDataLength = 0;
+            updateQuakeNumber();
+            return;
+        }
     felt = unfelt = 0;
     maxMag = maxDepth = maxSig = -Number.MAX_VALUE;
     minMag = minDepth = minSig = Number.MAX_VALUE;
@@ -147,7 +155,7 @@ function updateDataSummary(geoJsonFeatures){
     maxDate = getFeatureProperty(geoJsonFeatures[geoJsonFeatures.length - 1], 'time');
     currentDataLength = geoJsonFeatures.length;
     updateScale();
-    drawXAxis(minDate, maxDate);
+    drawXAxis(currentAxisType);
     updateQuakeNumber();
     
 }
@@ -159,23 +167,60 @@ function getTimeTick(){
     if(dataURL === allMonth)
         return d3.time.weeks;
 }
-function drawXAxis(start, end){
-    $('#timeSvg').empty();
-    var width  = $('#timeDiv').width();
-    var x= d3.time.scale().domain([new Date(start),new Date(end)])
-    .range([20,width - 20]);
-    // x.nice();
-    var axisSvg = d3.select('#timeSvg');
-    var xAxis = d3.svg.axis()
-    .scale(x)
-    .tickSize(2);
-    axisSvg.append('g').attr('id','xAxis')
-    .call(xAxis)
-    .attr('id', 'xAxis')
+
+function drawXAxis(type){
+    $('#filterAxis').empty();
+    var start = getTypeRange(type)[0],
+        end = getTypeRange(type)[1];
+    
+    filterMin = start;
+    filterMax = end;
+
+   getAxis();
+    d3.select('#handle-one').style('left','0%');
+    d3.select('#handle-two').style('left','100%');
+    d3.select('#filterAxis > div').style('left','0%')
+    .style('right', '0%');
+  
+
+    function getAxis(){
+        var width = $('body').width();
+        if(type === 'time')
+            return d3.select('#filterAxis')
+            .call(d3.slider()
+            .scale(d3.time.scale()
+            .domain([new Date(start), new Date(end)])
+            // .range([20, width - 20])
+        )
+            
+            .axis(d3.svg.axis())
+            .value([start, end])
+            .on('slide', function(evt, value){
+            console.log('1  ',value[0]);
+            console.log('2   ',value[1]);
+            filterMin = value[0];
+            filterMax = value[1];
+        })
+        );
+        else
+            return   d3.select('#filterAxis')
+            .call(d3.slider().axis(true)
+            .min(start).max(end)
+            .step((start - end) / width)
+            .value([start, end])
+            .on('slide', function(evt, value){
+            console.log('1  ',value[0]);
+            console.log('2   ',value[1]);
+            filterMin = value[0];
+            filterMax = value[1];
+        })
+        );
+    }
     // .append('text')
     // .attr('class', 'label')
     // .attr('x', width);
 }
+
 
 function updateScale(){
     colorScale =  d3.scale.quantize()
@@ -485,7 +530,7 @@ function animateFormHandler(){
     $('#animateForm:first').removeClass('has-error');
     animateDelta = time;
     $('#animateForm').slideUp();
-    $('#timeDiv').slideUp();
+    $('#filterDiv').slideUp();
     var darkThemeChecked = ($('#animateForm .checkbox label input:checked').length ===1); 
     animateMap(darkThemeChecked);
 }
@@ -515,7 +560,6 @@ function updateQuakePropertiesDynamic(){
             setTimeout(function(){
 
                 $("#success-alert").slideUp(2000);
-                $('#timeDiv').slideDown();
                 // replaceQuakeData(theData.features);
                 updateQuakeProperties();
                 dataDisplayed = 0;
@@ -551,7 +595,60 @@ function hideSelect(){
     selectArea = undefined;
 }
 
+function filterData(type, min, max){
+    min = min ? min : getTypeRange(type)[0];
+    max = max ? max : getTypeRange(type)[1];
+    currentData = currentData.filter(
+        getFilterFunc(type, min, max)
+    );
+    replaceData(currentData);
+    if(type == 'time'){
+        var options = {  
+        weekday: "short", year: "numeric", month: "short",  
+        day: "numeric", hour: "2-digit", minute: "2-digit"  
+        };  
+        var start = new Date(min),
+            end = new Date(max);
+        min = start.toLocaleTimeString('en-us',options);
+        max = end.toLocaleTimeString('en-us',options);
+    }
+    var rows = $('#filterTable > tbody  tr').length + 1;
+    type = typeToString(type);
+    $( `<tr>
+        <th>${rows}</th>
+        <td>${type}</td>
+        <td>${min}</td>
+        <td>${max}</td>
+        </tr>`).prependTo('#filterTable > tbody');
+    $('#filterTable').show('slow');
+    
 
+}
+function typeToString(type){
+    return {
+        'mag': 'Magnitude',
+        'sig': 'Significance',
+        'depth': 'Depth',
+        'time': 'Time'
+
+    }[type];
+}
+function getFilterFunc(type, min=-Number.MAX_VALUE, max=Number.MAX_VALUE){
+    return  function (element){
+            var value = getFeatureProperty(element, type);
+            if(value <= max && value >= min)
+                return true;
+            return false;
+       };
+}
+function getTypeRange(type){
+    return {
+        'mag': [minMag, maxMag],
+        'sig': [minSig, maxSig],
+        'depth': [minDepth, maxDepth],
+        'time': [minDate, maxDate]
+    }[type];
+}
 function getFeatureProperty(feature, property){
     return {
         'lat':feature.geometry.coordinates[1],

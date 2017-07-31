@@ -19,7 +19,6 @@ function moveBar(value) {
         elem.style.width = '100' + '%';    
         elem.innerHTML = 'Done !';
         setTimeout(function(){
-                $('#timeDiv').slideDown();
             
                 $('#myProgress').slideUp();   
                 
@@ -42,6 +41,7 @@ function moveBar(value) {
     if(value === -4){
         elem.style.width = '100' + '%';    
         elem.innerHTML = 'Loading...';
+           $('#filterDiv').slideUp();
         return;
     }
     elem.style.width = Math.floor(value * 100) + '%';    
@@ -61,6 +61,7 @@ function getData(dataurl){
     xhr.onload = function(){
         try{
             theData = JSON.parse(xhr.responseText);
+            currentData = theData.features;
             theData.features = theData.features.sort(function(a,b){
                 return (getFeatureProperty(a,'time') - getFeatureProperty(b, 'time'));
             });
@@ -78,10 +79,12 @@ function getData(dataurl){
         $('#mainMap').empty();
         $('#mainMap').removeClass();
         dataDisplayed = 0;  
+        $('#filterTable > tbody').empty();
+        $('#filterTable').hide('slow'); 
 
         initMap();
         enableMenue();
-
+        
         //hide download bar
         setTimeout(function(){
             moveBar(-1);       
@@ -117,17 +120,7 @@ function extractOurData(){
     });
 }
 //update map size according to screen size (avoid scrooling - app like mode)
-// function windowResizeHandler(){
-//     var bodyChilds = document.body.children;
-//     var sumHeight = 0;
-//     for (var i = 0; i < bodyChilds.length; i++){
-//         if(! hasClass(bodyChilds[i], 'no-height'))
-//             sumHeight += bodyChilds[i].clientHeight || 0 ;
 
-//     }
-//     var windwoHeight = $(window).height();
-//     $('.map-wrapper:first').height(windwoHeight - sumHeight -10); //10 for the download bar
-// }
 function windowResizeHandler(){
 
     var totalHeight = 0;
@@ -140,8 +133,8 @@ function windowResizeHandler(){
     $(".width-calc").each(function(){
         totalWidth += $(this).width();
     });
-    if($('body').css('padding-top') !== 50) //$('#mainNav').height()
-        $('body').animate({ paddingTop: 50 });
+    // if($('body').css('padding-top') !== 50) //$('#mainNav').height()
+    //     $('body').animate({ paddingTop: 50 });
     var suggestedHeight = windwoHeight - totalHeight -50 -18;//34 xAxis, 50 navbar
     var suugestedWidth = windowWidth - totalWidth + 15;
     $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 
@@ -150,7 +143,7 @@ function windowResizeHandler(){
         mymap.invalidateSize();    
         // mymap.fitWorld();
     }
-    drawXAxis(minDate, maxDate);
+    drawXAxis(currentAxisType);
 }
 function toggleThemeWrapper(){
     if(themeLight){
@@ -164,9 +157,8 @@ function toggleThemeWrapper(){
 
 function updateCurrentData(type, who){
     moveBar(0);
-    $('#timeDiv').slideUp();
+    $('#filterDiv').slideUp();
     navBarHide();
-    currentData = type;
     $(who).parent().parent().children().removeClass('active');
     $(who).parent().addClass('active');
     setTimeout(function(){getData(type);},400); //300 to avoid progressbar slidedown lag
@@ -184,7 +176,20 @@ function hideMe(item){
 function showMe(item){
     $(item).show();
 }
-
+function filterDivHandler(type){
+    currentAxisType = type;
+    navBarHide();
+    disableMenue();
+    drawXAxis(type);
+    $('#filterDiv').slideDown();
+    
+    
+}
+function filterDataHandler(){
+    filterData(currentAxisType, filterMin, filterMax);
+    $('#filterDiv').slideUp();
+    enableMenue();
+}
 function navBarHide(){
     if($('#collapseBtn').css('display') !== 'none')
         $('.navbar-toggle').click();
@@ -204,18 +209,24 @@ function hasClass(element, cls) {
 }
 
 function resetMap(){
-    currentData = 'mag';
+    
     moveBar(-4);
     hideSelect();
     changeMap("");
     $('.info').css('display','block');
     selectData = undefined;
+    currentData = theData.features;
     replaceData(theData.features);
     mymap.setView([0,0],2);
+     $('#filterTable > tbody').empty();
+    $('#filterTable').hide('slow');    
     moveBar(-1);
     dynamicTurns = 10;
     i = 0;    
 }
+
+
+
 function enableMenue(){
     $('#collapseBtn').attr('data-toggle','collapse');
     $('#mainNav .dropdown, .navbar-btn').show();

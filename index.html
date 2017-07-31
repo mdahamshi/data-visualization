@@ -13,6 +13,7 @@
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/d3.slider.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
@@ -26,6 +27,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script type="text/javascript" src="js/d3.min.js"></script>
     <script type="text/javascript" src="js/Globals.js"></script>    
+    <script type="text/javascript" src="js/d3.slider.js"></script>
     
     <script src="data/worldgeo.js"></script>
     <script type="text/javascript" src="js/init.js"></script>
@@ -79,16 +81,28 @@
                 </li>
 
                  <li class="dropdown">
-                        <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Data Type
+                        <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Data
                         <span class="caret"></span></a>
                     <ul  class="dropdown-menu">
                         <li class="active default-active"><a href="#" onclick="updateCurrentData(pastDay, this);" >Last Day (default)</a>  </li>
                         <li><a href="#" onclick="updateCurrentData(pastSeven, this);" >Past 7 Days</a>  </li>
-                        <li><a href="#" onclick="updateCurrentData(allMonth, this);" >All Month</a>  </li>
+                        <li id='allMonths'><a href="#" onclick="updateCurrentData(allMonth, this);" >All Month</a>  </li>
                         
 
                     </ul>
                 </li>
+
+                <li class="dropdown">
+                    <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Filter By
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li data-toggle="tooltip" title="Filter the Data by time range."><a href="#" onclick="filterDivHandler('time')">Time</a>  </li>
+                        <li  id='toggleLabel' data-toggle="tooltip" title="Filter the Data by Magnitude range."><a href="#" onclick="filterDivHandler('mag')"  >Magnitude</a></li>
+                        <li data-toggle="tooltip" title="Filter the Data by Significance range."><a href="#" onclick="filterDivHandler('sig')">Significance</a></li>
+                        <li  id='toggleLabel' data-toggle="tooltip" title="Filter the Data by Depth range. "><a href="#" onclick="filterDivHandler('depth')"  >Depth</a></li>
+                    </ul>
+                </li>
+
                   <button class="btn  navbar-btn" onclick="animateBtnHandler()" data-toggle="tooltip" title="Animate the Map according to the date they happend">Animate</button> 
                  <button class="btn btn-danger navbar-btn" onclick="resetMap();navBarHide()" data-toggle="tooltip" title="Reset the map to it's original state">Reset</button>
             </ul>
@@ -124,8 +138,13 @@
     <div id="sideBar" class=" "></div>
 
     <!-- time axis -->
-    <div id='timeDiv' class=" margin-up-down">
-        <svg id='timeSvg'></svg>
+    <div id='filterDiv' class=" margin-up-down">
+         <!-- <svg id='timeSvg'></svg>  -->
+         <div id='filterAxis'></div>
+         <div  class="col-md-4 text-center">
+         <button type="button" class="btn btn-default" value="cancel" onclick="$('#filterDiv').slideUp();enableMenue();">Cancel</button>
+         <button type="button" class="btn btn-default" value="begin" onclick="filterDataHandler();">Filter</button>
+         </div>
     </div>
 
     <!--the map-->
@@ -143,10 +162,25 @@
     <div id='success-alert' style="display:none;"class="text-center alert alert-success">
         <strong></strong> Data Animated Successfully !
     </div>
+      <div  class="text-center container">
+        <table id='filterTable' style='display:none;' class="table text-center">
+            <thead>
+                <tr>
+                    <th class="col-xs-1">#</th>
+                    <th class="col-xs-1">Filter</th>
+                    <th class="col-xs-5">From</th>
+                    <th class="col-xs-5">To</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+    </div>
    <table class="table table-condensed text-center height-calc">
-    <thead>
-      <tr>
-        <th># Earthquakes</th>
+    <thead >
+      <tr id="infoHead">
+        <th ># Earthquakes</th>
         <th>Magnitude Range</th>
         <th>Sig Range</th>
         <th># Felt / Not Felt</th>
