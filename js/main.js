@@ -181,6 +181,7 @@ function filterDivHandler(type){
         showInfo('No Data available ! Reset the Map', 'alert-danger')
         return;
     }
+    $("html, body").animate({ scrollTop: 0 }, "slow");
     currentAxisType = type;
     navBarHide();
     disableMenue();
@@ -231,15 +232,16 @@ function resetMap(){
 }
 
 
-function showInfo(msg, type){
-    $('#success-alert').text(msg);
-    $('#success-alert').addClass(type);
-    $('#success-alert').slideDown();
+function showInfo(msg, type, after = 0){
     setTimeout(function(){
-    $('#success-alert').slideUp();
-    $('#success-alert').removeClass(type);
-        
-    }, 3000);
+        $('#success-alert').text(msg);
+        $('#success-alert').addClass(type);
+        $('#success-alert').slideDown();
+        setTimeout(function(){
+        $('#success-alert').slideUp();
+        setTimeout(a =>{$('#success-alert').removeClass(type);}, 1000);        
+        }, 3000);
+    }, after);
 }
 function enableMenue(){
     $('#collapseBtn').attr('data-toggle','collapse');

@@ -56,6 +56,16 @@ body{
     margin-bottom: 50;
     
 }
+div.mytooltip {	
+    position: absolute;			
+    padding: 40px;				
+    font: 12px sans-serif;		
+    background: black;	
+    color: white; 
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
+}
 #filterDiv{
     display: none;
     width: inherit;
@@ -90,7 +100,7 @@ body{
 #quakeMap > circle{
     stroke: white;
 }
-.info {
+.info ,.pointInfo {
     padding: 6px 8px;
     font: 14px/16px Arial, Helvetica, sans-serif;
     background: white;
@@ -98,10 +108,11 @@ body{
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
 }
-.info h4 {
+.info  ,.pointInfo h4 {
     margin: 0 0 5px;
     color: #777;
 }
+
  /* #worldGraph path:hover{
     cursor: pointer;
 }  */
