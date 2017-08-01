@@ -4,7 +4,12 @@
 
 //creating leaflet map
 var mapOpacity = 0.5,
-    strokeOpacity = 0.5;
+    strokeOpacity = 0.5,
+     div = d3.select("body").append("div")	
+    .attr("class", "mytooltip")				
+    .style("opacity", 0);
+
+    
 function initMap(){
     mymap = L.map('mainMap').setView([0,0],2);
     // mymap.createPane('geoJsonPane');
@@ -52,10 +57,38 @@ function initMap(){
     theData.features.forEach(function(d) {
             d.LatLng = new L.LatLng(getFeatureProperty(d,'lat'),
                                     getFeatureProperty(d,'lng'))
+            d.getTooltipString = function(){
+                var mag = getFeatureProperty(this, 'mag'),
+                    sig = getFeatureProperty(this, 'sig'),
+                    depth = getFeatureProperty(this, 'depth'),
+                    time = new Date(getFeatureProperty(this, 'time')).toLocaleTimeString('en-us',dateOptions),
+                    lat = getFeatureProperty(this, 'lat'),
+                    lng = getFeatureProperty(this, 'lng');
+                return `
+                    Date: ${time} <br/>
+                    Magnitude: ${mag} <br/>
+                    Significance: ${sig} <br/>
+                    Depth: ${depth} <br/>
+                    Latitude: ${lat} <br/>
+                    Longitude: ${lng}
+                `
+            }
         }
     );
     //inserting info popup (right)
     var info = L.control();
+    pointInfo = L.control.layers(null, null, {position: 'bottomright'});
+    
+    pointInfo.onAdd = function(map){
+        this._div = L.DomUtil.create('div', 'pointInfo'); // create a div with a class "info"
+        this.update();
+        return this._div;
+    };
+
+    pointInfo.update = function(d){
+        this._div.innerHTML = '<h4>Point Info</h4>' +  (d ?
+        d.getTooltipString() : 'Hover a point');
+    };
 
     info.onAdd = function (map) {
         this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
@@ -70,6 +103,8 @@ function initMap(){
     };
 
     info.addTo(mymap);
+    if(! isMobile)    //not sutible for small screens, also it is hover activate
+        pointInfo.addTo(mymap);
     replaceQuakeData(theData.features);
     
     
@@ -498,11 +533,28 @@ function replaceQuakeData(data){
     //     var oldFill = d3.select(this).attr('oldFill');
     //     d3.select(this).style('fill',oldFill);
     // })
-    .on('click', function(d){
-        if (d3.event.defaultPrevented) 
-            return; // dragged
-        console.log('quake clicked',this,d);
-    }).call(drag);
+    // .on('click', function(d){
+    //     if (d3.event.defaultPrevented) 
+    //         return; // dragged
+    //     console.log('quake clicked',this,d);
+    // }).call(drag);
+     .on("mouseover", function(d) {		
+            // div.transition()		
+            //     .duration(200)		
+            //     .style("opacity", .9);		
+            // div	.html(d.getTooltipString())	
+            //     .style("left", (d3.event.pageX) + "px")		
+            //     .style("top", (d3.event.pageY - 28) + "px");	
+
+            pointInfo.update(d);
+            })					
+        .on("mouseout", function(d) {		
+            // div.transition()		
+            //     .duration(500)		
+            //     .style("opacity", 0);	
+            pointInfo.update();
+        });
+
       
     updateQuakeProperties();
     zoomReset();
@@ -556,7 +608,7 @@ function updateQuakePropertiesDynamic(){
         dataDisplayed++;
         if (earthquakes[0].length === dataDisplayed){ 
             enableMenue();
-            showInfo('Data animated successfuly !', 'alert-success')
+            showInfo('Data animated successfuly !', 'alert-success', 2000);
             setTimeout(function(){
 
          
@@ -603,14 +655,11 @@ function filterData(type, min, max){
     );
     replaceData(currentData);
     if(type == 'time'){
-        var options = {  
-        weekday: "short", year: "numeric", month: "short",  
-        day: "numeric", hour: "2-digit", minute: "2-digit"  
-        };  
+ 
         var start = new Date(min),
             end = new Date(max);
-        min = start.toLocaleTimeString('en-us',options);
-        max = end.toLocaleTimeString('en-us',options);
+        min = start.toLocaleTimeString('en-us',dateOptions);
+        max = end.toLocaleTimeString('en-us',dateOptions);
     }
     else{
         min = min.toFixed(2);
