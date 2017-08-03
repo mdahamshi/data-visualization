@@ -111,6 +111,12 @@ var ResetZoom = L.Control.extend({
     container.onclick = function(){
        mymap.setView([0,0],1);
     }
+    container.onmouseover = function(){
+        $('.legends').show('slow');
+    }
+    container.onmouseout = function(){
+        $('.legends').hide('slow');
+    }
     return container;
   },
  
