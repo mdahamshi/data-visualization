@@ -177,8 +177,8 @@ function showMe(item){
     $(item).show();
 }
 function filterDivHandler(type){
-    if(currentData.length === 0){
-        showInfo('No Data available ! Reset the Map', 'alert-danger')
+    if(currentData.length <= 1){
+        showInfo('Not enough Data available ! Reset the Map', 'alert-danger')
         return;
     }
     $("html, body").animate({ scrollTop: 0 }, "slow");

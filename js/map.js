@@ -57,30 +57,21 @@ function initMap(){
     theData.features.forEach(function(d) {
             d.LatLng = new L.LatLng(getFeatureProperty(d,'lat'),
                                     getFeatureProperty(d,'lng'))
-            d.getTooltipString = function(){
-                var mag = getFeatureProperty(this, 'mag'),
-                    sig = getFeatureProperty(this, 'sig'),
-                    depth = getFeatureProperty(this, 'depth'),
-                    time = new Date(getFeatureProperty(this, 'time')).toLocaleTimeString('en-us',dateOptions),
-                    lat = getFeatureProperty(this, 'lat'),
-                    lng = getFeatureProperty(this, 'lng');
-                return `
-                    Date: ${time} <br/>
-                    Magnitude: ${mag} <br/>
-                    Significance: ${sig} <br/>
-                    Depth: ${depth} <br/>
-                    Latitude: ${lat} <br/>
-                    Longitude: ${lng}
-                `
-            }
+            d.getTooltipString = getPointInfo;
         }
     );
     //inserting info popup (right)
     var info = L.control();
-    pointInfo = L.control.layers(null, null, {position: 'bottomright'});
+    pointInfo = L.control.layers(null, null, {position: 'bottomright'})
+    , legend =  L.control.layers(null, null, {position: 'bottomleft'});
+    legend.onAdd = function(map){
+        this._div = L.DomUtil.create('div', 'info legends'); // create a div with a class "info"
+        return this._div;
+    }
+
     
     pointInfo.onAdd = function(map){
-        this._div = L.DomUtil.create('div', 'pointInfo'); // create a div with a class "info"
+        this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
         this.update();
         return this._div;
     };
@@ -103,8 +94,11 @@ function initMap(){
     };
 
     info.addTo(mymap);
-    if(! isMobile)    //not sutible for small screens, also it is hover activate
+    if(! isMobile){    //not sutible for small screens, also it is hover activate
         pointInfo.addTo(mymap);
+        legend.addTo(mymap);
+    }
+
     replaceQuakeData(theData.features);
     
     
@@ -160,6 +154,7 @@ function initMap(){
 
     zoomReset();    //to set default map at startup
     changeMap("");
+    createLegends();
 
 }
 
@@ -202,7 +197,23 @@ function getTimeTick(){
     if(dataURL === allMonth)
         return d3.time.weeks;
 }
-
+function getPointInfo(){
+    
+                var mag = getFeatureProperty(this, 'mag'),
+                    sig = getFeatureProperty(this, 'sig'),
+                    depth = getFeatureProperty(this, 'depth'),
+                    time = new Date(getFeatureProperty(this, 'time')).toLocaleTimeString('en-us',dateOptions),
+                    lat = getFeatureProperty(this, 'lat'),
+                    lng = getFeatureProperty(this, 'lng');
+                return `
+                    Date: ${time} <br/>
+                    Magnitude: ${mag} <br/>
+                    Significance: ${sig} <br/>
+                    Depth: ${depth} <br/>
+                    Latitude: ${lat} <br/>
+                    Longitude: ${lng}
+                `
+            }
 function drawXAxis(type){
     $('#filterAxis').empty();
     var start = getTypeRange(type)[0],
@@ -210,6 +221,8 @@ function drawXAxis(type){
     
     filterMin = start;
     filterMax = end;
+   $('#filterMin').text(getFilterTxt(type, filterMin));
+    $('#filterMax').text(getFilterTxt(type, filterMax));    
 
    getAxis();
     d3.select('#handle-one').style('left','0%');
@@ -220,40 +233,40 @@ function drawXAxis(type){
 
     function getAxis(){
         var width = $('body').width();
+        var axis;
         if(type === 'time')
-            return d3.select('#filterAxis')
-            .call(d3.slider()
+            axis = d3.slider()
             .scale(d3.time.scale()
-            .domain([new Date(start), new Date(end)])
-            // .range([20, width - 20])
-        )
-            
+                .domain([new Date(start), new Date(end)])        
+                )
             .axis(d3.svg.axis())
-            .value([start, end])
-            .on('slide', function(evt, value){
-            console.log('1  ',value[0]);
-            console.log('2   ',value[1]);
-            filterMin = value[0];
-            filterMax = value[1];
-        })
-        );
+            .value([start, end]);
         else
-            return   d3.select('#filterAxis')
-            .call(d3.slider().axis(true)
+          axis = d3.slider().axis(true)
             .min(start).max(end)
-            .step((start - end) / width)
-            .value([start, end])
-            .on('slide', function(evt, value){
-            console.log('1  ',value[0]);
-            console.log('2   ',value[1]);
-            filterMin = value[0];
-            filterMax = value[1];
-        })
-        );
+            .step((end - start) / width)
+            .value([start, end]);
+       
+        
+        axis.on('slide', function(evt, value){
+                filterMin = value[0];
+                filterMax = value[1];
+                $('#filterMin').text(getFilterTxt(currentAxisType, filterMin));
+                $('#filterMax').text(getFilterTxt(currentAxisType, filterMax));
+            })
+        return d3.select('#filterAxis')
+            .call(axis);
     }
-    // .append('text')
-    // .attr('class', 'label')
-    // .attr('x', width);
+    function getFilterTxt(type, value){
+        if(type === 'time'){
+            return new Date(value)
+            .toLocaleTimeString('en-us',dateOptions);
+        }
+        else{
+            return value.toFixed(2);
+        }
+    }
+
 }
 
 
@@ -523,35 +536,13 @@ function replaceQuakeData(data){
     quakeFeature.exit().remove();   
     quakeFeature.enter()
     .append('circle')
-        // .classed('leaflet-interactive', true)
-    // .on('mouseover' ,function(){
-    //     var oldFill = d3.select(this).style('fill')
-    //     d3.select(this).attr('oldFill',oldFill)
-    //     d3.select(this).style('fill','gray');
-    // })
-    // .on('mouseout', function(){
-    //     var oldFill = d3.select(this).attr('oldFill');
-    //     d3.select(this).style('fill',oldFill);
-    // })
-    // .on('click', function(d){
-    //     if (d3.event.defaultPrevented) 
-    //         return; // dragged
-    //     console.log('quake clicked',this,d);
-    // }).call(drag);
-     .on("mouseover", function(d) {		
-            // div.transition()		
-            //     .duration(200)		
-            //     .style("opacity", .9);		
-            // div	.html(d.getTooltipString())	
-            //     .style("left", (d3.event.pageX) + "px")		
-            //     .style("top", (d3.event.pageY - 28) + "px");	
-
+  
+    .on("mouseover", function(d) {		
+        d3.select(this).style("fill-opacity", 0.5); 
             pointInfo.update(d);
             })					
-        .on("mouseout", function(d) {		
-            // div.transition()		
-            //     .duration(500)		
-            //     .style("opacity", 0);	
+    .on("mouseout", function(d) {		
+            d3.select(this).style("fill-opacity", 1) ;
             pointInfo.update();
         });
 
@@ -567,12 +558,112 @@ function updateQuakeProperties(){
     .style("stroke-opacity", strokeOpacityAttr)
     .style('stroke-width', 0)
     .style("fill-opacity", 1) 
+    .style('pointer-events', 'visible')
     // .style('fill-opacity',transAttr)
     // .style('stroke-opacity', transAttr);
     feltOn = false;
     
 }
+function createLegends(){
+    var margin = {top: 20, right: 20, bottom: 30, left: 30};
+    var legendElements;
+    d3.select('.legends').append('svg');
+    d3.select('.legends svg')
+    .style('width','250')
+    .style('height', '270')
+    .append('g')  
+    .attr('id', 'radiusLegend')
+    .attr("transform", "translate(" + margin.left + "," + (margin.top * 2) + ")");
+    
+    legendElements = d3.select('#radiusLegend')
+    .selectAll('g') 
+    .data(radiusScale.range().slice(1))
+    .enter().append('g');
 
+    d3.select('#radiusLegend')
+    .append('text')
+    .attr('dy','-16')
+    .style('font-weight', 'bold')
+    .text('Magnitude');
+
+    var ysum=0;
+    legendElements
+    .append('circle')
+    .attr('r',d => {return d;})
+    .attr('cy',(d,i)=> {return (i > 0 ? (ysum = 2 * radiusRange[i-1] + 20 + ysum) : 0)});
+    ysum = 0;
+    legendElements
+    .append('text')
+    .attr('y',(d,i)=> {return (i > 0 ? (ysum = 2 * radiusRange[i-1] + 20 + ysum) : 0)})
+    .attr('dy','5')
+    .attr('dx','40')
+    .text(function(d,i){
+        var value = radiusScale.invertExtent(radiusScale.range().slice(1)[i]);
+        var max =  radiusScale.invertExtent(radiusScale.range().slice(1)[radiusScale.range().slice(1).length - 1]);
+        var min =  radiusScale.invertExtent(radiusScale.range().slice(1)[0]);
+        if(value[1] ===  max[1])
+            return (value[0] + '+');
+        if(value[1] === min[1])
+            value[1] =  radiusScale.invertExtent(radiusScale.range()[2])[0];
+        return value[0] + ' to ' + value[1];
+    });
+    var radiusLegendWidth = d3.select('#radiusLegend').node().getBBox()['width'];
+    d3.select('.legends svg')
+    // .style('width','100%')
+    // .style('height', '400')
+    .append('g')  
+    .attr('id', 'colorLegend')
+    .attr("transform", "translate(" +  (radiusLegendWidth+margin.left) + "," + (margin.top + 20) + ")");
+
+    d3.select('#colorLegend')
+    .append('text')
+    .style('font-weight', 'bold')
+    .attr('dy','-16')
+    .text('Significance');
+    
+    legendElements = d3.select('#colorLegend')
+    .selectAll('g') 
+    .data(colorScale.range())
+    .enter().append('g');
+    var rectheight = 20 , rectwidth = 40;
+     legendElements
+    .append('rect')
+    .attr('x',0)
+    .attr('width', rectwidth)
+    .attr('height', rectheight)
+    .attr('y',(d,i)=> {return (i*(rectheight+5) )})
+    .attr('fill', d=>{return d});
+    
+    legendElements
+    .append('text')
+    .attr('y',(d,i)=> {return (i*(rectheight+5) )})
+    .attr('dy','16')
+    .attr('dx','50')
+    .text(function(d,i){
+        var value = colorScale.invertExtent(colorScale.range()[i]);
+        var max =  colorScale.invertExtent(colorScale.range()[colorScale.range().length - 1]);
+        var min =  radiusScale.invertExtent(radiusScale.range().slice(1)[0]);
+        if(value[1] ===  max[1])
+            return (value[0].toFixed(0) + '+');
+       return (value[0].toFixed(0) + ' to ' + value[1].toFixed(0));
+    });
+
+    legendElements.append('text')
+    .attr('y', ysum =  colorRange.length*(rectheight+5)  + 40)
+    .text('Felt:');
+    
+    legendElements.append('circle')
+    .attr('r', 15)
+    .attr('cy', ysum - 5)
+    .attr('cx', 70)
+    .attr('fill', 'white')
+    .attr('stroke', strokeRange[1])
+    .attr('stroke-width', 2);
+
+    d3.select('.legends').style('display','none');
+    
+
+}
 function animateFormHandler(){
     var time = $('#animateTime').val();
     if(isNaN(time) || time < 0 || time ===''){
@@ -593,6 +684,7 @@ function updateQuakePropertiesDynamic(){
     if(earthquakes[0].length === dataDisplayed)
         return;
     var c = earthquakes[0][dataDisplayed];
+    pointInfo.update(c.__data__);
         d3.select(c)
         .attr("r", 1)
         .style("fill", circleColorAttr)
@@ -603,7 +695,7 @@ function updateQuakePropertiesDynamic(){
         .ease(Math.sqrt)
         .attr("r", radiusAttrExtra)
         .style("fill-opacity", 1e-6)
-        .style("stroke-opacity", 1e-6)
+        .style("stroke-opacity", 1e-6);
         setTimeout(updateQuakePropertiesDynamic, animateDelta);
         dataDisplayed++;
         if (earthquakes[0].length === dataDisplayed){ 
@@ -611,7 +703,7 @@ function updateQuakePropertiesDynamic(){
             showInfo('Data animated successfuly !', 'alert-success', 2000);
             setTimeout(function(){
 
-         
+                pointInfo.update();
                 // replaceQuakeData(theData.features);
                 updateQuakeProperties();
                 dataDisplayed = 0;
@@ -627,6 +719,7 @@ function updateQuakePropertiesDynamic(){
 
 function animateMap(toggleTheme){
         quakeFeature.style('fill-opacity',0)
+        .style('pointer-events','none')
         .style("stroke-opacity", 0)
         if(themeLight && toggleTheme)
             toggleThemeTo('dark');

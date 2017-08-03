@@ -84,9 +84,9 @@
                         <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Data
                         <span class="caret"></span></a>
                     <ul  class="dropdown-menu">
-                        <li class="active default-active"><a href="#" onclick="updateCurrentData(pastDay, this);" >Last Day (default)</a>  </li>
-                        <li><a href="#" onclick="updateCurrentData(pastSeven, this);" >Past 7 Days</a>  </li>
-                        <li id='allMonths'><a href="#" onclick="updateCurrentData(allMonth, this);" >All Month</a>  </li>
+                        <li class="active default-active" data-toggle="tooltip" title='Display Data from last 24 hours.'><a href="#" onclick="updateCurrentData(pastDay, this);" >Last Day (default)</a>  </li>
+                        <li data-toggle="tooltip" title="Display Data from last 7 days."><a href="#" onclick="updateCurrentData(pastSeven, this);" >Past 7 Days</a>  </li>
+                        <li id='allMonths' data-toggle="tooltip" title="Display Data from last 30 days."><a href="#" onclick="updateCurrentData(allMonth, this);" >All Month</a>  </li>
                         
 
                     </ul>
@@ -122,7 +122,7 @@
     <!-- user input divs -->
     <form id='animateForm'   class="margin-left-right form-inline margin-up-down">
   <div class="form-group">
-    <label for="animateTime" >Time : </label>
+    <label for="animateTime" >Time (ms) : </label>
     <input type="text" value="500" data-toggle="tooltip" title="Time in ms between each point appearance." class="form-control" id="animateTime">
   </div>
   
@@ -142,8 +142,10 @@
          <!-- <svg id='timeSvg'></svg>  -->
          <div id='filterAxis'></div>
          <div  style="text-align: center">
+         Min: <span id="filterMin">hh</span>
          <button type="button" class="btn btn-default" value="cancel" onclick="$('#filterDiv').slideUp();enableMenue();">Cancel</button>
          <button type="button" class="btn btn-default" value="begin" onclick="filterDataHandler();">Filter</button>
+         Max: <span id="filterMax">ss</span>
          </div>
     </div>
 
@@ -179,6 +181,8 @@
             </tbody>
         </table>
     </div>
+
+    <!-- summary table -->
    <table class="table table-condensed text-center height-calc">
     <thead >
       <tr id="infoHead">
