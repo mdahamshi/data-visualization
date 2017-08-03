@@ -94,9 +94,6 @@ var ResetZoom = L.Control.extend({
     container.style.cursor = 'pointer';
     container.style.display = 'block';
     container.setAttribute("title",'Reset Zoom');
-    // container.style.backgroundColor = '#293f50';
-    // container.style.width = mymap.getSize().y / 2;
-    // container.style.height = '40px';
     container.innerText = 'O';
     this.show = function(){
         container.style.display = 'inline-block';
@@ -112,10 +109,12 @@ var ResetZoom = L.Control.extend({
        mymap.setView([0,0],1);
     }
     container.onmouseover = function(){
-        $('.legends').show('slow');
+        if(! isMobile)
+            $('.legends').show('slow');
     }
     container.onmouseout = function(){
-        $('.legends').hide('slow');
+        if(! isMobile)
+            $('.legends').hide('slow');
     }
     return container;
   },
