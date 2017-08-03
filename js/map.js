@@ -683,7 +683,8 @@ function updateQuakePropertiesDynamic(){
     if(earthquakes[0].length === dataDisplayed)
         return;
     var c = earthquakes[0][dataDisplayed];
-    pointInfo.update(c.__data__);
+    if(! isMobile)
+        pointInfo.update(c.__data__);
         d3.select(c)
         .attr("r", 1)
         .style("fill", circleColorAttr)
@@ -701,8 +702,8 @@ function updateQuakePropertiesDynamic(){
             enableMenue();
             showInfo('Data animated successfuly !', 'alert-success', 2000);
             setTimeout(function(){
-
-                pointInfo.update();
+                if(! isMobile)
+                    pointInfo.update();
                 // replaceQuakeData(theData.features);
                 updateQuakeProperties();
                 dataDisplayed = 0;
