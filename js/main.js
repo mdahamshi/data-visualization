@@ -218,7 +218,7 @@ function resetMap(){
     moveBar(-4);
     hideSelect();
     changeMap("");
-    $('.info').css('display','block');
+    // $('.info').css('display','block');
     selectData = undefined;
     currentData = theData.features;
     replaceData(theData.features);

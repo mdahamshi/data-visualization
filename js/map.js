@@ -154,7 +154,8 @@ function initMap(){
 
     zoomReset();    //to set default map at startup
     changeMap("");
-    createLegends();
+    if(! isMobile)
+        createLegends();
 
 }
 
@@ -609,8 +610,6 @@ function createLegends(){
     });
     var radiusLegendWidth = d3.select('#radiusLegend').node().getBBox()['width'];
     d3.select('.legends svg')
-    // .style('width','100%')
-    // .style('height', '400')
     .append('g')  
     .attr('id', 'colorLegend')
     .attr("transform", "translate(" +  (radiusLegendWidth+margin.left) + "," + (margin.top + 20) + ")");
@@ -660,7 +659,7 @@ function createLegends(){
     .attr('stroke', strokeRange[1])
     .attr('stroke-width', 2);
 
-    d3.select('.legends').style('display','none');
+    // d3.select('.legends').style('display','none');
     
 
 }
