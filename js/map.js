@@ -16,14 +16,10 @@ function initMap(){
     // mymap.getPane('geoJsonPane').style.pointerEvents = 'visible';
     // mymap.createPane('labels');
     feltOn = false;
-    cancelSelect = new MyButton();
-    mymap.addControl(cancelSelect);
-    cancelSelect.text('Cancel');
-    cancelSelect.container.onclick = hideSelect;
-    selectButton = new MyButton();
-    mymap.addControl(selectButton);
-    selectButton.container.onclick = addSelected;
-    mymap.addControl(new ResetZoom());
+    legendOn = true;
+    addCustomButtons();
+    
+
 
     geojson = L.geoJson(worldgeo.features,
         {
@@ -437,7 +433,8 @@ function worldLayerToggle(){
         $('.info').css('display','block');
     }else{
         $('#worldLayer').css('display','none');
-        $('.info').css('display','none');
+        
+        // $('.info').css('display','none');
     }
 }
 //add heat layer to the map
@@ -819,4 +816,35 @@ function featureToHeat(element){
             'lng': element.geometry.coordinates[0], 
             'mag': element.properties.mag
     }
+}
+
+function addCustomButtons(){
+    //select buttons
+    cancelSelect = new MyButton();
+    mymap.addControl(cancelSelect);
+    cancelSelect.text('Cancel');
+    cancelSelect.container.onclick = hideSelect;
+    selectButton = new MyButton();
+    mymap.addControl(selectButton);
+    selectButton.container.onclick = addSelected;
+    //reset zoom and toggle legend buttons
+    d3.select('#mainMap > div.leaflet-control-container > div.leaflet-top.leaflet-left > div')
+    .append('a').attr('id','resetZoomButton')
+    .attr('onclick','mymap.setView([0,0],1);')
+    .attr('role', 'button')
+    .attr('title', 'Reset Zoom')
+    .text('R');
+
+    d3.select('#mainMap > div.leaflet-control-container > div.leaflet-top.leaflet-left > div')
+    .append('a').attr('id','toggleLegendButton')
+    .attr('onclick','toggleLegend();')
+    .attr('onmouseover', 'legendHover("in")')
+    .attr('onmouseout', 'legendHover("out")')
+    .attr('role', 'button')
+    .attr('title', 'Hover to show legend, click to keep it shown')
+    .style('background-color', '#68ff7f')
+    .text('L');
+
+
+
 }
