@@ -73,7 +73,7 @@ function initMap(){
     };
 
     pointInfo.update = function(d){
-        this._div.innerHTML = '<h4>Point Info</h4>' +  (d ?
+        this._div.innerHTML = '<h4>Quake Info</h4>' +  (d ?
         d.getTooltipString() : 'Hover a point');
     };
 
@@ -201,11 +201,13 @@ function getPointInfo(){
                     depth = getFeatureProperty(this, 'depth'),
                     time = new Date(getFeatureProperty(this, 'time')).toLocaleTimeString('en-us',dateOptions),
                     lat = getFeatureProperty(this, 'lat'),
-                    lng = getFeatureProperty(this, 'lng');
+                    lng = getFeatureProperty(this, 'lng'),
+                    felt = getFeatureProperty(this, 'felt') || 0;
                 return `
                     Date: ${time} <br/>
                     Magnitude: ${mag} <br/>
                     Significance: ${sig} <br/>
+                    Felt: ${felt} <br/>
                     Depth: ${depth} <br/>
                     Latitude: ${lat} <br/>
                     Longitude: ${lng}
@@ -834,16 +836,16 @@ function addCustomButtons(){
     .attr('role', 'button')
     .attr('title', 'Reset Zoom')
     .text('R');
-
-    d3.select('#mainMap > div.leaflet-control-container > div.leaflet-top.leaflet-left > div')
-    .append('a').attr('id','toggleLegendButton')
-    .attr('onclick','toggleLegend();')
-    .attr('onmouseover', 'legendHover("in")')
-    .attr('onmouseout', 'legendHover("out")')
-    .attr('role', 'button')
-    .attr('title', 'Hover to show legend, click to keep it shown')
-    .style('background-color', '#68ff7f')
-    .text('L');
+    if(! isMobile)
+        d3.select('#mainMap > div.leaflet-control-container > div.leaflet-top.leaflet-left > div')
+        .append('a').attr('id','toggleLegendButton')
+        .attr('onclick','toggleLegend();')
+        .attr('onmouseover', 'legendHover("in")')
+        .attr('onmouseout', 'legendHover("out")')
+        .attr('role', 'button')
+        .attr('title', 'Hover to show legend, click to keep it shown')
+        .style('background-color', '#68ff7f')
+        .text('L');
 
 
 
