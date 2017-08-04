@@ -192,6 +192,7 @@ function filterDivHandler(type){
 }
 function filterDataHandler(){
     filterData(currentAxisType, filterMin, filterMax);
+    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
     $('#filterDiv').slideUp();
     enableMenue();
 }
@@ -261,7 +262,6 @@ function init(){
 }
 
 function toggleLegend(){
-
     if(legendOn){
         $('.legends').hide('slow');
         d3.select('#toggleLegendButton')
