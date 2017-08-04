@@ -135,7 +135,7 @@ function windowResizeHandler(){
     });
     // if($('body').css('padding-top') !== 50) //$('#mainNav').height()
     //     $('body').animate({ paddingTop: 50 });
-    var suggestedHeight = windwoHeight - totalHeight -50 -18;//34 xAxis, 50 navbar
+    var suggestedHeight = windwoHeight - totalHeight -30 ;
     var suugestedWidth = windowWidth - totalWidth + 15;
     $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 
     $('.map-wrapper').width(Math.max(suugestedWidth,380) ); 
@@ -216,9 +216,10 @@ function hasClass(element, cls) {
 function resetMap(){
     
     moveBar(-4);
+    legendOn = true;
     hideSelect();
     changeMap("");
-    // $('.info').css('display','block');
+    $('.info').css('display','block');
     selectData = undefined;
     currentData = theData.features;
     replaceData(theData.features);
@@ -227,8 +228,7 @@ function resetMap(){
     $('#filterTable').hide('slow');    
 
     moveBar(-1);
-    dynamicTurns = 10;
-    i = 0;    
+    $("html, body").animate({ scrollTop: 0 }, "slow");
 }
 
 
@@ -260,7 +260,28 @@ function init(){
     
 }
 
+function toggleLegend(){
 
+    if(legendOn){
+        $('.legends').hide('slow');
+        d3.select('#toggleLegendButton')
+        .style('background-color', 'white')
+        legendOn = false;
+    }
+    else{
+        $('.legends').show('slow');
+        d3.select('#toggleLegendButton')
+        .style('background-color', '#68ff7f')
+        legendOn = true;
+    }
+}
+function legendHover(type){
+    if(legendOn === false)
+        if(type === 'out')
+            $('.legends').hide('slow');
+        else
+            $('.legends').show('slow');
+}
 
 
 window.onresize = windowResizeHandler;
