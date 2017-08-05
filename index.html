@@ -103,13 +103,14 @@
                     </ul>
                 </li>
 
-                  <button class="btn  myintro navbar-btn" 
+                  <button class="btn btn-primary  myintro navbar-btn" 
                   onclick="animateBtnHandler()" data-toggle="tooltip" 
                   data-intro="This button animate the points according to the time they occured." data-step="7" title="Animate the Map according to the date they happend">Animate</button> 
                  <button class="btn myintro btn-danger navbar-btn" 
                  data-intro="This button reset the map to it's original state (with last choosen Data)"
                  data-step="8"
                  onclick="resetMap();navBarHide()" data-toggle="tooltip" title="Reset the map to it's original state">Reset</button>
+                 <button onclick="introJs().setOptions({groupClass:'.myintro'}).start();"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to show a tour">?</button>
             </ul>
         </div>
     </nav>
