@@ -69,6 +69,7 @@ function initMap(){
     pointInfo.onAdd = function(map){
         this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
         this.update();
+        this._div.setAttribute('data-intro','Here we show hovered point information');
         return this._div;
     };
 
@@ -93,6 +94,7 @@ function initMap(){
     if(! isMobile){    //not sutible for small screens, also it is hover activate
         pointInfo.addTo(mymap);
         legend.addTo(mymap);
+        
     }
 
     replaceQuakeData(theData.features);
@@ -208,7 +210,7 @@ function getPointInfo(){
                     Magnitude: ${mag} <br/>
                     Significance: ${sig} <br/>
                     Felt: ${felt} <br/>
-                    Depth: ${depth} <br/>
+                    Depth: ${depth} km <br/>
                     Latitude: ${lat} <br/>
                     Longitude: ${lng}
                 `
@@ -442,7 +444,7 @@ function worldLayerToggle(){
 //add heat layer to the map
 function addHeatMap(data){
     
-    var delta = maxValue - minValue;
+    var delta = maxMag - minMag;
     //maping the data to be between 0..1
     if(delta > 0){
         var mappedData = data.map(
@@ -452,7 +454,6 @@ function addHeatMap(data){
     }
     else
         mappedData = data.map(function(e){return [e.lat,e.lng,0];}) //the case where all mag is -1
-    updateDataSummary(data);
     try{
         return L.heatLayer(data, {
             radius: 19,
@@ -574,6 +575,7 @@ function createLegends(){
     .append('g')  
     .attr('id', 'radiusLegend')
     .attr("transform", "translate(" + margin.left + "," + (margin.top * 2) + ")");
+
     
     legendElements = d3.select('#radiusLegend')
     .selectAll('g') 
@@ -835,6 +837,9 @@ function addCustomButtons(){
     .attr('onclick','mymap.setView([0,0],1);')
     .attr('role', 'button')
     .attr('title', 'Reset Zoom')
+    .attr('data-intro',"This button restore the map zoom to 0.")
+    .classed('myintro', true)    
+    .attr('data-step', '4')
     .text('R');
     if(! isMobile)
         d3.select('#mainMap > div.leaflet-control-container > div.leaflet-top.leaflet-left > div')
@@ -844,9 +849,14 @@ function addCustomButtons(){
         .attr('onmouseout', 'legendHover("out")')
         .attr('role', 'button')
         .attr('title', 'Hover to show legend, click to keep it shown')
+        .attr('data-intro',"This button show/hide the legend.")
+        .attr('data-step', '5')
+        .classed('myintro', true)
+        
         .style('background-color', '#68ff7f')
         .text('L');
-
+    
+    
 
 
 }

@@ -18,6 +18,9 @@ function moveBar(value) {
     if(value === -1){
         elem.style.width = '100' + '%';    
         elem.innerHTML = 'Done !';
+        if(! introShowed)
+            introJs().setOptions({groupClass:'.myintro'}).start();
+        introShowed = true;
         setTimeout(function(){
             
                 $('#myProgress').slideUp();   
@@ -257,6 +260,7 @@ function init(){
      $('body').animate({ paddingTop: $('#mainNav').height() });
      moveBar(0);
      setTimeout(function(){getData(dataURL);},1000); //300 to avoid progressbar slidedown lag
+     
     
     
 }
