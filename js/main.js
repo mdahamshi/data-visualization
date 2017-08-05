@@ -18,8 +18,10 @@ function moveBar(value) {
     if(value === -1){
         elem.style.width = '100' + '%';    
         elem.innerHTML = 'Done !';
-        if(! introShowed)
+        if(localStorage.getItem('visited') == null){
             introJs().setOptions({groupClass:'.myintro'}).start();
+            localStorage.setItem('visited', true)
+        }
         introShowed = true;
         setTimeout(function(){
             
