@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/introjs.css">
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
@@ -28,7 +29,6 @@
     <script type="text/javascript" src="js/d3.min.js"></script>
     <script type="text/javascript" src="js/Globals.js"></script>    
     <script type="text/javascript" src="js/d3.slider.js"></script>
-    
     <script src="data/worldgeo.js"></script>
     <script type="text/javascript" src="js/init.js"></script>
     <script type="text/javascript" src="js/leaflet-heat.js"></script>
@@ -42,7 +42,7 @@
 <body >
     <!--<h1>data visualization</h1>-->
         <!--top menu-->
-    <nav id="mainNav" class="navbar navbar-inverse navbar-fixed-top">
+    <nav id="mainNav" data-intro="This is the main navigation bar." data-step='1'  class="navbar navbar-inverse myintro navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
                     <button id='collapseBtn' type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -53,7 +53,7 @@
                 <a class="navbar-brand text-uppercase" href="">Data visualization</a>
             </div>
             <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav">
+            <ul class="nav navbar-nav ">
                 <li class="dropdown">
                         <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Maps
                         <span class="caret"></span></a>
@@ -103,8 +103,13 @@
                     </ul>
                 </li>
 
-                  <button class="btn  navbar-btn" onclick="animateBtnHandler()" data-toggle="tooltip" title="Animate the Map according to the date they happend">Animate</button> 
-                 <button class="btn btn-danger navbar-btn" onclick="resetMap();navBarHide()" data-toggle="tooltip" title="Reset the map to it's original state">Reset</button>
+                  <button class="btn  myintro navbar-btn" 
+                  onclick="animateBtnHandler()" data-toggle="tooltip" 
+                  data-intro="This button animate the points according to the time they occured." data-step="2" title="Animate the Map according to the date they happend">Animate</button> 
+                 <button class="btn myintro btn-danger navbar-btn" 
+                 data-intro="This button reset the map to it's original state (with last choosen Data)"
+                 data-step="3"
+                 onclick="resetMap();navBarHide()" data-toggle="tooltip" title="Reset the map to it's original state">Reset</button>
             </ul>
         </div>
     </nav>
@@ -166,7 +171,7 @@
     </div>
 
     <!-- summary table -->
-   <table id='sumtable' class="table table-condensed text-center height-calc">
+   <table id='sumtable' data-intro="This table shows each property range (kind of summary)" data-step='6' class="table myintro table-condensed text-center height-calc">
     <thead >
       <tr id="infoHead">
         <th ># Earthquakes</th>
@@ -214,7 +219,9 @@
     </footer>
 
     <!--MUST be after the map div !-->
+    <script type="text/javascript" src="js/intro.js"></script>0    
     <script src="js/map.js"></script>
-
+    <script>  </script>
+    
 </body>
 </html>  

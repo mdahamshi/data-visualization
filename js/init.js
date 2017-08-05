@@ -1,4 +1,5 @@
 window.onload = function(){
+    init();
         
         windowResizeHandler();      
         $("html, body").animate({ scrollTop: 0 }, "slow");
