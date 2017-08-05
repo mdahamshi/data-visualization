@@ -55,7 +55,7 @@
             <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav ">
                 <li class="dropdown">
-                        <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Maps
+                        <a class="dropdown-toggle text-uppercase myintro" data-intro="Here you can change the Map layer" data-step="2"   data-toggle="dropdown" href="#">Maps
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="#" onclick="changeMapWrap(this,'terrian');">Terrain</a> </li>
@@ -69,7 +69,7 @@
                     </ul>
                 </li>
                 <li class="dropdown">
-                        <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Tools
+                        <a class="dropdown-toggle text-uppercase" data-intro="Here you can use various tools, hover each tool to show info about it." data-step="3" data-toggle="dropdown" href="#">Tools
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li data-toggle="tooltip" title="Select spesific area, show data only to it. (you can restore all data by clicking reset)"><a href="#" onclick="mapSelectArea();navBarHide();disableMenue();">Select Area</a>  </li>
@@ -81,7 +81,7 @@
                 </li>
 
                  <li class="dropdown">
-                        <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Data
+                        <a class="dropdown-toggle text-uppercase" data-step="4" data-intro="Here you can choose different Data types (last day, last week..)" data-toggle="dropdown" href="#">Data
                         <span class="caret"></span></a>
                     <ul  class="dropdown-menu">
                         <li class="active default-active" data-toggle="tooltip" title='Display Data from last 24 hours.'><a href="#" onclick="updateCurrentData(pastDay, this);" >Last Day (default)</a>  </li>
@@ -93,7 +93,7 @@
                 </li>
 
                 <li class="dropdown">
-                    <a class="dropdown-toggle text-uppercase" data-toggle="dropdown" href="#">Filter By
+                    <a class="dropdown-toggle text-uppercase" data-step="5" data-intro="Here you can filter current data by a property." data-toggle="dropdown" href="#">Filter By
                     <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li data-toggle="tooltip" title="Filter the Data by time range."><a href="#" onclick="filterDivHandler('time')">Time</a>  </li>
@@ -105,10 +105,10 @@
 
                   <button class="btn  myintro navbar-btn" 
                   onclick="animateBtnHandler()" data-toggle="tooltip" 
-                  data-intro="This button animate the points according to the time they occured." data-step="2" title="Animate the Map according to the date they happend">Animate</button> 
+                  data-intro="This button animate the points according to the time they occured." data-step="7" title="Animate the Map according to the date they happend">Animate</button> 
                  <button class="btn myintro btn-danger navbar-btn" 
                  data-intro="This button reset the map to it's original state (with last choosen Data)"
-                 data-step="3"
+                 data-step="8"
                  onclick="resetMap();navBarHide()" data-toggle="tooltip" title="Reset the map to it's original state">Reset</button>
             </ul>
         </div>
@@ -171,7 +171,7 @@
     </div>
 
     <!-- summary table -->
-   <table id='sumtable' data-intro="This table shows each property range (kind of summary)" data-step='6' class="table myintro table-condensed text-center height-calc">
+   <table id='sumtable' data-intro="This table shows each property range (kind of summary)" data-step='16' class="table myintro table-condensed text-center height-calc">
     <thead >
       <tr id="infoHead">
         <th ># Earthquakes</th>
@@ -209,7 +209,7 @@
         </table>
     </div>
     <!--footer-->
-    <footer class="height-calc">
+    <footer class="height-calc myintro"  data-intro="You can hover any button to display a tooltip that contain info about it." data-step="20">
         <p>Created by: Mohammad Dahamshi & Mohammad Dabbah & Naseem ma5se</p>
         <p>Contact information: <a href="mailto:Mohammad.Dahamshi@gmail.com">
         Mohammad.Dahamshi@gmail.com</a></p>
