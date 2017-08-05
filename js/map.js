@@ -69,6 +69,7 @@ function initMap(){
     pointInfo.onAdd = function(map){
         this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
         this.update();
+        this._div.setAttribute('data-step','9');
         this._div.setAttribute('data-intro','Here we show hovered point information');
         return this._div;
     };
@@ -839,7 +840,7 @@ function addCustomButtons(){
     .attr('title', 'Reset Zoom')
     .attr('data-intro',"This button restore the map zoom to 0.")
     .classed('myintro', true)    
-    .attr('data-step', '4')
+    .attr('data-step', '13')
     .text('R');
     if(! isMobile)
         d3.select('#mainMap > div.leaflet-control-container > div.leaflet-top.leaflet-left > div')
@@ -850,7 +851,7 @@ function addCustomButtons(){
         .attr('role', 'button')
         .attr('title', 'Hover to show legend, click to keep it shown')
         .attr('data-intro',"This button show/hide the legend.")
-        .attr('data-step', '5')
+        .attr('data-step', '14')
         .classed('myintro', true)
         
         .style('background-color', '#68ff7f')
