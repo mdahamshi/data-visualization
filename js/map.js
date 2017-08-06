@@ -92,8 +92,9 @@ function initMap(){
     };
 
     info.addTo(mymap);
+    pointInfo.addTo(mymap);
+    
     if(! isMobile){    //not sutible for small screens, also it is hover activate
-        pointInfo.addTo(mymap);
         legend.addTo(mymap);
         
     }

@@ -29,10 +29,8 @@
     <script type="text/javascript" src="js/d3.min.js"></script>
     <script type="text/javascript" src="js/Globals.js"></script>    
     <script type="text/javascript" src="js/d3.slider.js"></script>
-    <script src="data/worldgeo.js"></script>
-    <script type="text/javascript" src="js/init.js"></script>
+    <script type="text/javascript" src="js/worldgeo.js"></script>
     <script type="text/javascript" src="js/leaflet-heat.js"></script>
-    <script type="text/javascript" src="js/L.D3SvgOverlay.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <script type="text/javascript" src="js/leaflet-areaselect.js"></script>
     <link rel="stylesheet" href="css/style.css">
@@ -110,7 +108,7 @@
                  data-intro="This button reset the map to it's original state (with last choosen Data)"
                  data-step="8"
                  onclick="resetMap();navBarHide()" data-toggle="tooltip" title="Reset the map to it's original state">Reset</button>
-                 <button onclick="introJs().setOptions({groupClass:'.myintro'}).start();"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to show a tour">?</button>
+                 <button id="introButton" onclick="introJs().setOptions({groupClass:'.myintro'}).start();"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to show a tour">?</button>
             </ul>
         </div>
     </nav>
