@@ -22,7 +22,7 @@ function moveBar(value) {
             introJs().setOptions({groupClass:'.myintro'}).start();
             localStorage.setItem('visited', true)
         }
-        introShowed = true;
+
         setTimeout(function(){
             
                 $('#myProgress').slideUp();   
@@ -241,7 +241,7 @@ function resetMap(){
 }
 
 
-function showInfo(msg, type, after = 0){
+function showInfo(msg, type, after = 0, duration = 3000){
     setTimeout(function(){
         $('#success-alert').text(msg);
         $('#success-alert').addClass(type);
@@ -249,7 +249,7 @@ function showInfo(msg, type, after = 0){
         setTimeout(function(){
         $('#success-alert').slideUp();
         setTimeout(a =>{$('#success-alert').removeClass(type);}, 1000);        
-        }, 3000);
+        }, duration);
     }, after);
 }
 function enableMenue(){
@@ -264,10 +264,7 @@ function disableMenue(){
 function init(){
      $('body').animate({ paddingTop: $('#mainNav').height() });
      moveBar(0);
-     setTimeout(function(){getData(dataURL);},1000); //300 to avoid progressbar slidedown lag
-     
-    
-    
+     setTimeout(function(){getData(dataURL);},1000); //300 to avoid progressbar slidedown lag    
 }
 
 function toggleLegend(){
@@ -307,6 +304,7 @@ window.onload = function(){
     if(isMobile){
         $('#allMonths').hide(); //mobile device get slow with many data
         $('#introButton').hide();
+        showInfo('Some features are disabled for mobile devices.', 'alert-danger', 2000, 8000);    
     }
     //info table tooltip
     $('#infoHead th').on({
