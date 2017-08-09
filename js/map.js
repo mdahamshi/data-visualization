@@ -2,24 +2,24 @@
 
 
 
-//creating leaflet map
+
 var mapOpacity = 0.5,
     strokeOpacity = 0.5,
      div = d3.select("body").append("div")	
     .attr("class", "mytooltip")				
     .style("opacity", 0);
-
+var info = L.control();
+    pointInfo = L.control.layers(null, null, {position: 'bottomright'})
+    , legend =  L.control.layers(null, null, {position: 'bottomleft'});
+    
     
 function initMap(){
+    //creating leaflet map
     mymap = L.map('mainMap').setView([0,0],2);
-    // mymap.createPane('geoJsonPane');
-    // mymap.getPane('geoJsonPane').style.pointerEvents = 'visible';
-    // mymap.createPane('labels');
     feltOn = false;
     legendOn = true;
-    addCustomButtons();
     
-
+    addCustomButtons();
 
     geojson = L.geoJson(worldgeo.features,
         {
@@ -30,22 +30,14 @@ function initMap(){
             },
             onEachFeature: onEachFeature,
         }
-).addTo(mymap);
+        ).addTo(mymap);
 
     
     svg = d3.select("#mainMap").select('svg').attr('pointer-events','visible');
     svg.select('g').attr('id','worldLayer');
-    // worldG = svg.append('g')
-    // .attr('id', 'basicMap');    
-    // worldG.attr("class", "leaflet-zoom-hide")
+
     transform = d3.geo.transform({point:projectPoint});
     path = d3.geo.path().projection(transform);
-    // worldFeature = worldG.selectAll('path')
-    // .data(worldgeo.features)
-    // .enter()
-    // .append('path');
-    // worldFeature.attr('style', 'pointer-events:visiblePainted;');
-
 
     // inserting quake graph
     quakeG = svg.append('g')
@@ -57,39 +49,7 @@ function initMap(){
         }
     );
     //inserting info popup (right)
-    var info = L.control();
-    pointInfo = L.control.layers(null, null, {position: 'bottomright'})
-    , legend =  L.control.layers(null, null, {position: 'bottomleft'});
-    legend.onAdd = function(map){
-        this._div = L.DomUtil.create('div', 'info legends'); // create a div with a class "info"
-        return this._div;
-    }
 
-    
-    pointInfo.onAdd = function(map){
-        this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-        this.update();
-        this._div.setAttribute('data-step','14');
-        this._div.setAttribute('data-intro','Here we show hovered point information');
-        return this._div;
-    };
-
-    pointInfo.update = function(d){
-        this._div.innerHTML = '<h4>Quake Info</h4>' +  (d ?
-        d.getTooltipString() : 'Hover a point');
-    };
-
-    info.onAdd = function (map) {
-        this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
-        this.update();
-        return this._div;
-    };
-
-    // method that we will use to update the control based on feature properties passed
-    info.update = function (props) {
-        this._div.innerHTML = '<h4>Country Name</h4>' +  (props ?
-            '<b>' + props.name + '</b>' : 'Click a country to zoom it');
-    };
 
     info.addTo(mymap);
     pointInfo.addTo(mymap);
@@ -100,9 +60,17 @@ function initMap(){
     }
 
     replaceQuakeData(theData.features);
-    
-    
-    function highlightFeature(e) {
+
+    mymap.on("zoom",zoomReset);
+
+    zoomReset();    //to set default map at startup
+    changeMap("");
+    if(! isMobile)
+        createLegends();
+
+}
+
+function highlightFeature(e) {
         var layer = e.target;
         info.update(layer.feature.properties);
 
@@ -136,28 +104,36 @@ function initMap(){
     function zoomToFeature(e) {
         mymap.fitBounds(e.target.getBounds());
 }
+legend.onAdd = function(map){
+        this._div = L.DomUtil.create('div', 'info legends'); // create a div with a class "info"
+        return this._div;
+    }
 
+    
+    pointInfo.onAdd = function(map){
+        this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+        this.update();
+        this._div.setAttribute('data-step','14');
+        this._div.setAttribute('data-intro','Here we show hovered point information');
+        return this._div;
+    };
 
-    // worldFeature.on('click', function(d){
-    // if (d3.event.defaultPrevented) 
-    //     return; // dragged
-    // var bounds = path.bounds(d);
-    // console.log('world clicked');
-    // mymap.fitBounds(layerToLatLng(bounds));
-    // }).call(drag);
-    // quakeFeature.on('click', function(d){
-    // if (d3.event.defaultPrevented) 
-    //     return; // dragged
-    // console.log('quake clicked');
-    // }).call(drag);
-    mymap.on("zoom",zoomReset);
+    pointInfo.update = function(d){
+        this._div.innerHTML = '<h4>Quake Info</h4>' +  (d ?
+        d.getTooltipString() : 'Hover a point');
+    };
 
-    zoomReset();    //to set default map at startup
-    changeMap("");
-    if(! isMobile)
-        createLegends();
+    info.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+        this.update();
+        return this._div;
+    };
 
-}
+    // method that we will use to update the control based on feature properties passed
+    info.update = function (props) {
+        this._div.innerHTML = '<h4>Country Name</h4>' +  (props ?
+            '<b>' + props.name + '</b>' : 'Click a country to zoom it');
+    };
 
 function updateDataSummary(geoJsonFeatures){
         if(! geoJsonFeatures || geoJsonFeatures.length == 0 ){
@@ -424,23 +400,18 @@ function simpleToggleLabels(){
     if(tileLayer){
         mymap.removeLayer(tileLayer);
         tileLayer = undefined;
-        if($('#worldLayer').css('display') !== 'none')
-            $('.info').show();
     }
     else{
         currentMap = mapTypes['simple'];
         tileLayer = L.tileLayer(currentMap[0], currentMap[1]).addTo(mymap);
-        $('.info').hide();
     }
 }
 function worldLayerToggle(){
     if($('#worldLayer').css('display') == 'none'){
         $('#worldLayer').css('display','block');
-        $('.info').css('display','block');
     }else{
         $('#worldLayer').css('display','none');
         
-        // $('.info').css('display','none');
     }
 }
 //add heat layer to the map
@@ -632,6 +603,9 @@ function createLegends(){
     .append('rect')
     .attr('x',0)
     .attr('width', rectwidth)
+    .style('stroke', 'black')
+    .style('stroke-width', 0.5)
+    .style('stroke-opacity', 1)
     .attr('height', rectheight)
     .attr('y',(d,i)=> {return (i*(rectheight+5) )})
     .attr('fill', d=>{return d});
