@@ -111,7 +111,7 @@ legend.onAdd = function(map){
 
     
     pointInfo.onAdd = function(map){
-        this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+        this._div = L.DomUtil.create('div', 'info point-info'); // create a div with a class "info"
         this.update();
         this._div.setAttribute('data-step','14');
         this._div.setAttribute('data-intro','Here we show hovered point information');
@@ -182,8 +182,10 @@ function getPointInfo(){
                     time = new Date(getFeatureProperty(this, 'time')).toLocaleTimeString('en-us',dateOptions),
                     lat = getFeatureProperty(this, 'lat'),
                     lng = getFeatureProperty(this, 'lng'),
+                    title = getFeatureProperty(this, 'title'),
                     felt = getFeatureProperty(this, 'felt') || 0;
                 return `
+                    Title: ${title} <br/>
                     Date: ${time} <br/>
                     Magnitude: ${mag} <br/>
                     Significance: ${sig} <br/>
