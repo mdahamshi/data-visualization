@@ -23,6 +23,7 @@ function moveBar(value) {
             localStorage.setItem('visited', true)
         }
         enableMenue();
+        $("html, body").animate({ scrollTop: 0 }, "slow");
         setTimeout(function(){
             
                 $('#myProgress').slideUp();   
@@ -159,7 +160,12 @@ function toggleThemeWrapper(){
         themeLight = true;
     }
 }
+function handleRefresh(){
+    $("html, body").animate({ scrollTop: 0 }, "slow");
+    navBarHide(); 
+    setTimeout(function(){getData(dataURL);},600);
 
+}
 function updateCurrentData(type, who){
     moveBar(0);
     navBarHide();
