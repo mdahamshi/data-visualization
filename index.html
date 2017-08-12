@@ -105,7 +105,7 @@
                  data-step="8"
                  onclick="resetMap();navBarHide()" data-toggle="tooltip" title="Reset the map to it's original state without reloading the data">Reset</button>
                 
-                 <button  onclick="getData(dataURL);navBarHide()"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to redownload the data"><img src="css/refresh.png" width="20" alt="refresh button"></button>
+                 <button  onclick="navBarHide();getData(dataURL);"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to redownload the data"><img src="css/refresh.png" width="20" alt="refresh button"></button>
                  <button id="introButton" onclick="introJs().setOptions({groupClass:'.myintro'}).start();"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to show a tour">?</button>
                 </ul>
         </div>
