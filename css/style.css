@@ -37,6 +37,7 @@ body{
 .margin-left-right{
     margin-left: 4;
     margin-right: 4;
+    
 }
 
 #animateForm{
@@ -108,6 +109,9 @@ div.mytooltip {
     box-shadow: 0 0 15px rgba(0,0,0,0.2);
     border-radius: 5px;
 }
+.point-info{
+    max-width: 250;
+}
 .info   h4 {
     margin: 0 0 5px;
     color: #777;
@@ -141,6 +145,10 @@ div.mytooltip {
 .table th {
    text-align: center;   
    font-weight: bold;
+}
+
+#mainNav .dropdown, .navbar-btn {
+    display: none;
 }
 
 h1 {

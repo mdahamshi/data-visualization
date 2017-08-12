@@ -22,7 +22,7 @@ function moveBar(value) {
             introJs().setOptions({groupClass:'.myintro'}).start();
             localStorage.setItem('visited', true)
         }
-
+        enableMenue();
         setTimeout(function(){
             
                 $('#myProgress').slideUp();   
@@ -88,7 +88,7 @@ function getData(dataurl){
         $('#filterTable').hide('slow'); 
 
         initMap();
-        enableMenue();
+       
         
         //hide download bar
         setTimeout(function(){
@@ -164,6 +164,7 @@ function updateCurrentData(type, who){
     moveBar(0);
     $('#filterDiv').slideUp();
     navBarHide();
+    disableMenue()
     $(who).parent().parent().children().removeClass('active');
     $(who).parent().addClass('active');
     setTimeout(function(){getData(type);},400); //300 to avoid progressbar slidedown lag
@@ -192,8 +193,6 @@ function filterDivHandler(type){
     disableMenue();
     drawXAxis(type);
     $('#filterDiv').slideDown();
-    
-    
 }
 function filterDataHandler(){
     filterData(currentAxisType, filterMin, filterMax);
@@ -225,6 +224,7 @@ function hasClass(element, cls) {
 function resetMap(){
     
     moveBar(-4);
+    disableMenue();
     legendOn = true;
     hideSelect();
     changeMap("");
@@ -254,7 +254,7 @@ function showInfo(msg, type, after = 0, duration = 3000){
 }
 function enableMenue(){
     $('#collapseBtn').attr('data-toggle','collapse');
-    $('#mainNav .dropdown, .navbar-btn').show();
+    $('#mainNav .dropdown, .navbar-btn').show('slow');
 }
 function disableMenue(){
     $('#collapseBtn').removeAttr('data-toggle');
