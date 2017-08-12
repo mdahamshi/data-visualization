@@ -162,7 +162,6 @@ function toggleThemeWrapper(){
 
 function updateCurrentData(type, who){
     moveBar(0);
-    $('#filterDiv').slideUp();
     navBarHide();
     disableMenue()
     $(who).parent().parent().children().removeClass('active');
