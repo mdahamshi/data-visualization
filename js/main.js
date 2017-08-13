@@ -1,6 +1,5 @@
 
 
-init();
 
 //update progress bar according to downloaded data
 function moveBar(value) {
@@ -154,8 +153,11 @@ function windowResizeHandler(){
         mymap.invalidateSize();    
         // mymap.fitWorld();
     }
-    
-    drawXAxis(currentAxisType);
+    try{
+        drawXAxis(currentAxisType);
+    }catch (e){
+
+    }
 }
 function toggleThemeWrapper(){
     if(themeLight){
@@ -268,6 +270,8 @@ function init(){
      $('body').animate({ paddingTop: $('#mainNav').height() });
      moveBar(0);
      getData(dataURL, 1000);
+
+
 }
 
 function toggleLegend(){
@@ -322,3 +326,58 @@ function legendHover(type){
 
 window.onresize = windowResizeHandler;
 
+window.onload = function(){
+    init();
+        
+        
+    $("html, body").animate({ scrollTop: 0 }, "slow");
+
+    if(isMobile){
+        $('#allMonths').hide(); //mobile device get slow with many data
+        $('#introButton').remove();
+        showInfo('Some features are disabled for mobile devices.', 'alert-danger', 2000, 8000);    
+
+    }
+     
+    //navbar hide on click outside
+    $(document).click(function (event) {
+        event.stopPropagation();
+        var clickover = $(event.target);
+        var _opened = $("#myNavbar").hasClass("collapse in");
+        if (_opened === true && clickover.id !== 'collapseBtn') {
+              $('.collapse').collapse('hide');   
+        }
+        
+    });
+
+   
+    //info table tooltip
+    $('#infoHead th').on({
+    'mouseenter': function() {
+        var $cell = ($(this));
+        if (true) {
+            $cell.tooltip({
+                    container: 'body',
+                    html: true,
+                    trigger: 'manual',
+                    title: function() {
+                        return {
+                            0: "Number of earhquakes.",
+                            1: "Earthquake magnitude is a measure of the size of an earthquake at its source. ",
+                            2:"A number describing how significant the event is. Larger numbers indicate a more significant event.",
+                            3:"At least one person felt the event.",
+                            4: "The depth where the earthquake begins to rupture. "
+                        }[$(this)[0].cellIndex];
+                    }
+                });
+        }
+        $cell.tooltip('show');
+
+    },
+    'mouseleave': function() {
+        $(this).tooltip('hide');
+    }
+});
+
+   
+};
