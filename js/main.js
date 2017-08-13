@@ -209,11 +209,7 @@ function filterDataHandler(){
         $("html, body").animate({ scrollTop: 0 }, "slow");
     }, 2000);
 }
-function navBarHide(){
-    if($('#collapseBtn').css('display') !== 'none')
-        $('.navbar-toggle').click();
 
-}
 function mapSelectArea(){
     if(selectArea){
         selectArea.remove();
@@ -342,11 +338,13 @@ window.onload = function(){
     }
     //navbar hide on click outside
     $(document).click(function (event) {
+        event.stopPropagation();
         var clickover = $(event.target);
         var _opened = $("#myNavbar").hasClass("collapse in");
         if (_opened === true && clickover.id !== 'collapseBtn') {
-            navBarHide();
+              $('.collapse').collapse('hide');   
         }
+        
     });
 
    

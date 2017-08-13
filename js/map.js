@@ -370,7 +370,6 @@ function strokeOpacityAttr(d){
         return 0;
 }
 function changeMapWrap(who, type){
-    navBarHide();
     $(who).parent().parent().children().removeClass('active');
     $(who).parent().addClass('active');
     toggleThemeTo('light');
