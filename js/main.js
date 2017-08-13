@@ -6,7 +6,7 @@ init();
 function moveBar(value) {
 
     if ( $('#myProgress').css('display') == 'none' )
-        $('#myProgress').slideDown();
+        $('#myProgress').fadeIn('slow');
     var elem = document.getElementById("myBar"); 
     if(elem == null)
         return;
@@ -26,7 +26,7 @@ function moveBar(value) {
         $("html, body").animate({ scrollTop: 0 }, "slow");
         setTimeout(function(){
             
-                $('#myProgress').slideUp();   
+                $('#myProgress').fadeOut('slow');   
                 
                 windowResizeHandler();  
             }, 2000);
@@ -55,14 +55,20 @@ function moveBar(value) {
 
 }
 
+function getData(dataurl, delay = 600){
+    moveBar(0);
+    setTimeout(function(){
+        downloadData(dataurl);
+    },delay);
+}
 //get the earthquake data
-function getData(dataurl){
+function downloadData(dataurl){
     dataURL = dataurl;
     disableMenue();
     var xhr = new XMLHttpRequest();
     xhr.addEventListener("progress", updateProgress);
     xhr.addEventListener("error", downloadError);
-    xhr.open('GET', dataurl, true);
+    xhr.open('GET',dataurl, true);
     xhr.send(null);
     xhr.onload = function(){
         try{
@@ -163,7 +169,7 @@ function toggleThemeWrapper(){
 function handleRefresh(){
     $("html, body").animate({ scrollTop: 0 }, "slow");
     navBarHide(); 
-    setTimeout(function(){getData(dataURL);},600);
+    getData(dataURL);
 
 }
 function updateCurrentData(type, who){
@@ -172,7 +178,7 @@ function updateCurrentData(type, who){
     disableMenue()
     $(who).parent().parent().children().removeClass('active');
     $(who).parent().addClass('active');
-    setTimeout(function(){getData(type);},400); //300 to avoid progressbar slidedown lag
+    getData(type);
 }
 function animateBtnHandler(){
     $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -269,7 +275,7 @@ function disableMenue(){
 function init(){
      $('body').animate({ paddingTop: $('#mainNav').height() });
      moveBar(0);
-     setTimeout(function(){getData(dataURL);},1000); //300 to avoid progressbar slidedown lag    
+     getData(dataURL, 1000);
 }
 
 function toggleLegend(){

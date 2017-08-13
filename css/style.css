@@ -172,6 +172,8 @@ h1 {
 #myProgress{
     width: 100%;
     background-color: grey;
+    margin-top: 50;
+    
 }
 #myBar{
     width: 1%;
