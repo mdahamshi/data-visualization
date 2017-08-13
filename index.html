@@ -64,10 +64,10 @@
                         <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                      
-                        <li id='toggleLabel' data-toggle="tooltip" title="Toggle locations labels "><a href="#" onclick="simpleToggleLabels();navBarHide();"  >Toggle Labels</a></li>
-                        <li data-toggle="tooltip" title="Toggle Countries Layer"><a href="#" onclick="worldLayerToggle();navBarHide();">Toggle Layer</a></li>
-                        <li data-toggle="tooltip" title="Toggle light / darak theme. "><a href="#" onclick="toggleThemeWrapper();navBarHide();"  >Toggle Theme</a></li>
-                        <li data-toggle="tooltip" title="Toggle Felt / Not Felt Data at the map. "><a href="#" onclick="toggleFelt();navBarHide();"  >Toggle Felt Data</a></li>
+                        <li id='toggleLabel' data-toggle="tooltip" title="Toggle locations labels "><a href="#" onclick="simpleToggleLabels();"  >Toggle Labels</a></li>
+                        <li data-toggle="tooltip" title="Toggle Countries Layer"><a href="#" onclick="worldLayerToggle();">Toggle Layer</a></li>
+                        <li data-toggle="tooltip" title="Toggle light / darak theme. "><a href="#" onclick="toggleThemeWrapper();"  >Toggle Theme</a></li>
+                        <li data-toggle="tooltip" title="Toggle Felt / Not Felt Data at the map. "><a href="#" onclick="toggleFelt();"  >Toggle Felt Data</a></li>
                     </ul>
                 </li>
 
@@ -87,7 +87,7 @@
                     <a class="dropdown-toggle text-uppercase" data-step="5" data-intro="Here you can filter current data by a property." data-toggle="dropdown" href="#">Filter By
                     <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                           <li data-toggle="tooltip" title="Select spesific area, show data only to it. (you can restore all data by clicking reset)"><a href="#" onclick="mapSelectArea();navBarHide();disableMenue();">Select Area</a>  </li>
+                           <li data-toggle="tooltip" title="Select spesific area, show data only to it. (you can restore all data by clicking reset)"><a href="#" onclick="mapSelectArea();disableMenue();">Select Area</a>  </li>
                         <li data-toggle="tooltip" title="Filter the Data by time range."><a href="#" onclick="filterDivHandler('time')">Time</a>  </li>
                         <li  id='toggleLabel' data-toggle="tooltip" title="Filter the Data by Magnitude range."><a href="#" onclick="filterDivHandler('mag')"  >Magnitude</a></li>
                         <li data-toggle="tooltip" title="Filter the Data by Significance range."><a href="#" onclick="filterDivHandler('sig')">Significance</a></li>
@@ -103,7 +103,7 @@
                  <button class="btn myintro btn-danger navbar-btn" 
                  data-intro="This button reset the map to it's original state (without reloading the data)"
                  data-step="8"
-                 onclick="resetMap();navBarHide()" data-toggle="tooltip" title="Reset the map to it's original state without reloading the data">Reset</button>
+                 onclick="resetMap();" data-toggle="tooltip" title="Reset the map to it's original state without reloading the data">Reset</button>
                 
                  <button  onclick="handleRefresh();"class="btn btn-success myintro navbar-btn" data-toggle="tooltip" title="Click to redownload the data"><img src="css/refresh.png" width="20" alt="refresh button"></button>
                  <button id="introButton" onclick="introJs().setOptions({groupClass:'.myintro'}).start();"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to show a tour"><img src="css/ques.png" alt="about" width="20"></button>
