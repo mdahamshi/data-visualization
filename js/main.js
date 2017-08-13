@@ -264,6 +264,7 @@ function enableMenue(){
 function disableMenue(){
     $('#collapseBtn').removeAttr('data-toggle');
     $('#mainNav .dropdown, .navbar-btn').hide();
+    $('#fullScreenBtn').show();
 }
 
 function init(){
