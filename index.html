@@ -105,8 +105,10 @@
                  data-step="8"
                  onclick="resetMap();navBarHide()" data-toggle="tooltip" title="Reset the map to it's original state without reloading the data">Reset</button>
                 
-                 <button  onclick="handleRefresh();"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to redownload the data"><img src="css/refresh.png" width="20" alt="refresh button"></button>
-                 <button id="introButton" onclick="introJs().setOptions({groupClass:'.myintro'}).start();"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to show a tour">?</button>
+                 <button  onclick="handleRefresh();"class="btn btn-success myintro navbar-btn" data-toggle="tooltip" title="Click to redownload the data"><img src="css/refresh.png" width="20" alt="refresh button"></button>
+                 <button id="introButton" onclick="introJs().setOptions({groupClass:'.myintro'}).start();"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to show a tour"><img src="css/ques.png" alt="about" width="20"></button>
+                  <button class="btn btn-primary  myintro navbar-btn" 
+                  onclick="toggleFullScreen()" data-toggle="tooltip"  title="Toggle Full screen mode"><img id="fullScreenImg" src="css/full.png"  width="20" alt="full screen button"></button> 
                 </ul>
         </div>
     </nav>
@@ -213,10 +215,10 @@
     <!--footer-->
     <footer class="height-calc "  >
         <p>Created by: Mohammad Dahamshi & Mohammad Dabbah</p>
-        <p>Contact information: <a href="mailto:Mohammad.Dahamshi@gmail.com">
+        <p>E-mail: <a href="mailto:Mohammad.Dahamshi@gmail.com">
         Mohammad.Dahamshi@gmail.com</a></p>
         <p>
-            Github: <a href="https://github.com/mdahamshi">mdahamshi@github</a>
+            About Me <a href="https://about.me/mdahamshi">about.me/mdahamshi</a>
         </p>
     </footer>
 

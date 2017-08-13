@@ -22,12 +22,11 @@ function moveBar(value) {
             introJs().setOptions({groupClass:'.myintro'}).start();
             localStorage.setItem('visited', true)
         }
-        enableMenue();
         $("html, body").animate({ scrollTop: 0 }, "slow");
         setTimeout(function(){
             
                 $('#myProgress').fadeOut('slow');   
-                
+                enableMenue();    
                 windowResizeHandler();  
             }, 2000);
         return;
@@ -168,13 +167,11 @@ function toggleThemeWrapper(){
 }
 function handleRefresh(){
     $("html, body").animate({ scrollTop: 0 }, "slow");
-    navBarHide(); 
     getData(dataURL);
 
 }
 function updateCurrentData(type, who){
     moveBar(0);
-    navBarHide();
     disableMenue()
     $(who).parent().parent().children().removeClass('active');
     $(who).parent().addClass('active');
@@ -183,7 +180,6 @@ function updateCurrentData(type, who){
 function animateBtnHandler(){
     $("html, body").animate({ scrollTop: 0 }, "slow");
     $('#animateForm').slideDown();
-    navBarHide();
     disableMenue();
 }
 
@@ -200,7 +196,6 @@ function filterDivHandler(type){
     }
     $("html, body").animate({ scrollTop: 0 }, "slow");
     currentAxisType = type;
-    navBarHide();
     disableMenue();
     drawXAxis(type);
     $('#filterDiv').slideDown();
@@ -299,7 +294,34 @@ function legendHover(type){
         else
             $('.legends').show('slow');
 }
-
+ function toggleFullScreen(){
+        var element = document.documentElement;
+        
+        if(document.webkitIsFullScreen || window.fullScreen){
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+            else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            }
+            else if (document.webkitCancelFullScreen) {
+                document.webkitCancelFullScreen();
+            }
+            $('#fullScreenImg').attr('src', 'css/full.png');
+            return;
+        }
+        $('#fullScreenImg').attr('src', 'css/unfull.png');
+        if (element.requestFullscreen) {
+            element.requestFullscreen();
+        }
+        else if (element.mozRequestFullScreen) {
+            element.mozRequestFullScreen();
+        }
+        else if (element.webkitRequestFullScreen) {
+            element.webkitRequestFullScreen();
+        }
+        
+    }
 
 window.onresize = windowResizeHandler;
 
@@ -318,6 +340,16 @@ window.onload = function(){
         showInfo('Some features are disabled for mobile devices.', 'alert-danger', 2000, 8000);    
 
     }
+    //navbar hide on click outside
+    $(document).click(function (event) {
+        var clickover = $(event.target);
+        var _opened = $("#myNavbar").hasClass("collapse in");
+        if (_opened === true && clickover.id !== 'collapseBtn') {
+            navBarHide();
+        }
+    });
+
+   
     //info table tooltip
     $('#infoHead th').on({
     'mouseenter': function() {
