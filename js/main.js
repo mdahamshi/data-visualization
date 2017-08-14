@@ -219,8 +219,11 @@ function mapSelectArea(){
         selectArea = undefined;
     }
     selectArea =  L.areaSelect({width:200, height:130}).addTo(mymap);
+    selectArea.legendWasOn = legendOn;
+    windowResizeHandler();
     selectButton.show();
     cancelSelect.show();
+    toggleLegend('off');
 }
 function hasClass(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
@@ -275,8 +278,8 @@ function init(){
 
 }
 
-function toggleLegend(){
-    if(legendOn){
+function toggleLegend(state='on'){
+    if(state === 'off' || legendOn){
         $('.legends').hide('slow');
         d3.select('#toggleLegendButton')
         .style('background-color', 'white')

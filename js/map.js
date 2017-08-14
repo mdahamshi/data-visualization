@@ -713,8 +713,11 @@ function hideSelect(){
     enableMenue();
     selectButton.hide();
     cancelSelect.hide();
-    if(selectArea)
+    if(selectArea){
+        if(selectArea.legendWasOn)
+            toggleLegend('om');
         selectArea.remove();
+    }
     selectArea = undefined;
 }
 
