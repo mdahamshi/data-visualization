@@ -481,7 +481,6 @@ function addSelected(){
     enableMenue();
     var topLeft = selectArea.getBounds().getNorthWest();
     var downRight = selectArea.getBounds().getSouthEast();
-    console.log(topLeft,downRight);
     extractAreaData(topLeft,downRight);
     replaceData(currentData);
     hideSelect();
