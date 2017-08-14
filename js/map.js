@@ -446,7 +446,7 @@ function addHeatMap(data){
 }
 //latitude increase when going up (opposite to screen coordinates...)
 function extractAreaData(topLeft, downRight){
-    selectData = theData.features.filter(
+    currentData = currentData.filter(
         function(current){
             var currentPoint = {lat: current.geometry.coordinates[1],
                                 lng: current.geometry.coordinates[0]};
@@ -483,7 +483,7 @@ function addSelected(){
     var downRight = selectArea.getBounds().getSouthEast();
     console.log(topLeft,downRight);
     extractAreaData(topLeft,downRight);
-    replaceData(selectData);
+    replaceData(currentData);
     hideSelect();
     mymap.fitBounds([topLeft, downRight]);
     zoomReset();
