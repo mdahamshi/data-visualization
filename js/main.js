@@ -198,6 +198,14 @@ function filterDivHandler(type){
         return;
     }
     $("html, body").animate({ scrollTop: 0 }, "slow");
+    if(type === 'felt'){
+        filterData('felt');
+        $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+        setTimeout(function() {
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+        }, 2000);
+        return;
+    }
     currentAxisType = type;
     disableMenue();
     drawXAxis(type);
@@ -220,7 +228,7 @@ function mapSelectArea(){
     }
     selectArea =  L.areaSelect({width:200, height:130}).addTo(mymap);
     selectArea.legendWasOn = legendOn;
-    windowResizeHandler();
+    mymap.invalidateSize();    
     selectButton.show();
     cancelSelect.show();
     toggleLegend('off');
