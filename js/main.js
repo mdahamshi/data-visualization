@@ -140,15 +140,8 @@ function windowResizeHandler(){
     $(".height-calc").each(function(){
         totalHeight += $(this).height();
     });
-    $(".width-calc").each(function(){
-        totalWidth += $(this).width();
-    });
-    // if($('body').css('padding-top') !== 50) //$('#mainNav').height()
-    //     $('body').animate({ paddingTop: 50 });
     var suggestedHeight = windwoHeight - totalHeight -30 ;
-    var suugestedWidth = windowWidth - totalWidth + 15;
     $('.map-wrapper').animate({ height: Math.max(suggestedHeight,380)},600);
-    $('.map-wrapper').animate({ width: Math.max(suugestedWidth,380)},600);
     if(mymap){
         mymap.invalidateSize();    
         // mymap.fitWorld();
