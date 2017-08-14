@@ -147,8 +147,8 @@ function windowResizeHandler(){
     //     $('body').animate({ paddingTop: 50 });
     var suggestedHeight = windwoHeight - totalHeight -30 ;
     var suugestedWidth = windowWidth - totalWidth + 15;
-    $('.map-wrapper').height(Math.max(suggestedHeight,380) ); 
-    $('.map-wrapper').width(Math.max(suugestedWidth,380) ); 
+    $('.map-wrapper').animate({ height: Math.max(suggestedHeight,380)},600);
+    $('.map-wrapper').animate({ width: Math.max(suugestedWidth,380)},600);
     if(mymap){
         mymap.invalidateSize();    
         // mymap.fitWorld();
