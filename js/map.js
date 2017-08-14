@@ -735,7 +735,7 @@ function filterData(type, min, max){
         min = start.toLocaleTimeString('en-us',dateOptions);
         max = end.toLocaleTimeString('en-us',dateOptions);
     }
-    else{
+    else if(type !== 'felt'){
         min = min.toFixed(2);
         max = max.toFixed(2);
     }
@@ -756,11 +756,16 @@ function typeToString(type){
         'mag': 'Magnitude',
         'sig': 'Significance',
         'depth': 'Depth',
-        'time': 'Time'
+        'time': 'Time',
+        'felt': 'Felt'
 
     }[type];
 }
 function getFilterFunc(type, min=-Number.MAX_VALUE, max=Number.MAX_VALUE){
+    if(type === 'felt')
+        return function(element){
+            return (getFeatureProperty(element, type) > 0);
+        }
     return  function (element){
             var value = getFeatureProperty(element, type);
             if(value <= max && value >= min)
@@ -773,7 +778,8 @@ function getTypeRange(type){
         'mag': [minMag, maxMag],
         'sig': [minSig, maxSig],
         'depth': [minDepth, maxDepth],
-        'time': [minDate, maxDate]
+        'time': [minDate, maxDate],
+        'felt': ['Felt', 'Felt']
     }[type];
 }
 function getFeatureProperty(feature, property){
