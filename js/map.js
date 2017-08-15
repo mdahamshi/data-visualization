@@ -52,12 +52,10 @@ function initMap(){
 
 
     info.addTo(mymap);
-    pointInfo.addTo(mymap);
-    
-    if(! isMobile){    //not sutible for small screens, also it is hover activate
-        legend.addTo(mymap);
+    pointInfo.addTo(mymap);    
+    legend.addTo(mymap);
         
-    }
+    
 
     replaceQuakeData(theData.features);
 
@@ -65,8 +63,7 @@ function initMap(){
 
     zoomReset();    //to set default map at startup
     changeMap("");
-    if(! isMobile)
-        createLegends();
+    createLegends();
 
 }
 
@@ -635,7 +632,8 @@ function createLegends(){
     .attr('fill', 'white')
     .attr('stroke', strokeRange[1])
     .attr('stroke-width', 2);
-
+    if(isMobile)
+        toggleLegend('off');
     // d3.select('.legends').style('display','none');
     
 
@@ -841,8 +839,7 @@ function addCustomButtons(){
     .style('background-color', '#68ff7f')
     .text('L');
     
-     if(isMobile)
-        toggleLegend('off');
+
 
 
 }
