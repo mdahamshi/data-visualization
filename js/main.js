@@ -233,11 +233,8 @@ function hasClass(element, cls) {
 function resetMap(){
     
     moveBar(-4);
-    disableMenue();
-    legendOn = true;
     hideSelect();
     changeMap("");
-    $('.info').css('display','block');
     selectData = undefined;
     currentData = theData.features;
     replaceData(theData.features);
