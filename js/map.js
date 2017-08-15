@@ -103,6 +103,7 @@ function highlightFeature(e) {
 }
 legend.onAdd = function(map){
         this._div = L.DomUtil.create('div', 'info legends'); // create a div with a class "info"
+        this._div.setAttribute('onclick', 'toggleLegend("off")')
         return this._div;
     }
 
