@@ -17,7 +17,6 @@ function initMap(){
     //creating leaflet map
     mymap = L.map('mainMap').setView([0,0],2);
     feltOn = false;
-    legendOn = true;
     
     addCustomButtons();
 
@@ -633,7 +632,7 @@ function createLegends(){
     .attr('fill', 'white')
     .attr('stroke', strokeRange[1])
     .attr('stroke-width', 2);
-    if(isMobile)
+    if(isMobile || ! legendOn)
         toggleLegend('off');
     // d3.select('.legends').style('display','none');
     
