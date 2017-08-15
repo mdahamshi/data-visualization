@@ -826,22 +826,23 @@ function addCustomButtons(){
     .classed('myintro', true)    
     .attr('data-step', '12')
     .text('R');
-    if(! isMobile)
-        d3.select('#mainMap > div.leaflet-control-container > div.leaflet-top.leaflet-left > div')
-        .append('a').attr('id','toggleLegendButton')
-        .attr('onclick','toggleLegend();')
-        .attr('onmouseover', 'legendHover("in")')
-        .attr('onmouseout', 'legendHover("out")')
-        .attr('role', 'button')
-        .attr('title', 'Hover to show legend, click to keep it shown')
-        .attr('data-intro',"This button show/hide the legend.")
-        .attr('data-step', '13')
-        .classed('myintro', true)
-        
-        .style('background-color', '#68ff7f')
-        .text('L');
+   
+    d3.select('#mainMap > div.leaflet-control-container > div.leaflet-top.leaflet-left > div')
+    .append('a').attr('id','toggleLegendButton')
+    .attr('onclick','toggleLegend();')
+    .attr('onmouseover', 'legendHover("in")')
+    .attr('onmouseout', 'legendHover("out")')
+    .attr('role', 'button')
+    .attr('title', 'Hover to show legend, click to keep it shown')
+    .attr('data-intro',"This button show/hide the legend.")
+    .attr('data-step', '13')
+    .classed('myintro', true)
     
+    .style('background-color', '#68ff7f')
+    .text('L');
     
+     if(isMobile)
+        toggleLegend('off');
 
 
 }
