@@ -165,7 +165,7 @@ function handleRefresh(){
     if(navigator.onLine)
         getData(dataURL, 600);
     else
-        showInfo("You are offline, cannot retrive new data.", 'alert-danger');
+        showInfo("You are offline, cannot retrive new data.", 'alert-danger',0 ,5000);
 
 }
 function toggleRefresh(state="on"){
