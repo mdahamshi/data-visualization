@@ -8,7 +8,7 @@ Dr. Peter Bak - IBM Haifa Research Lab <a href="http://researcher.ibm.com/person
 
 **Publication date:** 16/8/2017
 
-**License**: <a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">GPL3</a>
+**License**: <a href="https://en.wikipedia.org/wiki/MIT_License">MIT</a>
 
 <h2>Project general description</h2>
 We used <a href="https://d3js.org/">d3 (v3)</a> library to draw the data, <a href="http://leafletjs.com/">leaflet</a> 
