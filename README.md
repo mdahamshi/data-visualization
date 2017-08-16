@@ -205,7 +205,7 @@ The filter table help the user to keep track with what filters he applied to the
 
 
 <p align="center">
-<a  href="https://goo.gl/x5MXeU target="_blank"">
+<a  href="https://goo.gl/x5MXeU" target="_blank">
 <img alt="visit the app" width="100" src="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/go.png"/>
 </a>
 </p>
