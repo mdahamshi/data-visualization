@@ -210,7 +210,7 @@ footer a {
     
     font-family:   sans-serif;
 }
-@media (max-width: 917px) {
+@media (max-width: 964px) {
   .navbar-header {
       float: none;
   }

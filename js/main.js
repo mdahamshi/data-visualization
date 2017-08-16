@@ -53,8 +53,7 @@ function moveBar(value) {
 
 }
 
-function getData(dataurl, delay = 600){
-    
+function getData(dataurl=dataURL, delay = 600){
     if(navigator.onLine){
         moveBar(0);
         setTimeout(function(){
@@ -169,7 +168,11 @@ function toggleThemeWrapper(){
     }
 }
 function handleRefresh(){
-    getData(dataURL, 600);
+    var autoRefreshON = refreshID ? true: false;
+    toggleRefresh('off');
+    getData();
+    if(autoRefreshON)
+        toggleRefresh('on');
 }
 function toggleRefresh(state="on"){
     if(state === 'off' || refreshID){
@@ -179,18 +182,20 @@ function toggleRefresh(state="on"){
         $('#refreshBtn').removeClass('btn-success');
         $('#refreshBtn').addClass('btn-danger');
     }else {
-        handleRefresh();
-        refreshID = setInterval(handleRefresh, refreshInterval);
+        refreshID = setInterval(getData, refreshInterval);
         $('#refreshBtn').removeClass('btn-danger');
         $('#refreshBtn').addClass('btn-success');
     }
 }
 function updateCurrentData(type, who){
+    var autoRefreshON = refreshID ? true: false;
+    toggleRefresh('off');
     if(getData(type)){
         $(who).parent().parent().children().removeClass('active');
         $(who).parent().addClass('active');
     }
-    
+    if(autoRefreshON)
+        toggleRefresh('on');
 }
 function animateBtnHandler(){
     $("html, body").animate({ scrollTop: 0 }, "slow");
