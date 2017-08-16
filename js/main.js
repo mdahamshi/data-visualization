@@ -60,9 +60,11 @@ function getData(dataurl, delay = 600){
         setTimeout(function(){
             downloadData(dataurl);
         },delay);    
+        return true;
     }
     else
         showInfo("You are offline, cannot retrive new data.", 'alert-danger',0 ,5000);
+    return false;
 }
 //get the earthquake data
 function downloadData(dataurl){
@@ -184,11 +186,11 @@ function toggleRefresh(state="on"){
     }
 }
 function updateCurrentData(type, who){
-    moveBar(0);
-    disableMenue()
-    $(who).parent().parent().children().removeClass('active');
-    $(who).parent().addClass('active');
-    getData(type);
+    if(getData(type)){
+        $(who).parent().parent().children().removeClass('active');
+        $(who).parent().addClass('active');
+    }
+    
 }
 function animateBtnHandler(){
     $("html, body").animate({ scrollTop: 0 }, "slow");
