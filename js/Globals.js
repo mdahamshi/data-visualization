@@ -198,6 +198,9 @@ var svg,
     currentData,
     filterMin,
     filterMax,
+    refreshWasOn = false,
+    refreshID = undefined,
+    refreshInterval = 300000, //5 minute
     currentAxisType = 'time';
 
     

@@ -162,9 +162,22 @@ function toggleThemeWrapper(){
     }
 }
 function handleRefresh(){
-    $("html, body").animate({ scrollTop: 0 }, "slow");
-    getData(dataURL);
+    getData(dataURL, 600);
 
+}
+function toggleRefresh(state="on"){
+    if(state === 'off' || refreshID){
+        if(refreshID)
+            clearInterval(refreshID);
+        refreshID = undefined;
+        $('#refreshBtn').removeClass('btn-success');
+        $('#refreshBtn').addClass('btn-danger');
+    }else {
+        handleRefresh();
+        refreshID = setInterval(handleRefresh, refreshInterval);
+        $('#refreshBtn').removeClass('btn-danger');
+        $('#refreshBtn').addClass('btn-success');
+    }
 }
 function updateCurrentData(type, who){
     moveBar(0);
@@ -231,7 +244,7 @@ function hasClass(element, cls) {
 }
 
 function resetMap(){
-    
+    toggleRefresh('off');
     moveBar(-4);
     hideSelect();
     changeMap("");

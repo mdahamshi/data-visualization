@@ -675,12 +675,16 @@ function updateQuakePropertiesDynamic(){
         dataDisplayed++;
         if (earthquakes[0].length === dataDisplayed){ 
             enableMenue();
+            
             showInfo('Data animated successfuly !', 'alert-success', 2000);
             setTimeout(function(){
                 if(! isMobile)
                     pointInfo.update();
                 // replaceQuakeData(theData.features);
-                updateQuakeProperties();
+                if(refreshWasOn)
+                    toggleRefresh('on');
+                else
+                    updateQuakeProperties();
                 dataDisplayed = 0;
                 if(themeLight)
                     toggleThemeTo('light');
@@ -693,18 +697,23 @@ function updateQuakePropertiesDynamic(){
 
 
 function animateMap(toggleTheme){
-        quakeFeature.style('fill-opacity',0)
+        
+    refreshWasOn = refreshID ? true : false;
+    toggleRefresh('off');
+    quakeFeature.style('fill-opacity',0)
         .style('pointer-events','none')
         .style("stroke-opacity", 0)
-        if(themeLight && toggleTheme)
-            toggleThemeTo('dark');
-        disableMenue();
-        mymap.setView([0,0],1);
-        windowResizeHandler();        
-        if(feltOn)
-            toggleFelt();
-        setTimeout(updateQuakePropertiesDynamic,2000);
-        
+    
+    if(themeLight && toggleTheme)
+        toggleThemeTo('dark');
+    disableMenue();
+
+    mymap.setView([0,0],1);
+    windowResizeHandler();        
+    if(feltOn)
+        toggleFelt();
+    setTimeout(updateQuakePropertiesDynamic,2000);
+    
 }
 function hideSelect(){
     enableMenue();
