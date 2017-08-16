@@ -107,7 +107,7 @@
                  data-step="8"
                  onclick="resetMap();" data-toggle="tooltip" title="Reset the map to it's original state without reloading the data">Reset</button>
                 
-                 <button  onclick="handleRefresh();"class="btn btn-success myintro navbar-btn" data-toggle="tooltip" title="Click to redownload the data"><img src="css/refresh.png" width="20" alt="refresh button"></button>
+                 <button  id="refreshBtn" onclick="toggleRefresh();"class="btn btn-danger myintro navbar-btn" data-toggle="tooltip" title="Enable Auto data update (every 5 minutes)"><img src="css/refresh.png" width="20" alt="refresh button"></button>
                  <button id="introButton" onclick="introJs().setOptions({groupClass:'.myintro'}).start();"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to show a tour"><img src="css/ques.png" alt="about" width="20"></button>
                   <button id="fullScreenBtn" class="btn btn-primary  myintro navbar-btn" 
                   onclick="toggleFullScreen()" data-toggle="tooltip"  title="Toggle Full screen mode"><img id="fullScreenImg" src="css/full.png"  width="20" alt="full screen button"></button> 
