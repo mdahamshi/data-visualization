@@ -164,6 +164,8 @@ function toggleThemeWrapper(){
 function handleRefresh(){
     if(navigator.onLine)
         getData(dataURL, 600);
+    else
+        showInfo("You are offline, cannot retrive new data.", 'alert-danger');
 
 }
 function toggleRefresh(state="on"){
