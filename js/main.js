@@ -162,7 +162,8 @@ function toggleThemeWrapper(){
     }
 }
 function handleRefresh(){
-    getData(dataURL, 600);
+    if(navigator.onLine)
+        getData(dataURL, 600);
 
 }
 function toggleRefresh(state="on"){
