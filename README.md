@@ -28,7 +28,7 @@ When you visit the app, you get the following page:<br/>
 
 After that, when the Data download finish successfully, you get the app's main page:<br/>
 <p align="center">
-<img src="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/main.png"/>
+<img src="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/main2.png"/>
 </p>
 
 <h3>App Elements</h3>
