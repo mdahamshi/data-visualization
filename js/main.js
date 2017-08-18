@@ -81,6 +81,13 @@ function downloadData(dataurl){
             theData.features = theData.features.sort(function(a,b){
                 return (getFeatureProperty(a,'time') - getFeatureProperty(b, 'time'));
             });
+            theData.features.forEach(function(d) {
+                    d.LatLng = new L.LatLng(getFeatureProperty(d,'lat'),
+                                    getFeatureProperty(d,'lng'))
+                    d.getTooltipString = getPointInfo;
+                }
+            );
+            
         }catch(err){
             moveBar(-3);
             console.log('error parasing ' + err);
@@ -89,16 +96,10 @@ function downloadData(dataurl){
         //after loading the data, extract heat data and add them to map
 
         updateDataSummary(theData.features);
-        if(mymap)
-            mymap.remove();
-        
-        $('#mainMap').empty();
-        $('#mainMap').removeClass();
-        dataDisplayed = 0;  
-        $('#filterTable > tbody').empty();
-        $('#filterTable').hide('slow'); 
-
-        initMap();
+        if(!mymap)
+            initMap();
+        else
+            replaceQuakeData(theData.features);
        
         
         //hide download bar
