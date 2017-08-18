@@ -655,8 +655,17 @@ function myvoid(){}
 function updateQuakePropertiesDynamic(){
     
     var earthquakes = quakeFeature;
-    if(earthquakes[0].length === dataDisplayed)
+    if(earthquakes[0].length === dataDisplayed || stopRequest){
+        if(stopRequest)
+            finishAnimation('Data animation stopped !');
+        else
+            finishAnimation();
+
+        stopRequest = false;
+        $('#stopAnimateBtn').hide();
+        
         return;
+    }
     var c = earthquakes[0][dataDisplayed];
     if(! isMobile)
         pointInfo.update(c.__data__);
@@ -673,10 +682,14 @@ function updateQuakePropertiesDynamic(){
         .style("stroke-opacity", 1e-6);
         setTimeout(updateQuakePropertiesDynamic, animateDelta);
         dataDisplayed++;
-        if (earthquakes[0].length === dataDisplayed){ 
-            enableMenue();
+        if (earthquakes[0].length === dataDisplayed)
+            finishAnimation();
+
+
+        function finishAnimation(msg = 'Data animated successfuly !'){
+              enableMenue();
             
-            showInfo('Data animated successfuly !', 'alert-success', 2000);
+            showInfo(msg, 'alert-success', 2000);
             setTimeout(function(){
                 if(! isMobile)
                     pointInfo.update();
@@ -691,7 +704,7 @@ function updateQuakePropertiesDynamic(){
                 windowResizeHandler();
             },4000);
 
-      }
+        }
     }
     // .style('opacity',transAttr)
 
@@ -712,6 +725,10 @@ function animateMap(toggleTheme){
     windowResizeHandler();        
     if(feltOn)
         toggleFelt();
+    $('#stopAnimateBtn').show();
+    $('.leaflet-bar a').animate({height:'60px',width:'60px'},600);
+    $('.leaflet-bar a').animate({height:'30px',width:'30px'},600);
+    showInfo('Click the red "S" button to stop animation','alert-info',0,7000);
     setTimeout(updateQuakePropertiesDynamic,2000);
     
 }
@@ -847,6 +864,15 @@ function addCustomButtons(){
     
     .style('background-color', '#68ff7f')
     .text('L');
+
+    d3.select('#mainMap > div.leaflet-control-container > div.leaflet-top.leaflet-left > div')
+    .append('a').attr('id','stopAnimateBtn')
+    .attr('onclick','stopAnimate();')
+    .attr('role', 'button')
+    .attr('title', 'Click to stop animation')
+    .style('background-color', '#ff0000')
+    .style('display', 'none')
+    .text('S');
     
 
 
