@@ -81,12 +81,7 @@ function downloadData(dataurl){
             theData.features = theData.features.sort(function(a,b){
                 return (getFeatureProperty(a,'time') - getFeatureProperty(b, 'time'));
             });
-            theData.features.forEach(function(d) {
-                    d.LatLng = new L.LatLng(getFeatureProperty(d,'lat'),
-                                    getFeatureProperty(d,'lng'))
-                    d.getTooltipString = getPointInfo;
-                }
-            );
+            
             
         }catch(err){
             moveBar(-3);
@@ -99,7 +94,7 @@ function downloadData(dataurl){
         if(!mymap)
             initMap();
         else
-            replaceQuakeData(theData.features);
+            initQuakeData();
        
         
         //hide download bar
