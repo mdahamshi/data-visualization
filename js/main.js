@@ -253,6 +253,9 @@ function mapSelectArea(){
 function hasClass(element, cls) {
     return (' ' + element.className + ' ').indexOf(' ' + cls + ' ') > -1;
 }
+function stopAnimate(){
+    stopRequest = true;
+}
 
 function resetMap(){
     toggleRefresh('off');

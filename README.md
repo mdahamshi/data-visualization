@@ -114,7 +114,11 @@ It also give the user the ability to choose the time interval between each event
 <img src="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/animate-bar.png"/>
 </p>
 
-Please notice that once an animate session started, it can only be stopped by refreshing the page, or clicking the "EARTHQUAKE DATA" at the top left corner.
+Please notice that once an animate session started, you can stop
+it by clicking the red "S" button in the control buttons:
+<p align="center">
+<img src="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/5.png"/>
+</p>
 
 
 <h4>Reset:</h4>
@@ -188,6 +192,7 @@ This card show the user the legend of the viewd attributes: Magnitude, Significa
    <li><b>The "-" button:</b> Zoom out button.</li>
    <li><b>The "R" button:</b> Reset Zoom to view all the world.</li>
    <li><b>The "L" button:</b> Show/hide the Legend card.</li>
+   <li><b>The "S" button:</b> Stop the animation. only shown during animation</li>
 </ul>
 
 <h4>Summary Table:</h4>
