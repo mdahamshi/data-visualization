@@ -51,7 +51,7 @@ function initMap(){
         
     
 
-    replaceQuakeData(theData.features);
+    initQuakeData();
 
     mymap.on("zoom",zoomReset);
 
@@ -60,7 +60,15 @@ function initMap(){
     createLegends();
 
 }
-
+function initQuakeData(){
+    theData.features.forEach(function(d) {
+                    d.LatLng = new L.LatLng(getFeatureProperty(d,'lat'),
+                                    getFeatureProperty(d,'lng'))
+                    d.getTooltipString = getPointInfo;
+                }
+            );
+    replaceQuakeData(theData.features);
+}
 function highlightFeature(e) {
         var layer = e.target;
         info.update(layer.feature.properties);
