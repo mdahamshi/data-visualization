@@ -687,7 +687,6 @@ function updateQuakePropertiesDynamic(){
 
 
         function finishAnimation(msg = 'Data animated successfuly !'){
-              enableMenue();
             
             showInfo(msg, 'alert-success', 2000);
             setTimeout(function(){
@@ -702,6 +701,7 @@ function updateQuakePropertiesDynamic(){
                 if(themeLight)
                     toggleThemeTo('light');
                 windowResizeHandler();
+              enableMenue();                
             },4000);
 
         }
