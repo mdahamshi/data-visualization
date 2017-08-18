@@ -1,0 +1,284 @@
+<html lang="en">
+<head>
+<link rel="icon" href="favicon.ico">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="View, Animate and Filter Earthquakes Data in a beatiful and simple way.">
+<meta name="keywords" content="earh,earthquake,usgs,data,visualization,d3,leaflet,quaka,Mohammad,Dahamshi,mdahamshi">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <title>Quaka | An Earhquakes Data visualization app</title>
+    <style>
+      h3{
+        border-bottom: 1px solid #eaecef;
+        padding-bottom: 0.3em;
+		padding-top:5px;
+      } h2{
+        border-top: 1px solid #eaecef;
+        padding-bottom: 0.3em;
+		padding-top:20px;
+      }
+	p{
+		padding:15px;
+	}
+#myBtn {
+  display: none;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  z-index: 99;
+  color: white;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+      h4{
+        border-top: 1px solid #eaecef;
+        padding-bottom: 0.3em;
+        padding-top: 0.3em;
+      }
+      footer { 
+    display: block;
+    text-align: center;
+    color:black;
+    font-size: 12px;
+    font-family:   sans-serif;
+    margin: auto;
+	padding-bottom:40px;
+    position: relative;
+    width: 100%;
+    /*height: 1%;*/
+   padding-top:40px; 
+
+}
+footer a { 
+    display: inline-block;
+    text-align: center;
+    text-decoration:  none;
+    font-size: 12px;
+    
+    font-family:   sans-serif;
+}
+    #main-box
+{
+	position: relative;
+	/* width: 500px; */
+	padding: 20px;
+	padding-top:50;
+	/* margin: 0 auto; */
+	background-color: #fff;
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2), inset 0 0 50px rgba(0, 0, 0, 0.1);
+}
+    </style>
+</head>
+<body>
+ <div id="main-box" style=";max-width:900px;margin:auto;margin-top:40px" >
+<button onclick="topFunction()" id="myBtn" class="btn " title="Go to top"><img src="up.png" width="30px"/></button>
+
+  <article class="markdown-body entry-content" itemprop="text"><h1 style="text-align:center"><a id="user-content-quaka" class="anchor" href="#quaka" aria-hidden="true"></a>Quaka</h1>
+    <p style="text-align:center"><a href="https://goo.gl/x5MXeU">Quaka</a> is an Earhquakes Data visualization app.</p><br/>
+    <p><a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/main.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/main.png" alt="alt tag" style="max-width:100%;"></a></p>
+<div style="padding:80px"></div>
+    <p><strong>Course Instructor</strong>
+    Dr. Peter Bak - IBM Haifa Research Lab <a href="http://researcher.ibm.com/person/il-peter.bak">*</a></p>
+    <p><strong>Publication date:</strong> 16/8/2017</p>
+    <p><strong>License</strong>: <a href="https://en.wikipedia.org/wiki/MIT_License">MIT</a></p>
+    <h2><a id="user-content-project-general-description" class="anchor" href="#project-general-description" aria-hidden="true"></a>Project general description</h2>
+    We used <a href="https://d3js.org/">d3 (v3)</a> library to draw the data, <a href="http://leafletjs.com/">leaflet</a> 
+    for viewing the map. We also used the following plug-ins/libs to help us building the app:
+<br/><br/>
+    <ul>
+    <li><b>Select area</b>: A leaflet plugin for selecting area on the map. <a href="https://github.com/heyman/leaflet-areaselect">*</a></li>
+    <li><b>d3 slider</b>: A d3 plugin for building sliders easily.<a href="https://github.com/MasterMaps/d3-slider">*</a></li>
+    <li><b>IntroJS</b>: A javascript library for displaying quick tour for first site visit.<a href="http://introjs.com/">*</a></li>
+    <li><b>USGS</b>: Used to get the data in <a href="http://geojson.org/">GeoJSON</a> format.<a href="https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php">*</a></li>
+    </ul>
+    <h2><a id="user-content-documentation" class="anchor" href="#documentation" aria-hidden="true"></a>Documentation</h2>
+    When you visit the app, you get the following page:<br>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/1.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/1.png" style="max-width:100%;"></a>
+    </p>
+    <p>After that, when the Data download finish successfully, you get the app's main page:<br></p>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/main2.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/main2.png" style="max-width:100%;"></a>
+    </p>
+    <h2><a id="user-content-app-elements" class="anchor" href="#app-elements" aria-hidden="true"></a>App Elements</h2><br/>
+    <h4 style="border-top:none;"><a id="user-content-navigation-bar" class="anchor" href="#navigation-bar" aria-hidden="true"></a>Navigation bar:</h4>
+		
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/3.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/3.png" style="max-width:100%;"></a>
+    </p>
+    <p>The navigation bar contain most of the app buttons and tools, it is always available for easy access.</p>
+    <h4><a id="user-content-maps" class="anchor" href="#maps" aria-hidden="true"></a>Maps:</h4>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/maps.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/maps.png" style="max-width:100%;"></a>
+    </p>
+    <p>The Maps menu contain different map layers, the user can select the layer he prefer with a click. We think
+    the most suitable map is the one we created, it is simple, clear, beatiful, we chose it to be the default map.</p>
+    <h4><a id="user-content-tools" class="anchor" href="#tools" aria-hidden="true"></a>Tools:</h4>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/tools.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/tools.png" style="max-width:100%;"></a>
+    </p>
+    <p>The Tools menu contain different tools the user can use:</p>
+    <ul>
+      <li><b>Toggle Labels:</b> This tool is special for our simple map, it add a labels layer to our simple map.</li>
+      <li><b>Toggle Layer:</b> This tool Show/Hide the hover Layer, this layer is useful to highlight current country
+      borders, zooming when clicking a country.</li>
+      <li><b>Toggle Felt Data:</b> This tool used to add/remove a green stroke for events that have been felt by at least one person.</li><br>
+      <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/felt-data.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/felt-data.png" style="max-width:100%;"></a>
+    </p>
+      <li><b>Toggle Theme:</b> This tool is special for our simple map, toggle between Light (default) and Dark Theme.</li><br>
+      <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/dark-theme.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/dark-theme.png" style="max-width:100%;"></a>
+    </p>
+    </ul>
+    <h4><a id="user-content-data" class="anchor" href="#data" aria-hidden="true"></a>Data:</h4>
+      <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/data.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/data.png" style="max-width:100%;"></a>
+    </p>
+    <p>The Data menu contain different data types:</p>
+    <ul>
+       <li><b>Last Day:</b> Default data type, display events during the past 24 hours.</li>
+       <li><b>Past 7 Days:</b> Display events during the past 7 days.</li>
+       <li><b>All Month:</b> Display events during the past 30 days.</li>
+    </ul>
+    <h4><a id="user-content-filter-by" class="anchor" href="#filter-by" aria-hidden="true"></a>Filter By:</h4>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/filter.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/filter.png" style="max-width:100%;"></a>
+    </p>
+    <p>The Filter By menu contain different data filters:</p>
+    <ul>
+       <li><b>Select Area:</b> A tool that give the user the ability to view only events from spesific area by selecting it.</li><br>
+       <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/select.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/select.png" style="max-width:100%;"></a>
+    </p>
+       <li><b>Time:</b>A tool that give the user the ability to view only events at spesific time range.</li>
+       <li><b>Magnitude:</b> A tool that give the user the ability to view only events that fall in spesific magnitude range.</li>
+       <li><b>Depth:</b> A tool that give the user the ability to view only events that fall in spesific depth range.</li>
+       <li><b>Felt:</b> A tool that give the user the ability to view only events that have been felt by at lease one person.</li>
+       Significance
+    </ul>
+    <h4><a id="user-content-animate" class="anchor" href="#animate" aria-hidden="true"></a>Animate:</h4>
+    <p align="center">
+        <button class="btn btn-primary  myintro navbar-btn" data-toggle="tooltip" title="Animate the Map according to the date they happend">Animate</button> 
+    </p>
+    <p>This tool allow the user to view the date dynamically, ordered by the time the event occured, it is useful to see if there is
+    a patterent or some relation between event size, location ,etc.<br></p>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/animate-map.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/animate-map.png" style="max-width:100%;"></a>
+    </p>
+    <p>It also give the user the ability to choose the time interval between each event view (in ms): <br></p>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/animate-bar.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/animate-bar.png" style="max-width:100%;"></a>
+    </p>
+Please notice that once an animate session started, you can stop
+it by clicking the red "S" button in the control buttons:
+<p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/5.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/5.png" style="max-width:100%;"></a>
+    </p>
+
+    <h4><a id="user-content-reset" class="anchor" href="#reset" aria-hidden="true"></a>Reset:</h4>
+    <p align="center">
+        <button class="btn myintro btn-danger navbar-btn" onclick="resetMap();" data-toggle="tooltip" title="Reset the map to it's original state without reloading the data">Reset</button>
+    </p>
+    <p>The reset button reset the map to it's original state, with the last choosen data type (past day, past 7 days..), it does so without
+    re-downloading the data again.it is useful to restore the map at the end of applaying different filters.</p>
+    <h4><a id="user-content-refresh" class="anchor" href="#refresh" aria-hidden="true"></a>Refresh:</h4>
+    <p align="center">
+        <button  id="refreshBtn" onclick="toggleRefresh();"class="btn btn-danger myintro navbar-btn" data-toggle="tooltip" title="Enable/Disable Auto data update (every 5 minutes)"><img src="css/refresh.png" width="20" alt="refresh button"></button>
+    </p>
+    <p>The refresh button is used to enable or disable the "auto refresh" feature, this feature update the data every
+    5 minutes without user interaction. It is useful for keeping the data up to date with the <a href="https://www.usgs.gov/">USGS</a> website.</p>
+    <h4><a id="user-content-download" class="anchor" href="#download" aria-hidden="true"></a>Download:</h4>
+    <p align="center">
+        <button   onclick="handleRefresh();"class="btn btn-success myintro navbar-btn" data-toggle="tooltip" title="Click to download new data."><img src="css/download.png" width="20" alt="download button"></button>
+    </p>
+    The download button allow the user to update the data on-demand, It is useful when the user want to view the last data.
+    <h4><a id="user-content-help" class="anchor" href="#help" aria-hidden="true"></a>Help:</h4>
+    <p align="center">
+        <button id="introButton" onclick="introJs().setOptions({groupClass:'.myintro'}).start();"class="btn btn-info myintro navbar-btn" data-toggle="tooltip" title="Click to show a tour"><img src="css/ques.png" alt="about" width="20"></button>
+    </p>
+    <p>The help button show a quick tour for the user, the same tour that displayed on the first time the user visit the site.</p>
+    <h4><a id="user-content-full-screen" class="anchor" href="#full-screen" aria-hidden="true"></a>Full screen:</h4>
+    <p align="center">
+        <button id="fullScreenBtn" class="btn btn-primary  myintro navbar-btn"  onclick="toggleFullScreen()" data-toggle="tooltip"  title="Toggle Full screen mode"><img id="fullScreenImg" src="css/full.png"  width="20" alt="full screen button"></button> 
+    </p>
+    <p>The full screen button toggle between full/normal screen mode, It is useful to give the user all the available space
+    to view the data clearly.</p>
+    <h4><a id="user-content-country-name" class="anchor" href="#country-name" aria-hidden="true"></a>Country name:</h4>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/country-name.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/country-name.png" style="max-width:100%;"></a>
+    </p>
+    <p>This card show the user current hovered country name. It also tell the user to click a country to zoom to it.</p>
+    <h4><a id="user-content-point-info" class="anchor" href="#point-info" aria-hidden="true"></a>Point Info:</h4>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/quake-info.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/quake-info.png" style="max-width:100%;"></a>
+    </p>
+    <p>This card show the user infromation about the current hovered point.</p>
+    <h4><a id="user-content-legend" class="anchor" href="#legend" aria-hidden="true"></a>Legend:</h4>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/4.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/4.png" style="max-width:100%;"></a>
+    </p>
+    <p>This card show the user the legend of the viewd attributes: Magnitude, Significance, Felt. You can hide it by clicking it.</p>
+    <h4><a id="user-content-controls" class="anchor" href="#controls" aria-hidden="true"></a>Controls:</h4>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/5.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/5.png" style="max-width:100%;"></a>
+    </p>
+    <ul>
+       <li><b>The "+" button:</b> Zoom in button.</li>
+       <li><b>The "-" button:</b> Zoom out button.</li>
+       <li><b>The "R" button:</b> Reset Zoom to view all the world.</li>
+       <li><b>The "L" button:</b> Show/hide the Legend card.</li>
+	  <li><b>The "S" button:</b> Stop the animation. only shown during animation</li>
+    </ul>
+    <h4><a id="user-content-summary-table" class="anchor" href="#summary-table" aria-hidden="true"></a>Summary Table:</h4>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/summary-table.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/summary-table.png" style="max-width:100%;"></a>
+    </p>
+    <p>The summary table show the user useful infromation about the current viewd data, number of events, minimum/maximum attributes range...</p>
+    <h4><a id="user-content-filter-table" class="anchor" href="#filter-table" aria-hidden="true"></a>Filter Table:</h4>
+    <p align="center">
+    <a href="https://github.com/mdahamshi/data-visualization/blob/master/screenshots/filter-table.png" target="_top"><img src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/filter-table.png" style="max-width:100%;"></a>
+    </p>
+    <p>The filter table help the user to keep track with what filters he applied to the data. It only shown when filters applied.</p>
+    <h2>Visit The App:</h2>
+    <p align="center" style="padding:50px;">
+    <a href="https://goo.gl/x5MXeU">
+    <img alt="visit the app" width="100" src="https://github.com/mdahamshi/data-visualization/raw/master/screenshots/go.png" style="max-width:100%;">
+    </a>
+    </p>
+    </article>
+ <footer align="center"  >
+    <p><b>Created by:</b> Mohammad Dahamshi , Ahmed Shafee , Ebraheem Kashkoush , Naseem Hanna</p>
+    <b>E-mail:</b> <a href="mailto:Mohammad.Dahamshi@gmail.com">
+    Mohammad.Dahamshi@gmail.com</a><br/>
+        <b>About Me:</b> <a href="https://about.me/mdahamshi">about.me/mdahamshi</a>
+</footer> 
+ </div>
+<div style="padding:50px;"></div>    
+<script>
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        document.getElementById("myBtn").style.display = "block";
+    } else {
+        document.getElementById("myBtn").style.display = "none";
+    }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+}
+</script>   
+</body>
+</html>
