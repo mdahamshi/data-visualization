@@ -41,12 +41,7 @@ function initMap(){
     // inserting quake graph
     quakeG = svg.append('g')
         .attr('id', 'quakeMap');
-    theData.features.forEach(function(d) {
-            d.LatLng = new L.LatLng(getFeatureProperty(d,'lat'),
-                                    getFeatureProperty(d,'lng'))
-            d.getTooltipString = getPointInfo;
-        }
-    );
+
     //inserting info popup (right)
 
 
@@ -662,6 +657,7 @@ function updateQuakePropertiesDynamic(){
             finishAnimation();
 
         stopRequest = false;
+        dataDisplayed = 0;
         $('#stopAnimateBtn').hide();
         
         return;
